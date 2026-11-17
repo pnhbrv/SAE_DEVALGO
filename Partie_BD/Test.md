@@ -241,3 +241,52 @@ SOURCE Suppression.sql;
 SOURCE Creation.sql;
 SOURCE insertion.sql;
 ```
+
+## 9. Partie Algo : préférences et cache
+
+Vérifier les tables :
+
+```sql
+SELECT COUNT(*) FROM PREFERENCE_STYLE;
+SELECT * FROM VERSION_PROGRAMMATION;
+```
+
+Résultats :
+
+```text
+PREFERENCE_STYLE: 8
+VERSION_PROGRAMMATION: numero = 1 (plus si les inserts d'événements l'ont fait monter)
+```
+
+La note 0 et les notes hors de -5 à +5 sont refusées :
+
+```sql
+INSERT INTO PREFERENCE_STYLE (id_spectateur, id_style, note) VALUES (1, 5, 0);
+-- Erreur
+INSERT INTO PREFERENCE_STYLE (id_spectateur, id_style, note) VALUES (1, 5, 9);
+-- Erreur
+```
+
+La version augmente quand la programmation change :
+
+```sql
+SELECT numero FROM VERSION_PROGRAMMATION;
+UPDATE EVENEMENT SET titre = titre WHERE id_evenement = 1;
+SELECT numero FROM VERSION_PROGRAMMATION;
+-- Résultat : le numéro a augmenté de 1
+```
+
+Un changement de préférence supprime le calcul du spectateur (et son cache) :
+
+```sql
+INSERT INTO CALCUL_RECOMMANDATION (id_spectateur, version_programmation)
+VALUES (1, 1);
+INSERT INTO CACHE_RECOMMANDATION (id_spectateur, id_evenement, score)
+VALUES (1, 1, 2.5);
+
+UPDATE PREFERENCE_STYLE SET note = 4 WHERE id_spectateur = 1 AND id_style = 3;
+
+SELECT COUNT(*) FROM CALCUL_RECOMMANDATION WHERE id_spectateur = 1;
+SELECT COUNT(*) FROM CACHE_RECOMMANDATION WHERE id_spectateur = 1;
+-- Résultat : 0 et 0
+```

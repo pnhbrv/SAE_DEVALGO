@@ -563,3 +563,11 @@ INSERT INTO LOGER (id_groupe, id_hebergement, date_nuit, nb_places_necessaires) 
     (70, 56, '2026-11-25', 12), (71, 79, '2026-11-26', 15), (72, 80, '2026-11-27', 30), (73, 75, '2026-11-28', 18),
     (74, 76, '2026-11-29', 20), (75, 57, '2026-11-30', 6), (76, 77, '2026-12-01', 14), (77, 58, '2026-12-02', 8),
     (78, 59, '2026-12-03', 12), (79, 60, '2026-12-04', 10), (80, 78, '2026-12-05', 15);
+
+-- PREFERENCE_STYLE (id_spectateur, id_style, note) : algo
+-- Styles : 1 Rap, 3 Rock, 4 Pop, 5 Electro, 13 Punk, 18 Techno, 60 Garage Rock
+INSERT INTO PREFERENCE_STYLE (id_spectateur, id_style, note) VALUES
+    (1, 3, 5), (1, 60, -3), (1, 1, 2),   -- Emma : aime le rock, sauf le garage rock
+    (2, 5, 4), (2, 18, -4),              -- Louis : aime l'electro, mais pas la techno
+    (3, 1, 5), (3, 4, -2),               -- Chloe : aime le rap, pas la pop
+    (4, 13, 5);                          -- Thomas : seulement le punk
