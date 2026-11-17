@@ -44,20 +44,20 @@ SELECT COUNT(*) FROM LOGER;
 Résultats  :
 
 ```text
-MEMBRE: 9
-GROUPE: 10
-STYLE_MUSICAL: 10
-EVENEMENT: 5
-PRE_INSCRIRE: 5
-PARTICIPER: 5
-LOGER: 7
+MEMBRE: 80
+GROUPE: 80
+STYLE_MUSICAL: 80
+EVENEMENT: 80
+PRE_INSCRIRE: 80
+PARTICIPER: 80
+LOGER: 83
 ```
 
 ## 3. Billetterie
 
 ```sql
-SELECT CalculerOccupationLieu(1, '2026-10-12');
--- Résultat : 1
+SELECT CalculerOccupationLieu(11, '2026-10-18');
+-- Résultat : 17
 
 CALL AcheterBilletTransaction(1, 1, '2026-06-21 10:00:00');
 ```
@@ -73,8 +73,8 @@ Tester un spectateur sans droit :
 
 ```sql
 INSERT INTO PRE_INSCRIRE (id_spectateur, id_evenement)
-VALUES (4, 1);
--- Erreur 
+VALUES (1, 80);
+-- Erreur (Pass 1 jour : pas de billet pour le 2026-12-05)
 ```
 
 Tester un événement privé :
@@ -90,11 +90,11 @@ UPDATE EVENEMENT SET est_public = TRUE WHERE id_evenement = 1;
 Tester la jauge :
 
 ```sql
-UPDATE LIEU SET jauge_max = 1 WHERE id_lieu = 1;
+UPDATE LIEU SET jauge_max = 1 WHERE id_lieu = 11;
 INSERT INTO PRE_INSCRIRE (id_spectateur, id_evenement)
-VALUES (3, 1);
+VALUES (80, 15);
 -- Erreur 
-UPDATE LIEU SET jauge_max = 5000 WHERE id_lieu = 1;
+UPDATE LIEU SET jauge_max = 1000 WHERE id_lieu = 11;
 ```
 
 ## 4. Hébergements et groupes

@@ -22,9 +22,6 @@ DROP TRIGGER IF EXISTS TRG_Check_Chevauchement_Lieu;
 DROP TRIGGER IF EXISTS TRG_Check_Inclusion_Journee;
 DROP TRIGGER IF EXISTS TRG_Check_Ubiquite_Spectateur;
 DROP PROCEDURE IF EXISTS InscrireGroupeHebergementTransaction;
-DROP INDEX IF EXISTS idx_evt_public ON EVENEMENT;
-DROP INDEX IF EXISTS idx_evt_date ON EVENEMENT;
-DROP INDEX IF EXISTS idx_groupe_style ON AVOIR_STYLE;
 -- Partie Algo (supprime aussi les triggers)
 DROP TABLE IF EXISTS CACHE_RECOMMANDATION;
 DROP TABLE IF EXISTS CALCUL_RECOMMANDATION;

@@ -299,32 +299,6 @@ BEGIN
     END IF;
 END$$
 
-CREATE TRIGGER verifier_horaires_evenement_avant_insertion
-BEFORE INSERT ON EVENEMENT
-FOR EACH ROW
-BEGIN
-    DECLARE v_heure_debut TIME;
-    DECLARE v_heure_fin TIME;
-    DECLARE v_heure_fin_evenement TIME;
-
-    SELECT heure_debut_officielle, heure_fin_officielle
-    INTO v_heure_debut, v_heure_fin
-    FROM JOURNEE
-    WHERE date_jour = NEW.date_jour;
-
-    SET v_heure_fin_evenement = ADDTIME(
-        TIME(NEW.date_heure_debut),
-        SEC_TO_TIME(NEW.duree * 60)
-    );
-
-    IF DATE(NEW.date_heure_debut) <> NEW.date_jour
-       OR TIME(NEW.date_heure_debut) < v_heure_debut
-       OR v_heure_fin_evenement > v_heure_fin THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'L evenement depasse les horaires de la journee';
-    END IF;
-END$$
-
 CREATE TRIGGER TRG_Check_Droit_PreInscription
 BEFORE INSERT ON PRE_INSCRIRE
 FOR EACH ROW
