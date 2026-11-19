@@ -669,6 +669,45 @@ BEGIN
     END WHILE;
 END$$
 
+-- Meme controle que ci-dessus, mais quand on change le parent d'un style existant :
+-- un style ne peut pas devenir son propre ancetre.
+CREATE TRIGGER TRG_Check_Boucle_Style_Update
+BEFORE UPDATE ON STYLE_MUSICAL
+FOR EACH ROW
+BEGIN
+    DECLARE v_style INT;
+    DECLARE v_parent INT;
+    DECLARE v_termine INT DEFAULT 0;
+    DECLARE v_profondeur INT DEFAULT 0;
+
+    IF NOT (NEW.id_style_parent <=> OLD.id_style_parent) THEN
+        SET v_style = NEW.id_style_parent;
+
+        WHILE v_style IS NOT NULL AND v_termine = 0 DO
+            SET v_profondeur = v_profondeur + 1;
+
+            IF v_style = NEW.id_style OR v_profondeur > 100 THEN
+                SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT =
+                        'La hierarchie des styles contient une boucle';
+            END IF;
+
+            SET v_parent = NULL;
+
+            SELECT id_style_parent
+            INTO v_parent
+            FROM STYLE_MUSICAL
+            WHERE id_style = v_style;
+
+            IF v_parent IS NULL THEN
+                SET v_termine = 1;
+            ELSE
+                SET v_style = v_parent;
+            END IF;
+        END WHILE;
+    END IF;
+END$$
+
 DELIMITER ;
 
 DELIMITER $$
