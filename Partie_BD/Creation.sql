@@ -299,6 +299,32 @@ BEGIN
     END IF;
 END$$
 
+CREATE TRIGGER verifier_horaires_evenement_avant_insertion
+BEFORE INSERT ON EVENEMENT
+FOR EACH ROW
+BEGIN
+    DECLARE v_heure_debut TIME;
+    DECLARE v_heure_fin TIME;
+    DECLARE v_heure_fin_evenement TIME;
+
+    SELECT heure_debut_officielle, heure_fin_officielle
+    INTO v_heure_debut, v_heure_fin
+    FROM JOURNEE
+    WHERE date_jour = NEW.date_jour;
+
+    SET v_heure_fin_evenement = ADDTIME(
+        TIME(NEW.date_heure_debut),
+        SEC_TO_TIME(NEW.duree * 60)
+    );
+
+    IF DATE(NEW.date_heure_debut) <> NEW.date_jour
+       OR TIME(NEW.date_heure_debut) < v_heure_debut
+       OR v_heure_fin_evenement > v_heure_fin THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'L evenement depasse les horaires de la journee';
+    END IF;
+END$$
+
 CREATE TRIGGER TRG_Check_Droit_PreInscription
 BEFORE INSERT ON PRE_INSCRIRE
 FOR EACH ROW
@@ -669,45 +695,6 @@ BEGIN
     END WHILE;
 END$$
 
--- Meme controle que ci-dessus, mais quand on change le parent d'un style existant :
--- un style ne peut pas devenir son propre ancetre.
-CREATE TRIGGER TRG_Check_Boucle_Style_Update
-BEFORE UPDATE ON STYLE_MUSICAL
-FOR EACH ROW
-BEGIN
-    DECLARE v_style INT;
-    DECLARE v_parent INT;
-    DECLARE v_termine INT DEFAULT 0;
-    DECLARE v_profondeur INT DEFAULT 0;
-
-    IF NOT (NEW.id_style_parent <=> OLD.id_style_parent) THEN
-        SET v_style = NEW.id_style_parent;
-
-        WHILE v_style IS NOT NULL AND v_termine = 0 DO
-            SET v_profondeur = v_profondeur + 1;
-
-            IF v_style = NEW.id_style OR v_profondeur > 100 THEN
-                SIGNAL SQLSTATE '45000'
-                    SET MESSAGE_TEXT =
-                        'La hierarchie des styles contient une boucle';
-            END IF;
-
-            SET v_parent = NULL;
-
-            SELECT id_style_parent
-            INTO v_parent
-            FROM STYLE_MUSICAL
-            WHERE id_style = v_style;
-
-            IF v_parent IS NULL THEN
-                SET v_termine = 1;
-            ELSE
-                SET v_style = v_parent;
-            END IF;
-        END WHILE;
-    END IF;
-END$$
-
 DELIMITER ;
 
 DELIMITER $$
@@ -868,111 +855,5 @@ END$$
 CREATE INDEX idx_evt_public ON EVENEMENT (est_public, est_gratuit)$$
 CREATE INDEX idx_evt_date ON EVENEMENT (date_heure_debut)$$
 CREATE INDEX idx_groupe_style ON AVOIR_STYLE (id_style)$$
-
-DELIMITER ;
-
-
--- PARTIE ALGO : preferences des spectateurs et cache des recommandations
-
-
-
--- Note de chaque spectateur pour un style musical (de -5 a +5, jamais 0).
--- Pas de ligne = pas de preference. La preference d'un style s'applique
--- aussi a ses sous-styles (voir STYLE_MUSICAL.id_style_parent).
-CREATE TABLE PREFERENCE_STYLE (
-    id_spectateur INT NOT NULL,
-    id_style INT NOT NULL,
-    note INT NOT NULL,
-    PRIMARY KEY (id_spectateur, id_style),
-    FOREIGN KEY (id_spectateur) REFERENCES SPECTATEUR(id_spectateur) ON DELETE CASCADE,
-    FOREIGN KEY (id_style) REFERENCES STYLE_MUSICAL(id_style) ON DELETE CASCADE,
-    CONSTRAINT chk_note_pref CHECK (note BETWEEN -5 AND 5 AND note <> 0)
-);
-
--- Numero de version de la programmation (une seule ligne).
--- Il augmente a chaque changement de la programmation (voir les triggers plus bas).
-CREATE TABLE VERSION_PROGRAMMATION (
-    id TINYINT PRIMARY KEY DEFAULT 1,
-    numero INT NOT NULL DEFAULT 1,
-    CONSTRAINT chk_version_unique CHECK (id = 1)
-);
-INSERT INTO VERSION_PROGRAMMATION (id, numero) VALUES (1, 1);
-
--- Un calcul de recommandations par spectateur : a quelle version de la
--- programmation il correspond et quand il a ete fait. Sert a savoir si
--- est a jour, meme quand il n'y a aucune recommandation.
-CREATE TABLE CALCUL_RECOMMANDATION (
-    id_spectateur INT PRIMARY KEY,
-    version_programmation INT NOT NULL,
-    date_calcul DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_spectateur) REFERENCES SPECTATEUR(id_spectateur) ON DELETE CASCADE
-);
-
--- Concerts recommandes a un spectateur, avec leur score.
--- Supprimer le calcul d'un spectateur supprime aussi ses lignes ici.
-CREATE TABLE CACHE_RECOMMANDATION (
-    id_spectateur INT NOT NULL,
-    id_evenement INT NOT NULL,
-    score DECIMAL(6,3) NOT NULL,
-    PRIMARY KEY (id_spectateur, id_evenement),
-    FOREIGN KEY (id_spectateur) REFERENCES CALCUL_RECOMMANDATION(id_spectateur) ON DELETE CASCADE,
-    FOREIGN KEY (id_evenement) REFERENCES EVENEMENT(id_evenement) ON DELETE CASCADE
-);
-
-DELIMITER |
-
--- La programmation change (evenement, groupe d'un evenement, style d'un
--- groupe) : on augmente la version, donc les caches existants sont plus valables.
-CREATE TRIGGER TRG_Version_Evt_Ins AFTER INSERT ON EVENEMENT FOR EACH ROW
-BEGIN
-    UPDATE VERSION_PROGRAMMATION SET numero = numero + 1;
-END|
-
-CREATE TRIGGER TRG_Version_Evt_Upd AFTER UPDATE ON EVENEMENT FOR EACH ROW
-BEGIN
-    UPDATE VERSION_PROGRAMMATION SET numero = numero + 1;
-END|
-
-CREATE TRIGGER TRG_Version_Evt_Del AFTER DELETE ON EVENEMENT FOR EACH ROW
-BEGIN
-    UPDATE VERSION_PROGRAMMATION SET numero = numero + 1;
-END|
-
-CREATE TRIGGER TRG_Version_Part_Ins AFTER INSERT ON PARTICIPER FOR EACH ROW
-BEGIN
-    UPDATE VERSION_PROGRAMMATION SET numero = numero + 1;
-END|
-
-CREATE TRIGGER TRG_Version_Part_Del AFTER DELETE ON PARTICIPER FOR EACH ROW
-BEGIN
-    UPDATE VERSION_PROGRAMMATION SET numero = numero + 1;
-END|
-
-CREATE TRIGGER TRG_Version_Style_Ins AFTER INSERT ON AVOIR_STYLE FOR EACH ROW
-BEGIN
-    UPDATE VERSION_PROGRAMMATION SET numero = numero + 1;
-END|
-
-CREATE TRIGGER TRG_Version_Style_Del AFTER DELETE ON AVOIR_STYLE FOR EACH ROW
-BEGIN
-    UPDATE VERSION_PROGRAMMATION SET numero = numero + 1;
-END|
-
--- Les preferences d'un spectateur changent : on supprime son calcul
--- (et donc son cache) pour qu'il soit refait a la prochaine demande.
-CREATE TRIGGER TRG_Invalide_Pref_Ins AFTER INSERT ON PREFERENCE_STYLE FOR EACH ROW
-BEGIN
-    DELETE FROM CALCUL_RECOMMANDATION WHERE id_spectateur = NEW.id_spectateur;
-END|
-
-CREATE TRIGGER TRG_Invalide_Pref_Upd AFTER UPDATE ON PREFERENCE_STYLE FOR EACH ROW
-BEGIN
-    DELETE FROM CALCUL_RECOMMANDATION WHERE id_spectateur = NEW.id_spectateur;
-END|
-
-CREATE TRIGGER TRG_Invalide_Pref_Del AFTER DELETE ON PREFERENCE_STYLE FOR EACH ROW
-BEGIN
-    DELETE FROM CALCUL_RECOMMANDATION WHERE id_spectateur = OLD.id_spectateur;
-END|
 
 DELIMITER ;
