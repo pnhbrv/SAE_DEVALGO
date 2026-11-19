@@ -126,22 +126,61 @@ INSERT INTO GROUPE (id_groupe, nom_groupe, description, liens_photos, liens_rese
 
 
 INSERT INTO STYLE_MUSICAL (id_style, libelle_style, id_style_parent) VALUES
-    (1, 'Rap', NULL), (2, 'Hip-Hop', 1), (3, 'Rock', NULL), (4, 'Pop', NULL), (5, 'Electro', NULL), 
-    (6, 'RnB', NULL), (7, 'Soul', 6), (8, 'Drill', 2), (9, 'Jazz', NULL), (10, 'Reggae', NULL), 
-    (11, 'Funk', NULL), (12, 'Metal', 3), (13, 'Punk', 3), (14, 'Blues', NULL), (15, 'Country', NULL), 
-    (16, 'Folk', NULL), (17, 'Disco', NULL), (18, 'Techno', 5), (19, 'House', 5), (20, 'Trance', 5), 
-    (21, 'Dubstep', 5), (22, 'Drum and Bass', 5), (23, 'Ambient', 5), (24, 'Classique', NULL), (25, 'Lo-Fi', NULL), 
-    (26, 'Indie Rock', 3), (27, 'Synthpop', 4), (28, 'Grunge', 3), (29, 'Ska', 10), (30, 'Dancehall', 10), 
-    (31, 'Afrobeat', NULL), (32, 'K-Pop', 4), (33, 'J-Pop', 4), (34, 'Latin', NULL), (35, 'Reggaeton', 34), 
-    (36, 'Salsa', 34), (37, 'Bossa Nova', 34), (38, 'Flamenco', NULL), (39, 'Tango', 34), (40, 'Chanson Française', NULL), 
-    (41, 'Variété', NULL), (42, 'Zouk', NULL), (43, 'Raï', NULL), (44, 'Gospel', NULL), (45, 'Bluegrass', 15), 
-    (46, 'Americana', 15), (47, 'Emo', 13), (48, 'Hardcore', 13), (49, 'Doom Metal', 12), (50, 'Black Metal', 12), 
-    (51, 'Death Metal', 12), (52, 'Thrash Metal', 12), (53, 'Nu Metal', 12), (54, 'Metal Industriel', 12), (55, 'Shoegaze', 26), 
-    (56, 'Post-Rock', 3), (57, 'Math Rock', 3), (58, 'Krautrock', 3), (59, 'Rock Psychédélique', 3), (60, 'Garage Rock', 3), 
-    (61, 'Britpop', 4), (62, 'New Wave', 4), (63, 'Post-Punk', 13), (64, 'Gothique', 63), (65, 'Synthwave', 5), 
-    (66, 'Vaporwave', 5), (67, 'Glitch', 5), (68, 'IDM', 5), (69, 'Breakbeat', 5), (70, 'UK Garage', 5), 
-    (71, 'Grime', 1), (72, 'Trap', 1), (73, 'Boom Bap', 1), (74, 'G-Funk', 1), (75, 'Crunk', 1), 
-    (76, 'Mumble Rap', 1), (77, 'Conscious Rap', 1), (78, 'Cloud Rap', 1), (79, 'Bounce', 1), (80, 'Drill UK', 8);
+    (1, 'Rock', NULL), (2, 'Folk rock', 1), (3, 'Folk rock psychédélique', 2), (4, 'Folk punk', 2), (5, 'Country rock', 2),
+    (6, 'Garage rock', 1), (7, 'Garage punk', 6), (8, 'Garage revival', 6), (9, 'Freakbeat', 6), (10, 'Rock psychédélique', 1),
+    (11, 'Acid rock', 10), (12, 'Space rock', 10), (13, 'Stoner rock', 10), (14, 'Punk rock', 1), (15, 'Hardcore punk', 14),
+    (16, 'Pop punk', 14), (17, 'Post-punk', 14), (18, 'Rock alternatif', 1), (19, 'Grunge', 18), (20, 'Indie rock', 18),
+    (21, 'Shoegaze', 18), (22, 'Pop', NULL), (23, 'Synth-pop', 22), (24, 'New wave', 23), (25, 'Dark wave', 23),
+    (26, 'Synthwave', 23), (27, 'Dream pop', 22), (28, 'Chillwave', 27), (29, 'Ethereal wave', 27), (30, 'Bedroom pop', 27),
+    (31, 'K-pop', 22), (32, 'Idol pop', 31), (33, 'K-ballad', 31), (34, 'K-indie', 31), (35, 'Électropop', 22),
+    (36, 'Electroclash', 35), (37, 'Hyperpop', 35), (38, 'Dance-pop', 35), (39, 'Indie pop', 22), (40, 'Twee pop', 39),
+    (41, 'Jangle pop', 39), (42, 'Chamber pop', 39), (43, 'Hip-hop', NULL), (44, 'Trap', 43), (45, 'Cloud rap', 44),
+    (46, 'JRage', 44), (47, 'Phonk', 44), (48, 'Boom bap', 43), (49, 'East Coast rap', 48), (50, 'Jazz rap', 48),
+    (51, 'Hardcore hip-hop', 48), (52, 'Pop-rap', 43), (53, 'Emo rap', 52), (54, 'Rap mélodique', 52), (55, 'Afrotrap', 52),
+    (56, 'Drill', 43), (57, 'UK drill', 56), (58, 'Chicago drill', 56), (59, 'Brooklyn drill', 56), (60, 'Rap conscient', 43),
+    (61, 'Rap politique', 60), (62, 'Hip-hop alternatif', 60), (63, 'Abstract hip-hop', 60), (64, 'RnB / Soul', NULL), (65, 'RnB contemporain', 64),
+    (66, 'RnB alternatif', 65), (67, 'New jack swing', 65), (68, 'Quiet storm', 65), (69, 'Néo-soul', 64), (70, 'Hip-hop soul', 69),
+    (71, 'Soul jazz', 69), (72, 'Afro-soul', 69), (73, 'Funk', 64), (74, 'P-funk', 73), (75, 'Funk rock', 73),
+    (76, 'Boogie', 73), (77, 'Soul classique', 64), (78, 'Motown', 77), (79, 'Southern soul', 77), (80, 'Northern soul', 77),
+    (81, 'Gospel', 64), (82, 'Gospel traditionnel', 81), (83, 'Gospel contemporain', 81), (84, 'Spiritual', 81), (85, 'Électro', NULL),
+    (86, 'Techno', 85), (87, 'Minimal techno', 86), (88, 'Detroit techno', 86), (89, 'Hard techno', 86), (90, 'House', 85),
+    (91, 'Deep house', 90), (92, 'Tech house', 90), (93, 'Acid house', 90), (94, 'Drum and bass', 85), (95, 'Liquid funk', 94),
+    (96, 'Neurofunk', 94), (97, 'Jungle', 94), (98, 'Dubstep', 85), (99, 'Brostep', 98), (100, 'Riddim', 98),
+    (101, 'Chillstep', 98), (102, 'Trance', 85), (103, 'Psytrance', 102), (104, 'Trance progressive', 102), (105, 'Uplifting trance', 102),
+    (106, 'Metal', NULL), (107, 'Heavy metal', 106), (108, 'NWOBHM', 107), (109, 'Power metal', 107), (110, 'Speed metal', 107),
+    (111, 'Thrash metal', 106), (112, 'Crossover thrash', 111), (113, 'Bay Area thrash', 111), (114, 'Thrash teutonique', 111), (115, 'Death metal', 106),
+    (116, 'Death mélodique', 115), (117, 'Brutal death', 115), (118, 'Death technique', 115), (119, 'Black metal', 106), (120, 'Black metal atmosphérique', 119),
+    (121, 'Black metal symphonique', 119), (122, 'Black metal dépressif', 119), (123, 'Metalcore', 106), (124, 'Deathcore', 123), (125, 'Mathcore', 123),
+    (126, 'Metalcore mélodique', 123), (127, 'Jazz', NULL), (128, 'Bebop', 127), (129, 'Hard bop', 128), (130, 'Post-bop', 128),
+    (131, 'Jazz modal', 128), (132, 'Swing', 127), (133, 'Big band', 132), (134, 'Jazz manouche', 132), (135, 'Swing revival', 132),
+    (136, 'Jazz fusion', 127), (137, 'Jazz-funk', 136), (138, 'Jazz-rock', 136), (139, 'Smooth jazz', 136), (140, 'Free jazz', 127),
+    (141, 'Jazz d’avant-garde', 140), (142, 'Spiritual jazz', 140), (143, 'Improvisation libre', 140), (144, 'Cool jazz', 127), (145, 'West Coast jazz', 144),
+    (146, 'Third stream', 144), (147, 'Jazz de chambre', 144), (148, 'Blues', NULL), (149, 'Delta blues', 148), (150, 'Country blues', 149),
+    (151, 'Hill country blues', 149), (152, 'Blues acoustique', 149), (153, 'Chicago blues', 148), (154, 'Blues électrique', 153), (155, 'West Side blues', 153),
+    (156, 'Harmonica blues', 153), (157, 'Blues rock', 148), (158, 'British blues', 157), (159, 'Southern rock', 157), (160, 'Heavy blues', 157),
+    (161, 'Piano blues', 148), (162, 'Boogie-woogie', 161), (163, 'Barrelhouse', 161), (164, 'Jump blues', 161), (165, 'Blues moderne', 148),
+    (166, 'Soul blues', 165), (167, 'Blues contemporain', 165), (168, 'Punk blues', 165), (169, 'Reggae', NULL), (170, 'Roots reggae', 169),
+    (171, 'Nyabinghi', 170), (172, 'Reggae conscient', 170), (173, 'Lovers rock', 170), (174, 'Dub', 169), (175, 'Dub poetry', 174),
+    (176, 'Dubtronica', 174), (177, 'Steppers', 174), (178, 'Ska', 169), (179, 'Ska traditionnel', 178), (180, '2-Tone', 178),
+    (181, 'Ska punk', 178), (182, 'Dancehall', 169), (183, 'Ragga', 182), (184, 'Bashment', 182), (185, 'Dancehall digital', 182),
+    (186, 'Reggae fusion', 169), (187, 'Reggae rock', 186), (188, 'Reggae pop', 186), (189, 'Électro-reggae', 186), (190, 'Classique', NULL),
+    (191, 'Baroque', 190), (192, 'Baroque italien', 191), (193, 'Baroque français', 191), (194, 'Baroque allemand', 191), (195, 'Classicisme', 190),
+    (196, 'Style galant', 195), (197, 'École de Vienne', 195), (198, 'École de Mannheim', 195), (199, 'Romantique', 190), (200, 'Premier romantisme', 199),
+    (201, 'Romantisme tardif', 199), (202, 'Nationalisme musical', 199), (203, 'Opéra', 190), (204, 'Opera seria', 203), (205, 'Opera buffa', 203),
+    (206, 'Bel canto', 203), (207, 'Musique contemporaine', 190), (208, 'Minimalisme', 207), (209, 'Musique sérielle', 207), (210, 'Musique concrète', 207),
+    (211, 'Country', NULL), (212, 'Bluegrass', 211), (213, 'Bluegrass traditionnel', 212), (214, 'Newgrass', 212), (215, 'Bluegrass gospel', 212),
+    (216, 'Country pop', 211), (217, 'Nashville sound', 216), (218, 'Countrypolitan', 216), (219, 'Bro-country', 216), (220, 'Outlaw country', 211),
+    (221, 'Red dirt', 220), (222, 'Texas country', 220), (223, 'Cowpunk', 220), (224, 'Honky-tonk', 211), (225, 'Bakersfield sound', 224),
+    (226, 'Western swing', 224), (227, 'Country néo-traditionnelle', 224), (228, 'Alt-country', 211), (229, 'Americana', 228), (230, 'Insurgent country', 228),
+    (231, 'Gothic country', 228), (232, 'Chanson française', NULL), (233, 'Variété', 232), (234, 'Variété pop', 233), (235, 'Ballade romantique', 233),
+    (236, 'Yéyé', 233), (237, 'Chanson à texte', 232), (238, 'Chanson rive gauche', 237), (239, 'Chanson poétique', 237), (240, 'Chanson engagée', 237),
+    (241, 'Chanson réaliste', 232), (242, 'Musette', 241), (243, 'Cabaret', 241), (244, 'Chanson de rue', 241), (245, 'Nouvelle scène', 232),
+    (246, 'Pop française indé', 245), (247, 'Néo-réaliste', 245), (248, 'Chanson électro', 245), (249, 'Chanson régionale', 232), (250, 'Chanson bretonne', 249),
+    (251, 'Chanson occitane', 249), (252, 'Chanson corse', 249), (253, 'Musiques du monde', NULL), (254, 'Musiques africaines', 253), (255, 'Afrobeat', 254),
+    (256, 'Coupé-décalé', 254), (257, 'Rumba congolaise', 254), (258, 'Musiques latines', 253), (259, 'Reggaeton', 258), (260, 'Salsa', 258),
+    (261, 'Cumbia', 258), (262, 'Musiques brésiliennes', 253), (263, 'Bossa nova', 262), (264, 'Samba', 262), (265, 'Baile funk', 262),
+    (266, 'Musiques du Maghreb et du Moyen-Orient', 253), (267, 'Raï', 266), (268, 'Gnaoua', 266), (269, 'Chaabi', 266), (270, 'Musiques d’Asie', 253),
+    (271, 'Musique de Bollywood', 270), (272, 'Enka', 270), (273, 'Gamelan', 270);
 
 
 INSERT INTO SPECTATEUR (id_spectateur, nom, prenom, email, mot_de_passe) VALUES
@@ -456,14 +495,14 @@ INSERT INTO EST_SIMILAIRE (id_groupe, id_groupe_similaire) VALUES
 
 -- AVOIR_STYLE (id_groupe, id_style) : 80 paires
 INSERT INTO AVOIR_STYLE (id_groupe, id_style) VALUES
-    (1, 1), (1, 2), (2, 1), (2, 4), (3, 4), (3, 5), (4, 1), (4, 2), (5, 1), (5, 2),
-    (6, 1), (6, 8), (7, 1), (7, 4), (8, 4), (8, 5), (9, 6), (9, 7), (10, 4), (11, 5),
-    (11, 19), (12, 5), (13, 3), (14, 5), (15, 4), (16, 4), (17, 1), (18, 1), (19, 1), (20, 1),
-    (21, 1), (22, 1), (23, 1), (24, 1), (25, 1), (26, 1), (27, 72), (28, 1), (29, 1), (30, 1),
-    (31, 6), (32, 8), (33, 8), (34, 1), (35, 1), (36, 1), (37, 1), (38, 72), (39, 1), (40, 1),
-    (41, 4), (42, 6), (43, 6), (44, 4), (45, 4), (46, 1), (47, 1), (48, 1), (49, 1), (50, 72),
-    (51, 72), (52, 72), (53, 72), (54, 72), (55, 72), (56, 1), (57, 1), (58, 1), (59, 1), (60, 72),
-    (61, 72), (62, 8), (63, 4), (64, 4), (65, 4), (66, 4), (67, 4), (68, 4), (69, 4), (70, 4);
+    (1, 43), (2, 43), (2, 22), (3, 22), (3, 85), (4, 43), (5, 43), (6, 43), (6, 56), (7, 43),
+    (7, 22), (8, 22), (8, 85), (9, 64), (9, 77), (10, 22), (11, 85), (11, 90), (12, 85), (13, 1),
+    (14, 85), (15, 22), (16, 22), (17, 43), (18, 43), (19, 43), (20, 43), (21, 43), (22, 43), (23, 43),
+    (24, 43), (25, 43), (26, 43), (27, 44), (28, 43), (29, 43), (30, 43), (31, 64), (32, 56), (33, 56),
+    (34, 43), (35, 43), (36, 43), (37, 43), (38, 44), (39, 43), (40, 43), (41, 22), (42, 64), (43, 64),
+    (44, 22), (45, 22), (46, 43), (47, 43), (48, 43), (49, 43), (50, 44), (51, 44), (52, 44), (53, 44),
+    (54, 44), (55, 44), (56, 43), (57, 43), (58, 43), (59, 43), (60, 44), (61, 44), (62, 56), (63, 22),
+    (64, 22), (65, 22), (66, 22), (67, 22), (68, 22), (69, 22), (70, 22);
 
 -- METTRE_EN_FAVORI (id_spectateur, id_groupe) : 80 paires
 INSERT INTO METTRE_EN_FAVORI (id_spectateur, id_groupe) VALUES
@@ -565,9 +604,9 @@ INSERT INTO LOGER (id_groupe, id_hebergement, date_nuit, nb_places_necessaires) 
     (78, 59, '2026-12-03', 12), (79, 60, '2026-12-04', 10), (80, 78, '2026-12-05', 15);
 
 -- PREFERENCE_STYLE (id_spectateur, id_style, note) : algo
--- Styles : 1 Rap, 3 Rock, 4 Pop, 5 Electro, 13 Punk, 18 Techno, 60 Garage Rock
+-- Styles : 1 Rock, 6 Garage rock, 14 Punk rock, 22 Pop, 43 Hip-hop, 85 Électro, 86 Techno
 INSERT INTO PREFERENCE_STYLE (id_spectateur, id_style, note) VALUES
-    (1, 3, 5), (1, 60, -3), (1, 1, 2),   -- Emma : aime le rock, sauf le garage rock
-    (2, 5, 4), (2, 18, -4),              -- Louis : aime l'electro, mais pas la techno
-    (3, 1, 5), (3, 4, -2),               -- Chloe : aime le rap, pas la pop
-    (4, 13, 5);                          -- Thomas : seulement le punk
+    (1, 1, 5), (1, 6, -3), (1, 43, 2),   -- Emma : aime le rock, sauf le garage rock
+    (2, 85, 4), (2, 86, -4),              -- Louis : aime l'electro, mais pas la techno
+    (3, 43, 5), (3, 22, -2),               -- Chloe : aime le hip-hop, pas la pop
+    (4, 14, 5);                          -- Thomas : seulement le punk rock                          -- Thomas : seulement le punk
