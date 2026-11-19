@@ -46,7 +46,7 @@ Résultats  :
 ```text
 MEMBRE: 80
 GROUPE: 80
-STYLE_MUSICAL: 80
+STYLE_MUSICAL: 273
 EVENEMENT: 80
 PRE_INSCRIRE: 80
 PARTICIPER: 80
@@ -133,7 +133,7 @@ VALUES (1, 1, '2026-10-15', 1);
 ## 5. Recherche et recommandations
 
 ```sql
-SELECT RechercherGroupesParStyle(1);
+SELECT RechercherGroupesParStyle(43);
 SELECT OrganiserJourneeSpectateur(1);
 CALL GenererRecommandations(1);
 ```
@@ -161,6 +161,21 @@ INSERT INTO STYLE_MUSICAL
     (id_style, libelle_style, id_style_parent)
 VALUES (11, 'Style cyclique', 11);
 -- Erreur 
+```
+
+Tester une boucle en changeant le parent d'un style existant :
+
+```sql
+UPDATE STYLE_MUSICAL SET id_style_parent = 2 WHERE id_style = 1;
+-- Erreur (Rock deviendrait l'enfant de son propre sous-genre Folk rock)
+UPDATE STYLE_MUSICAL SET id_style_parent = 3 WHERE id_style = 1;
+-- Erreur (3 est un petit-enfant de Rock)
+UPDATE STYLE_MUSICAL SET id_style_parent = 1 WHERE id_style = 1;
+-- Erreur (un style ne peut pas etre son propre parent)
+UPDATE STYLE_MUSICAL SET id_style_parent = 22 WHERE id_style = 6;
+-- OK (Garage rock passe sous Pop, sans boucle)
+UPDATE STYLE_MUSICAL SET id_style_parent = 1 WHERE id_style = 6;
+-- OK (retour sous Rock)
 ```
 
 ## 6. Planning
@@ -284,7 +299,7 @@ VALUES (1, 1);
 INSERT INTO CACHE_RECOMMANDATION (id_spectateur, id_evenement, score)
 VALUES (1, 1, 2.5);
 
-UPDATE PREFERENCE_STYLE SET note = 4 WHERE id_spectateur = 1 AND id_style = 3;
+UPDATE PREFERENCE_STYLE SET note = 4 WHERE id_spectateur = 1 AND id_style = 1;
 
 SELECT COUNT(*) FROM CALCUL_RECOMMANDATION WHERE id_spectateur = 1;
 SELECT COUNT(*) FROM CACHE_RECOMMANDATION WHERE id_spectateur = 1;

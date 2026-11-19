@@ -18,6 +18,7 @@ DROP FUNCTION IF EXISTS RechercherGroupesParStyle;
 DROP FUNCTION IF EXISTS OrganiserJourneeSpectateur;
 DROP PROCEDURE IF EXISTS AjouterRelationSimilaire;
 DROP TRIGGER IF EXISTS TRG_Check_Boucle_Style;
+DROP TRIGGER IF EXISTS TRG_Check_Boucle_Style_Update;
 DROP TRIGGER IF EXISTS TRG_Check_Chevauchement_Lieu;
 DROP TRIGGER IF EXISTS TRG_Check_Inclusion_Journee;
 DROP TRIGGER IF EXISTS TRG_Check_Ubiquite_Spectateur;
