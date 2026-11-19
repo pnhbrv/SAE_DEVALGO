@@ -44,20 +44,20 @@ SELECT COUNT(*) FROM LOGER;
 Résultats  :
 
 ```text
-MEMBRE: 9
-GROUPE: 10
-STYLE_MUSICAL: 10
-EVENEMENT: 5
-PRE_INSCRIRE: 5
-PARTICIPER: 5
-LOGER: 7
+MEMBRE: 80
+GROUPE: 80
+STYLE_MUSICAL: 273
+EVENEMENT: 80
+PRE_INSCRIRE: 80
+PARTICIPER: 80
+LOGER: 83
 ```
 
 ## 3. Billetterie
 
 ```sql
-SELECT CalculerOccupationLieu(1, '2026-10-12');
--- Résultat : 1
+SELECT CalculerOccupationLieu(11, '2026-10-18');
+-- Résultat : 17
 
 CALL AcheterBilletTransaction(1, 1, '2026-06-21 10:00:00');
 ```
@@ -73,8 +73,8 @@ Tester un spectateur sans droit :
 
 ```sql
 INSERT INTO PRE_INSCRIRE (id_spectateur, id_evenement)
-VALUES (4, 1);
--- Erreur 
+VALUES (1, 80);
+-- Erreur (Pass 1 jour : pas de billet pour le 2026-12-05)
 ```
 
 Tester un événement privé :
@@ -90,11 +90,11 @@ UPDATE EVENEMENT SET est_public = TRUE WHERE id_evenement = 1;
 Tester la jauge :
 
 ```sql
-UPDATE LIEU SET jauge_max = 1 WHERE id_lieu = 1;
+UPDATE LIEU SET jauge_max = 1 WHERE id_lieu = 11;
 INSERT INTO PRE_INSCRIRE (id_spectateur, id_evenement)
-VALUES (3, 1);
+VALUES (80, 15);
 -- Erreur 
-UPDATE LIEU SET jauge_max = 5000 WHERE id_lieu = 1;
+UPDATE LIEU SET jauge_max = 1000 WHERE id_lieu = 11;
 ```
 
 ## 4. Hébergements et groupes
@@ -133,7 +133,7 @@ VALUES (1, 1, '2026-10-15', 1);
 ## 5. Recherche et recommandations
 
 ```sql
-SELECT RechercherGroupesParStyle(1);
+SELECT RechercherGroupesParStyle(43);
 SELECT OrganiserJourneeSpectateur(1);
 CALL GenererRecommandations(1);
 ```
@@ -161,6 +161,21 @@ INSERT INTO STYLE_MUSICAL
     (id_style, libelle_style, id_style_parent)
 VALUES (11, 'Style cyclique', 11);
 -- Erreur 
+```
+
+Tester une boucle en changeant le parent d'un style existant :
+
+```sql
+UPDATE STYLE_MUSICAL SET id_style_parent = 2 WHERE id_style = 1;
+-- Erreur (Rock deviendrait l'enfant de son propre sous-genre Folk rock)
+UPDATE STYLE_MUSICAL SET id_style_parent = 3 WHERE id_style = 1;
+-- Erreur (3 est un petit-enfant de Rock)
+UPDATE STYLE_MUSICAL SET id_style_parent = 1 WHERE id_style = 1;
+-- Erreur (un style ne peut pas etre son propre parent)
+UPDATE STYLE_MUSICAL SET id_style_parent = 22 WHERE id_style = 6;
+-- OK (Garage rock passe sous Pop, sans boucle)
+UPDATE STYLE_MUSICAL SET id_style_parent = 1 WHERE id_style = 6;
+-- OK (retour sous Rock)
 ```
 
 ## 6. Planning
@@ -240,4 +255,53 @@ Pour tout remettre à zéro :
 SOURCE Suppression.sql;
 SOURCE Creation.sql;
 SOURCE insertion.sql;
+```
+
+## 9. Partie Algo : préférences et cache
+
+Vérifier les tables :
+
+```sql
+SELECT COUNT(*) FROM PREFERENCE_STYLE;
+SELECT * FROM VERSION_PROGRAMMATION;
+```
+
+Résultats :
+
+```text
+PREFERENCE_STYLE: 8
+VERSION_PROGRAMMATION: numero = 1 (plus si les inserts d'événements l'ont fait monter)
+```
+
+La note 0 et les notes hors de -5 à +5 sont refusées :
+
+```sql
+INSERT INTO PREFERENCE_STYLE (id_spectateur, id_style, note) VALUES (1, 5, 0);
+-- Erreur
+INSERT INTO PREFERENCE_STYLE (id_spectateur, id_style, note) VALUES (1, 5, 9);
+-- Erreur
+```
+
+La version augmente quand la programmation change :
+
+```sql
+SELECT numero FROM VERSION_PROGRAMMATION;
+UPDATE EVENEMENT SET titre = titre WHERE id_evenement = 1;
+SELECT numero FROM VERSION_PROGRAMMATION;
+-- Résultat : le numéro a augmenté de 1
+```
+
+Un changement de préférence supprime le calcul du spectateur (et son cache) :
+
+```sql
+INSERT INTO CALCUL_RECOMMANDATION (id_spectateur, version_programmation)
+VALUES (1, 1);
+INSERT INTO CACHE_RECOMMANDATION (id_spectateur, id_evenement, score)
+VALUES (1, 1, 2.5);
+
+UPDATE PREFERENCE_STYLE SET note = 4 WHERE id_spectateur = 1 AND id_style = 1;
+
+SELECT COUNT(*) FROM CALCUL_RECOMMANDATION WHERE id_spectateur = 1;
+SELECT COUNT(*) FROM CACHE_RECOMMANDATION WHERE id_spectateur = 1;
+-- Résultat : 0 et 0
 ```
