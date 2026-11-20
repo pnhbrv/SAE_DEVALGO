@@ -4,7 +4,7 @@ Les préférences sont un dictionnaire {id_genre: note}, avec une note de -5 à 
 Un genre absent du dictionnaire = pas de préférence.
 """
 
-SCORE_NEUTRE = 0.05   # aucune préférence : le concert reste proposable, mais jamais en premier
+SCORE_NEUTRE = 0.05   # aucune préférence : le concert reste proposable mais jamais en premier
 
 
 def preference_la_plus_proche(arbre, prefs, id_genre):
