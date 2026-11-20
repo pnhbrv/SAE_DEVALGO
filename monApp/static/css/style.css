@@ -1,0 +1,98 @@
+/* Charte Fest'IUT'O (partie publique) [Source : maquettes — violet, titres magenta, boutons dégradés] */
+body {
+    font-family: sans-serif;
+    background-color: #faf7fc;
+}
+
+#main {
+    margin-top: 5em;
+}
+
+.navbar-festiuto {
+    background-color: #8e3fa0;
+}
+
+/* Police Pacifico : on donne un nom à la police et on indique son fichier */
+@font-face {
+    font-family: "Pacifico";
+    src: url("../fonts/Pacifico.ttf");
+}
+
+/* « Fest'IUT'O » en haut à gauche et slogan de l'accueil */
+.logo-festiuto {
+    font-family: "Pacifico";
+    font-size: 1.8em;
+    color: white;
+}
+
+.titre-festiuto {
+    color: #d61fd6;
+    font-weight: bold;
+}
+
+.btn-festiuto {
+    background: linear-gradient(#7b2fbe, #4b1d8f);
+    color: white;
+    border-radius: 0.8em;
+}
+
+.btn-festiuto:hover {
+    color: white;
+    background: #4b1d8f;
+}
+
+.carte-festiuto {
+    background-color: white;
+    border: thin solid #8e3fa0;
+    border-radius: 0.5em;
+    padding: 2em;
+    margin: 2em auto;
+}
+
+.carte-formulaire {
+    max-width: 32em;
+}
+
+.carte-choix {
+    border: 2px solid black;
+    border-radius: 0.8em;
+    padding: 1.5em;
+    width: 15em;
+    text-align: center;
+}
+
+.carte-choix h2 {
+    font-size: 1.2em;
+}
+
+/* Page d'accueil : tout est centré */
+.accueil {
+    text-align: center;
+}
+
+/* Logo de l'accueil, seul sur sa ligne et centré */
+.accueil-logo {
+    display: block;
+    width: 500px;
+    margin: 0 auto;
+}
+
+/* Vidéo de fond ajoutée en JavaScript : elle prend tout l'écran, derrière le reste */
+.accueil-video {
+    position: fixed;   /* collée à l'écran */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* remplit l'écran sans être déformée */
+    z-index: -1;       /* derrière tout le reste */
+}
+
+.accueil-bouton {
+    border-radius: 2em;
+    margin: 0.5em;
+}
+
+.accueil-slogan {
+    font-size: 2.5em;
+}

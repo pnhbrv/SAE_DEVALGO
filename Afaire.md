@@ -22,7 +22,6 @@
 
 ### 1.3 Algorithme pour un concert à un seul genre (la priorité)
 - Partir du genre du concert et remonter dans la hiérarchie
-- Garder la préférence la plus proche, ce qui permet de dire « j'aime le rock, sauf le garage rock »
 - Préférence négative : on écarte le concert
 - Préférence positive : le concert est un bon candidat, avec un score
 - Aucune préférence : on peut le proposer, mais sans le mettre en avant
