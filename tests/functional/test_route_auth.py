@@ -28,7 +28,7 @@ def test_login_spectateur(client, testapp):
     ajouter_comptes(testapp)
     response = login(client, "emma@mail.com", "emma", "")
     assert response.status_code == 200
-    assert "Déconnexion".encode() in response.data
+    assert "Accéder à la billetterie".encode() in response.data
 
 
 def test_login_echec(client, testapp):
@@ -62,7 +62,7 @@ def test_inscription_post(client, testapp):
         unSpectateur = Spectateur.query.filter_by(email="louis@mail.com").first()
         assert unSpectateur.mot_de_passe == hacher("louis")
     response = login(client, "louis@mail.com", "louis", "")
-    assert "Déconnexion".encode() in response.data
+    assert "Accéder à la billetterie".encode() in response.data
 
 
 def test_inscription_email_existant(client, testapp):
