@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from flask import flash, redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user
 
 from monApp.models import TypeBillet
@@ -10,6 +10,8 @@ from . import paiement_bp
 @paiement_bp.route('/paiement/')
 def paiement():
     identifiants = request.args.getlist('id_type_billet')
+    if not identifiants:
+        identifiants = [str(id_billet) for id_billet in session.get('selected_ticket_ids', [])]
     if not current_user.is_authenticated:
         flash("Veuillez vous connecter pour accéder au paiement.", "danger")
         prochaine_page = url_for('paiement.paiement', id_type_billet=identifiants) if identifiants else url_for('paiement.paiement')

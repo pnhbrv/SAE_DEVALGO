@@ -12,7 +12,8 @@
             <h2 id="paiement-recap-titre" class="h5 text-center">Formule(s) sélectionnée(s)</h2>
             {% if billets %}
                 {% for billet in billets %}
-                <article class="paiement-pass">
+                <article class="paiement-pass paiement-pass-selectionne">
+                    <span class="paiement-selection-badge">Pass sélectionné</span>
                     <h3 class="h4">{{ billet.libelle }}</h3>
                     <p>Accès au festival selon la formule choisie</p>
                     <p class="paiement-pass-prix">{{ "%.2f"|format(billet.prix) }}€</p>

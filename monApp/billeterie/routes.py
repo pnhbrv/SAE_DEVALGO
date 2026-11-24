@@ -1,5 +1,5 @@
 # Vues de la billetterie [Source : TP 3 — render_template ; TP 4 — Blueprint ; maquettes — formules disponibles]
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, session, url_for
 from flask_login import current_user
 from . import billeterie_bp
 from monApp.models import TypeBillet
@@ -63,7 +63,19 @@ def billeterie():
     else:
         billets = FORMULES_DEFAUT
 
-    return render_template("billeterie.html", title="Billeterie", billets=billets)
+    billets_disponibles = {billet["id_type_billet"] for billet in billets}
+    billets_selectionnes = [
+        id_billet for id_billet in session.get("selected_ticket_ids", [])
+        if id_billet in billets_disponibles
+    ]
+    session["selected_ticket_ids"] = billets_selectionnes
+
+    return render_template(
+        "billeterie.html",
+        title="Billeterie",
+        billets=billets,
+        billets_selectionnes=billets_selectionnes,
+    )
 
 
 @billeterie_bp.route('/billeterie/selection/<int:id_type_billet>/')
@@ -89,5 +101,12 @@ def selectionner(id_type_billet):
         flash("Ce billet n'est pas disponible.", "danger")
         return redirect(url_for('billeterie.billeterie'))
 
-    flash(f"Vous avez sélectionné : {nom_billet}.", "succes")
+    billets_selectionnes = session.get("selected_ticket_ids", [])
+    if id_type_billet in billets_selectionnes:
+        billets_selectionnes.remove(id_type_billet)
+        flash(f"Vous avez retiré : {nom_billet}.", "succes")
+    else:
+        billets_selectionnes.append(id_type_billet)
+        flash(f"Vous avez sélectionné : {nom_billet}.", "succes")
+    session["selected_ticket_ids"] = billets_selectionnes
     return redirect(url_for('billeterie.billeterie'))

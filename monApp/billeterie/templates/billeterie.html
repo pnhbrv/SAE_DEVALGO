@@ -10,11 +10,17 @@
 
     <div class="d-flex justify-content-center justify-content-lg-between align-items-stretch flex-wrap gap-4 mb-4">
         {% for billet in billets %}
-        <article class="carte-choix carte-billet">
+        {% set billet_selectionne = billet.id_type_billet in billets_selectionnes %}
+        <article class="carte-choix carte-billet{% if billet_selectionne %} carte-billet-selectionnee{% endif %}">
             <h2 class="carte-billet-nom">{{ billet.libelle }}</h2>
             <p class="carte-billet-description">{{ billet.description }}</p>
             <p class="carte-billet-prix">{{ "%.2f"|format(billet.prix) }}€*</p>
-            <a href="{{ url_for('billeterie.selectionner', id_type_billet=billet.id_type_billet) }}" class="btn btn-festiuto btn-billet">Sélectionner</a>
+            {% if billet_selectionne %}
+            <p class="badge text-bg-success">Pass sélectionné</p>
+            {% endif %}
+            <a href="{{ url_for('billeterie.selectionner', id_type_billet=billet.id_type_billet) }}" class="btn btn-festiuto btn-billet">
+                {{ "Désélectionner" if billet_selectionne else "Sélectionner" }}
+            </a>
         </article>
         {% endfor %}
     </div>

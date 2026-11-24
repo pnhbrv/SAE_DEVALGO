@@ -71,10 +71,16 @@ body {
 }
 
 .carte-billet:hover,
-.carte-billet:focus-within {
+.carte-billet:focus-within,
+.carte-billet-selectionnee {
     border-color: #d61fd6;
     box-shadow: 0 0.75rem 1.5rem rgba(75, 29, 143, 0.2);
     transform: translateY(-0.35rem);
+}
+
+.carte-billet-selectionnee {
+    background-color: #fbf2ff;
+    outline: 2px solid #d61fd6;
 }
 
 .paiement-page {
@@ -104,6 +110,19 @@ body {
     background: linear-gradient(160deg, #8e3fa0, #4b1d8f);
     color: white;
     text-align: center;
+}
+
+.paiement-pass-selectionne {
+    outline: 3px solid #d61fd6;
+}
+
+.paiement-selection-badge {
+    align-self: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background-color: white;
+    color: #4b1d8f;
+    font-weight: bold;
 }
 
 .paiement-pass-prix {

@@ -88,6 +88,22 @@ def test_selectionner_connecte(client, testapp):
     assert response.status_code == 200
     assert response.request.path == "/billeterie/"
     assert "Vous avez sélectionné : Pass 1 jour.".encode() in response.data
+    assert b"carte-billet-selectionnee" in response.data
+    assert "Désélectionner".encode() in response.data
+
+
+def test_selectionner_pass_selectionne_peut_etre_retire(client, testapp):
+    with testapp.app_context():
+        db.session.add(TypeBillet(libelle="Pass 1 jour", prix=19.99))
+        db.session.commit()
+
+    connecter_spectateur(client, testapp)
+    client.get('/billeterie/selection/1/')
+    response = client.get('/billeterie/selection/1/', follow_redirects=True)
+
+    assert response.status_code == 200
+    assert "Vous avez retiré : Pass 1 jour.".encode() in response.data
+    assert b"carte-billet-selectionnee" not in response.data
 
 
 def test_selectionner_billet_inconnu(client, testapp):

@@ -43,6 +43,21 @@ def test_paiement_affiche_pass_selectionnes_et_total(client, testapp):
     assert "Le paiement sera activé après l’intégration".encode() in response.data
 
 
+def test_paiement_retrouve_la_selection_de_billetterie(client, testapp):
+    with testapp.app_context():
+        db.session.add(TypeBillet(libelle="Pass 1 jour", prix=35.00))
+        db.session.commit()
+
+    connecter_spectateur(client, testapp)
+    client.get('/billeterie/selection/1/')
+    response = client.get('/paiement/')
+
+    assert response.status_code == 200
+    assert "Pass 1 jour".encode() in response.data
+    assert "35.00€".encode() in response.data
+    assert "Pass sélectionné".encode() in response.data
+
+
 def test_paiement_sans_pass_affiche_message_de_liaison(client, testapp):
     connecter_spectateur(client, testapp)
     response = client.get('/paiement/')
