@@ -1,5 +1,3 @@
-# Modèles de l'application Fest'IUT'O (TP 2 et 6)
-# les tables reprennent le MLD et Creation.sql
 from flask_login import UserMixin
 from .app import db, login_manager
 
@@ -478,7 +476,6 @@ class Spectateur(db.Model, UserMixin):
         self.mot_de_passe = mot_de_passe
 
     def get_id(self):
-        # identifiant de session = email (TP 6)
         return self.email
 
     def __repr__(self):
@@ -641,5 +638,4 @@ class Loger(db.Model):
 
 @login_manager.user_loader
 def load_user(identifiant):
-    # spectateur identifié par son email (TP 2 et 6)
     return Spectateur.query.filter_by(email=identifiant).first()

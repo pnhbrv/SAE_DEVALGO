@@ -1,4 +1,3 @@
-# Vues d'authentification (TP 5 et 6)
 from flask import redirect, render_template, request, url_for
 from flask_login import login_user, logout_user
 from . import auth_bp
@@ -10,7 +9,6 @@ from monApp.models import Spectateur
 
 @auth_bp.route("/compte/")
 def compte():
-    # page qui propose de se connecter ou de créer un compte
     return render_template("compte.html", title="Mon compte")
 
 
@@ -34,7 +32,6 @@ def inscription():
     unForm = InscriptionForm()
     if unForm.validate_on_submit():
         if Spectateur.query.filter_by(email=unForm.email.data).first() is not None:
-            # l'email doit être unique (contrainte UNIQUE dans Creation.sql)
             unForm.email.errors.append("Ce mail est déjà utilisé.")
         else:
             unSpectateur = Spectateur(nom=unForm.nom.data, prenom=unForm.prenom.data, email=unForm.email.data,

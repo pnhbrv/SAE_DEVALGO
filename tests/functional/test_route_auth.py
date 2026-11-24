@@ -1,4 +1,3 @@
-# Tests de l'authentification (TP 5 et 6)
 from monApp.app import db
 from monApp.commands import hacher
 from monApp.models import Spectateur

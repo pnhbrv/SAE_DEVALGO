@@ -1,4 +1,3 @@
-# Tests de la liste des artistes (TP 4)
 from monApp.app import db
 from monApp.models import Groupe
 
@@ -14,7 +13,6 @@ def test_artistes_sans_recherche(client, testapp):
     ajouter_groupes(testapp)
     response = client.get('/artistes/')
     assert response.status_code == 200
-    # rien dans la recherche : tous les groupes sont dans la liste
     assert "Angèle".encode() in response.data
     assert b"Adele" in response.data
     assert b"liste-artistes" in response.data
@@ -40,8 +38,6 @@ def test_artistes_aucun(client, testapp):
 
 
 def ajouter_donnees_filtres(testapp):
-    # Metal est un sous-genre de Rock
-    # Gojira (Metal) joue gratuitement le 10/10 au CO'Met, Angèle (Pop) joue en payant le 11/10 au Zénith
     from datetime import date, datetime, time
     from monApp.models import AvoirStyle, Evenement, Journee, Lieu, Participer, StyleMusical
     with testapp.app_context():
@@ -65,13 +61,11 @@ def test_artistes_filtres_affiches(client, testapp):
     response = client.get('/artistes/')
     for texte in ["Filtres", "Style", "Prix", "Date", "Lieu", "Rock", "Gratuit", "10/10/2026", "Zénith"]:
         assert texte.encode() in response.data
-    # Metal est un sous-genre : il n'est pas dans la liste des styles
     assert b"style=2" not in response.data
 
 
 def test_artistes_filtre_style_sous_genres(client, testapp):
     ajouter_donnees_filtres(testapp)
-    # Rock contient son sous-genre Metal, donc Gojira est affiché
     response = client.get('/artistes/?style=1')
     assert b"Gojira" in response.data
     assert "Angèle".encode() not in response.data
@@ -88,23 +82,19 @@ def test_artistes_filtres_prix_date_lieu(client, testapp):
 
 
 def test_artistes_filtre_invalide(client, testapp):
-    # une date ou un lieu mal écrits sont ignorés
     response = client.get('/artistes/?date=nimporte&lieu=abc')
     assert response.status_code == 200
 
 
 def test_artistes_plusieurs_filtres(client, testapp):
     ajouter_donnees_filtres(testapp)
-    # style Rock et gratuit : Gojira
     response = client.get('/artistes/?style=1&prix=gratuit')
     assert b"Gojira" in response.data and "Angèle".encode() not in response.data
-    # style Rock et payant : personne
     response = client.get('/artistes/?style=1&prix=payant')
     assert "Aucun artiste trouvé".encode() in response.data
 
 
 def test_artistes_liens_gardent_les_filtres(client, testapp):
     ajouter_donnees_filtres(testapp)
-    # avec le style Rock choisi, le lien Gratuit garde le style
     response = client.get('/artistes/?style=1')
     assert b'href="/artistes/?style=1&amp;prix=gratuit"' in response.data

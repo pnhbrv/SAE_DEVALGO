@@ -1,4 +1,3 @@
-# Formulaires d'authentification (TP 5 et 6)
 from flask_wtf import FlaskForm
 from wtforms import HiddenField, PasswordField, StringField
 from wtforms.validators import DataRequired
@@ -12,7 +11,6 @@ class LoginForm(FlaskForm):
     next = HiddenField()
 
     def get_authenticated_user(self):
-        # le spectateur se connecte avec son email
         unUser = Spectateur.query.filter_by(email=self.Login.data).first()
         if unUser is None:
             return None
@@ -20,7 +18,6 @@ class LoginForm(FlaskForm):
 
 
 class InscriptionForm(FlaskForm):
-    # champs de la maquette /inscription = colonnes de SPECTATEUR
     nom = StringField('Votre nom', validators=[DataRequired()])
     prenom = StringField('Votre prénom', validators=[DataRequired()])
     email = StringField('Votre mail', validators=[DataRequired()])

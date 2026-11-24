@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{# Page d'accueil (maquette) #}
-{# la barre violette n'apparaît que si on est connecté #}
 {% block navbar %}
     {% if current_user.is_authenticated %}
         {{ super() }}
@@ -11,7 +9,6 @@
 <section class="accueil">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Fest'IUT'O" class="accueil-logo">
     {% if not current_user.is_authenticated %}
-    {# pas connecté : le bouton mène à la page de connexion / inscription #}
     <a href="{{ url_for('auth.compte') }}" class="btn btn-light accueil-bouton">Réservez Maintenant</a>
     {% endif %}
     <p class="logo-festiuto accueil-slogan">Le Festival phare d'Orléans !</p>
@@ -22,9 +19,9 @@
 
     video.src = "{{ url_for('static', filename='videos/Video.mp4') }}";
 
-    video.autoplay = true;   // elle démarre toute seule
-    video.loop = true;       // elle recommence quand elle est finie
-    video.muted = true;      // sans le son (obligatoire pour que le navigateur accepte l'autoplay)
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
 
     video.className = "accueil-video";
 

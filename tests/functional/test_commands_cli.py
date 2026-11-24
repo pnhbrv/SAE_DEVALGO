@@ -1,4 +1,3 @@
-# Tests des commandes en ligne (TP 2 et 6)
 from monApp.models import *
 from monApp.commands import hacher
 from monApp.app import db

@@ -1,5 +1,4 @@
 <!doctype html>
-{# Template de base (TP 3, 4 et 6) #}
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
@@ -15,7 +14,6 @@
                 <a class="navbar-brand logo-festiuto" href="{{ url_for('menu.index') }}">Fest'IUT'O</a>
                 <ul class="navbar-nav ms-auto align-items-center">
                     {% if current_user.is_authenticated %}
-                    {# menu quand on est connecté, les # seront remplacés quand les pages existeront #}
                     <li class="nav-item"><a class="nav-link" href="#">Evenements</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Programmation</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('artiste.getArtistes') }}">Artiste</a></li>

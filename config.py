@@ -1,10 +1,9 @@
-# Fichier de configuration (TP 1 et 5)
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = "9c1f6a2e-4b7d-4e0a-9f3b-6d2c8e5a7b14"  # générée avec uuidgen (TP 5)
+    SECRET_KEY = "9c1f6a2e-4b7d-4e0a-9f3b-6d2c8e5a7b14"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     BOOTSTRAP_SERVE_LOCAL = True
 
