@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{# Page de billetterie [Source : maquette billetterie — formules disponibles, pass et tarifs] #}
+
+{% block main %}
+<div class="carte-festiuto billeterie-page">
+    <header class="billeterie-entete mb-4">
+        <h1 class="titre-festiuto billeterie-titre">Billeterie</h1>
+        <p class="billeterie-sous-titre">Voici les formules disponibles !</p>
+    </header>
+
+    <div class="d-flex justify-content-center justify-content-lg-between align-items-stretch flex-wrap gap-4 mb-4">
+        {% for billet in billets %}
+        <article class="carte-choix carte-billet">
+            <h2 class="carte-billet-nom">{{ billet.libelle }}</h2>
+            <p class="carte-billet-description">{{ billet.description }}</p>
+            <p class="carte-billet-prix">{{ "%.2f"|format(billet.prix) }}€*</p>
+            <a href="{{ url_for('billeterie.selectionner', id_type_billet=billet.id_type_billet) }}" class="btn btn-festiuto btn-billet">Sélectionner</a>
+        </article>
+        {% endfor %}
+    </div>
+
+    <footer class="d-flex justify-content-end mt-4">
+        <span class="note-billeterie">*Accès aux Événements payants</span>
+    </footer>
+</div>
+{% endblock %}

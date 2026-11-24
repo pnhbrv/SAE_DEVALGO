@@ -19,8 +19,10 @@ def create_app(config_class="config.ProductionConfig"):
     # Enregistrement des blueprints [Source : TP 4 ; TP 6 — auth_bp]
     from monApp.menu import menu_bp
     from monApp.auth import auth_bp
+    from monApp.billeterie import billeterie_bp
     app.register_blueprint(menu_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(billeterie_bp)
 
     # Enregistrement des commandes personnalisées [Source : TP 4]
     from .commands import register_commands
