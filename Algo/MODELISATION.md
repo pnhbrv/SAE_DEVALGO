@@ -47,7 +47,50 @@ Un concert peut avoir plusieurs genres. On calcule le score de chaque genre, pui
 - si un des genres est négatif, on écarte le concert (on peut changer ça avec `ecarter_si_negatif=False`) ;
 - sinon on prend le meilleur score (ou la moyenne avec `strategie="moyenne"`).
 
+## Choisir les concerts sans chevauchement (1.5)
+
+Même avec de bons scores, on ne peut pas aller à deux concerts en même temps. Il faut donc choisir, parmi les concerts conseillés, ceux qui ne se chevauchent pas et dont la somme des scores est la plus grande. On ne garde que les concerts qui ont un score positif.
+
+Prendre le concert au meilleur score ne suffit pas. Exemple : un concert de 14h à 17h (score 10), un de 16h à 19h (score 15) et un de 18h à 21h (score 10). Si on prend le meilleur score (15), on ne peut plus voir les deux autres. Mais le premier et le troisième ne se chevauchent pas et font 20 à eux deux.
+
+On utilise donc la programmation dynamique :
+
+1. On trie les concerts par heure de fin.
+2. Pour chaque concert, on calcule le meilleur total d'un planning qui finit par lui : son score, plus le meilleur total parmi les concerts d'avant qui sont déjà finis quand il commence.
+3. On prend le meilleur total, puis on remonte concert par concert pour retrouver le planning.
+
+Les concerts ont une date et une heure complètes, donc une journée qui passe minuit (un concert de 23h à 0h30, puis un autre à 1h) ne pose pas de problème.
+
+**Temps de trajet :** il y a une option `trajets` (en minutes). Si deux concerts sont dans des lieux différents, il faut que le trajet tienne entre la fin du premier et le début du second. Par défaut c'est 0 : on ne compte pas le trajet.
+
+## Le cache (1.6)
+
+Calculer les scores et le planning à chaque visite est inutile si rien n'a changé. Le cache garde le résultat de chaque festivalier. Il est encore valable si :
+
+- le numéro de version de la programmation est le même (il augmente quand un concert est ajouté, modifié ou supprimé) ;
+- le festivalier n'a pas modifié ses préférences depuis le calcul.
+
+La fonction `recommander` regarde d'abord le cache. S'il est valable, elle renvoie le résultat tout de suite. Sinon, elle note chaque concert, choisit le planning, enregistre le résultat dans le cache, puis le renvoie.
+
+**Limite :** pour l'instant le cache est un simple dictionnaire Python. Il est perdu quand le site redémarre. Les tables `CALCUL_RECOMMANDATION`, `CACHE_RECOMMANDATION` et `VERSION_PROGRAMMATION` existent dans la base, avec leurs triggers, mais le code Python ne les utilise pas encore.
+
+## Complexité
+
+- **Score d'un genre :** on remonte au plus 3 niveaux (la hauteur de l'arbre), donc c'est très rapide et ça ne dépend pas du nombre de styles.
+- **Score d'un concert qui a `g` genres :** au plus `g` remontées.
+- **Planning :** le tri est en O(n log n), puis on a deux boucles l'une dans l'autre sur les `n` concerts, donc O(n²). C'est cette partie qui domine.
+- **Une recommandation complète :** `n` scores, puis le planning, donc O(n²). Avec un cache valable, c'est juste une recherche dans un dictionnaire.
+
+Avec les 80 concerts du festival, ça reste instantané.
+
 ## Tests
+
+Les tests sont dans `Algo/`, un fichier par sujet :
+
+- `test_genres.py` et `test_scoring.py` : l'arbre et le score, sur un petit arbre (`jeu_essai.py`).
+- `test_arbre_reel.py` et `test_profils.py` : l'arbre de 273 styles et les profils d'Emma, Louis, Chloé et Thomas (`profils.py`).
+- `test_planning.py` : le choix des concerts sans chevauchement, la programmation dynamique contre le choix glouton, le passage de minuit et le trajet.
+- `test_cache.py` : le cache valable, périmé, invalidé.
 
 ```
 python -m pytest Algo -q
