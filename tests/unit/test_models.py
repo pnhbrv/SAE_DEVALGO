@@ -1,4 +1,4 @@
-# Tests unitaires des modèles [Source : TP 2 — tests unitaires du modèle]
+# Tests unitaires des modèles (TP 2)
 import datetime
 import decimal
 from monApp.models import *

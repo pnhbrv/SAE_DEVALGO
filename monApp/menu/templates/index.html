@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{# Page d'accueil [Source : maquette accueil — « Réservez maintenant », « Le Festival phare d'Orléans ! »] #}
-{# Bande violette (barre de navigation) : affichée seulement si on est connecté #}
+{# Page d'accueil (maquette) #}
+{# la barre violette n'apparaît que si on est connecté #}
 {% block navbar %}
     {% if current_user.is_authenticated %}
-        {{ super() }} {# super() = reprend la barre définie dans base.html #}
+        {{ super() }}
     {% endif %}
 {% endblock %}
 
@@ -11,7 +11,7 @@
 <section class="accueil">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Fest'IUT'O" class="accueil-logo">
     {% if not current_user.is_authenticated %}
-    {# pas connecté : le bouton mène à la page « Se connecter / Créer votre compte » #}
+    {# pas connecté : le bouton mène à la page de connexion / inscription #}
     <a href="{{ url_for('auth.compte') }}" class="btn btn-light accueil-bouton">Réservez Maintenant</a>
     {% endif %}
     <p class="logo-festiuto accueil-slogan">Le Festival phare d'Orléans !</p>

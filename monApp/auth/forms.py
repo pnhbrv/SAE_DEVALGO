@@ -1,4 +1,4 @@
-# Formulaires d'authentification [Source : TP 6 — LoginForm, get_authenticated_user ; TP 5 — DataRequired]
+# Formulaires d'authentification (TP 5 et 6)
 from flask_wtf import FlaskForm
 from wtforms import HiddenField, PasswordField, StringField
 from wtforms.validators import DataRequired

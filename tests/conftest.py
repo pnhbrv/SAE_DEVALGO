@@ -1,4 +1,4 @@
-# Configuration des tests [Source : TP 1 ; TP 2 — runner ; TP 5 — base de test]
+# Configuration des tests (TP 1, 2 et 5)
 import pytest
 from monApp import create_app
 from monApp.app import db

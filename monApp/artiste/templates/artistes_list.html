@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{# Liste des artistes (TP 4) #}
+
+{# lien vers la page en gardant les filtres déjà choisis (un filtre à None n'est pas mis dans l'URL) #}
+{% macro lien_filtre(style=style, prix=prix, jour=jour, lieu=lieu) -%}
+    {{ url_for('artiste.getArtistes', recherche=recherche or None, style=style, prix=prix,
+               date=jour.isoformat() if jour else None, lieu=lieu) }}
+{%- endmacro %}
+
+{# titre d'un filtre, on clique dessus pour ouvrir ou fermer la liste (collapse Bootstrap) #}
+{% macro titre_filtre(nom, cible, ouvert) %}
+<button class="filtre-titre {% if not ouvert %}collapsed{% endif %}" type="button" data-bs-toggle="collapse"
+        data-bs-target="#{{ cible }}" aria-expanded="{{ 'true' if ouvert else 'false' }}" aria-controls="{{ cible }}">
+    {{ nom }} <i class="bi bi-caret-down-fill"></i>
+</button>
+{% endmacro %}
+
+{% block main %}
+<div class="row mt-3">
+    {# colonne de gauche : titre + filtres #}
+    <div class="col-md-3">
+        <h1 class="titre-festiuto text-center">Artistes</h1>
+
+        <nav class="filtres" aria-label="Filtres">
+            <p class="filtres-entete">Filtres</p>
+
+            {# Style : ouvert par défaut comme sur la maquette #}
+            {{ titre_filtre("Style", "filtre-style", true) }}
+            <ul class="collapse show filtre-liste filtre-liste-longue" id="filtre-style">
+                {% for unStyle in styles %}
+                <li>
+                    {# cliquer sur le style déjà choisi l'enlève #}
+                    <a href="{{ lien_filtre(style=None if style == unStyle.id_style else unStyle.id_style) }}"
+                       {% if style == unStyle.id_style %}class="active" aria-current="true"{% endif %}>
+                        {{ unStyle.libelle_style }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {{ titre_filtre("Prix", "filtre-prix", prix) }}
+            <ul class="collapse {% if prix %}show{% endif %} filtre-liste" id="filtre-prix">
+                {% for valeur, texte in [('gratuit', 'Gratuit'), ('payant', 'Payant')] %}
+                <li>
+                    <a href="{{ lien_filtre(prix=None if prix == valeur else valeur) }}"
+                       {% if prix == valeur %}class="active" aria-current="true"{% endif %}>{{ texte }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {{ titre_filtre("Date", "filtre-date", jour) }}
+            <ul class="collapse {% if jour %}show{% endif %} filtre-liste" id="filtre-date">
+                {% for uneJournee in journees %}
+                <li>
+                    <a href="{{ lien_filtre(jour=None if jour == uneJournee.date_jour else uneJournee.date_jour) }}"
+                       {% if jour == uneJournee.date_jour %}class="active" aria-current="true"{% endif %}>
+                        {{ uneJournee.date_jour.strftime('%d/%m/%Y') }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {{ titre_filtre("Lieu", "filtre-lieu", lieu) }}
+            <ul class="collapse {% if lieu %}show{% endif %} filtre-liste filtre-liste-longue" id="filtre-lieu">
+                {% for unLieu in lieux %}
+                <li>
+                    <a href="{{ lien_filtre(lieu=None if lieu == unLieu.id_lieu else unLieu.id_lieu) }}"
+                       {% if lieu == unLieu.id_lieu %}class="active" aria-current="true"{% endif %}>{{ unLieu.nom_lieu }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if style or prix or jour or lieu %}
+            <a href="{{ url_for('artiste.getArtistes', recherche=recherche or None) }}" class="filtres-effacer">Effacer les filtres</a>
+            {% endif %}
+        </nav>
+    </div>
+
+    {# colonne de droite : recherche puis liste des groupes #}
+    <div class="col-md-9">
+        {# formulaire en GET, la recherche se retrouve dans l'URL (TP 5) #}
+        <form role="form" method="GET" action="{{ url_for('artiste.getArtistes') }}" class="d-flex mb-4">
+            {# pour garder les filtres quand on lance une recherche #}
+            {% if style %}<input type="hidden" name="style" value="{{ style }}">{% endif %}
+            {% if prix %}<input type="hidden" name="prix" value="{{ prix }}">{% endif %}
+            {% if jour %}<input type="hidden" name="date" value="{{ jour.isoformat() }}">{% endif %}
+            {% if lieu %}<input type="hidden" name="lieu" value="{{ lieu }}">{% endif %}
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" name="recherche" value="{{ recherche }}" class="form-control"
+                       placeholder="Rechercher un groupe, un artiste..." aria-label="Rechercher un artiste">
+                {# la croix vide la recherche (les filtres restent) #}
+                <a href="{{ url_for('artiste.getArtistes', style=style, prix=prix, date=jour.isoformat() if jour else None, lieu=lieu) }}"
+                   class="btn btn-outline-secondary" aria-label="Effacer la recherche">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+            <input class="btn btn-festiuto ms-2" type="submit" value="Rechercher">
+        </form>
+
+        <p>Nombre d'artistes : {{ groupes|length }}</p>
+        {% if groupes|length == 0 %}
+            <p>Aucun artiste trouvé.</p>
+        {% endif %}
+
+        {# zone qu'on fait défiler quand il y a beaucoup de groupes #}
+        <div class="liste-artistes">
+            {% for unGroupe in groupes %}
+            <div class="carte-artiste">
+                {% if unGroupe.liens_photos %}
+                <img src="{{ unGroupe.liens_photos }}" alt="Photo de {{ unGroupe.nom_groupe }}">
+                {% endif %}
+                <p class="carte-artiste-nom">{{ unGroupe.nom_groupe }}</p>
+                {# styles du groupe séparés par des virgules #}
+                <p class="carte-artiste-style">
+                    {% for unLien in unGroupe.styles %}{{ unLien.style.libelle_style }}{% if not loop.last %}, {% endif %}{% endfor %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

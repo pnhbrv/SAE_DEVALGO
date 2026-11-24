@@ -1,4 +1,4 @@
-# Tests de l'authentification [Source : TP 6 ; TP 5 — tests des formulaires POST]
+# Tests de l'authentification (TP 5 et 6)
 from monApp.app import db
 from monApp.commands import hacher
 from monApp.models import Spectateur

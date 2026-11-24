@@ -1,4 +1,4 @@
-# Vues du menu [Source : TP 3 — render_template ; TP 4 — BluePrint menu]
+# Vues du menu (TP 3 et 4)
 from flask import render_template
 from . import menu_bp
 

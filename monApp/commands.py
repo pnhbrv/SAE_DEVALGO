@@ -1,5 +1,4 @@
-# Commandes en ligne [Source : TP 2 — loaddb ; TP 4 — click.command, with_appcontext, register_commands ;
-# TP 6 — syncdb, sha256]
+# Commandes en ligne (TP 2, 4 et 6)
 import click, logging as lg
 import datetime
 from hashlib import sha256
@@ -8,7 +7,7 @@ from .app import db
 
 
 def hacher(mot_de_passe):
-    # hachage SHA256 du mot de passe [Source : TP 6 — newuser]
+    # hachage SHA256 du mot de passe (TP 6)
     m = sha256()
     m.update(mot_de_passe.encode())
     return m.hexdigest()
