@@ -15,6 +15,13 @@ from planning import sont_compatibles
 
 arbre = creer_arbre()
 
+
+def liste_ids(selection):
+    ids = []
+    for concert in selection:
+        ids.append(concert.id)
+    return ids
+
 # programmation d'essai
 CONCERTS = [
     Concert(id=1, debut=datetime(2026, 7, 10, 16, 0), fin=datetime(2026, 7, 10, 17, 30), genres=[ID["Rock"]]),
@@ -100,11 +107,11 @@ def test_deux_spectateurs_ont_chacun_leur_recommandation():
     # spectateur 2 aime le rap
     res2, _ = recommander(2, arbre, prefs_rap, CONCERTS, cache=cache)
 
-    assert any(c.id == 1 for c in res1)
-    assert all(c.id != 2 for c in res1)
+    assert 1 in liste_ids(res1)
+    assert 2 not in liste_ids(res1)
 
-    assert any(c.id == 2 for c in res2)
-    assert all(c.id != 1 for c in res2)
+    assert 2 in liste_ids(res2)
+    assert 1 not in liste_ids(res2)
 
 
 def test_le_cache_evite_vraiment_le_recalcul():
@@ -162,7 +169,7 @@ def test_recommander_journee_realiste_plusieurs_profils():
     res_rock, score_rock = recommander(
         1, arbre, PROFIL_ROCK, PROGRAMMATION_JOURNEE, cache=cache, version_prog=1, trajets=15
     )
-    ids_rock = {c.id for c in res_rock}
+    ids_rock = liste_ids(res_rock)
     assert 5 not in ids_rock   # Rock + Garage rock -> écarté par défaut
     assert 15 not in ids_rock  # Garage punk -> hérite de Garage rock (-3) -> écarté
     assert score_rock > 0
@@ -173,13 +180,13 @@ def test_recommander_journee_realiste_plusieurs_profils():
     res_rock_souple, _ = recommander(
         2, arbre, PROFIL_ROCK, PROGRAMMATION_JOURNEE, ecarter_si_negatif=False, trajets=15
     )
-    assert any(c.id == 5 for c in res_rock_souple)
+    assert 5 in liste_ids(res_rock_souple)
 
     # Profil Électro (sauf Techno)
     res_electro, _ = recommander(
         3, arbre, PROFIL_ELECTRO, PROGRAMMATION_JOURNEE, cache=cache, version_prog=1, trajets=15
     )
-    ids_electro = {c.id for c in res_electro}
+    ids_electro = liste_ids(res_electro)
     assert 12 not in ids_electro  # Techno / Minimal techno -> écarté
     assert 14 in ids_electro      # House / Deep house après minuit
     assert 16 in ids_electro      # Électro / House jusqu'à 4h
@@ -188,7 +195,7 @@ def test_recommander_journee_realiste_plusieurs_profils():
     res_rap, _ = recommander(
         4, arbre, PROFIL_RAP, PROGRAMMATION_JOURNEE, cache=cache, version_prog=1, trajets=15
     )
-    ids_rap = {c.id for c in res_rap}
+    ids_rap = liste_ids(res_rap)
     assert 2 not in ids_rap   # Pop / Synth-pop -> écarté
     assert 9 not in ids_rap   # New wave / Synth-pop -> écarté
     assert 13 in ids_rap      # Hip-hop / Cloud rap après minuit
