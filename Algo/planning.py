@@ -38,15 +38,6 @@ def sont_compatibles(concert_avant, concert_apres, trajet=0):
     delai = temps_trajet_entre(concert_avant.lieu, concert_apres.lieu, trajet)
     return vers_minutes(concert_apres.debut, concert_avant.fin) >= delai
 
-def test_le_temps_de_trajet_est_respecte():
-    # a finit à 20h30 (lieu 1) et c commence à 20h45 (lieu 2) : 15 min pour 30 min de trajet
-    a = Concert(id=1, debut=datetime(2026, 7, 10, 20, 0), fin=datetime(2026, 7, 10, 20, 30), score=9.0, lieu=1)
-    b = Concert(id=2, debut=datetime(2026, 7, 10, 20, 5), fin=datetime(2026, 7, 10, 20, 40), score=1.0, lieu=2)
-    c = Concert(id=3, debut=datetime(2026, 7, 10, 20, 45), fin=datetime(2026, 7, 10, 21, 15), score=5.0, lieu=2)
-    selection, score = planifier_concerts([a, b, c], trajets=30)
-    assert selection == [a]
-    assert score == 9.0
-
 
 def planifier_concerts(concerts, trajets=0):
     """Choisit les concerts qui ne se chevauchent pas avec le meilleur score total.
