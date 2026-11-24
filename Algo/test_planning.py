@@ -1,6 +1,7 @@
 from datetime import datetime
+from jeux_essai_planning import PROGRAMMATION_JOURNEE
 from modeles import Concert
-from planning import planifier_concerts
+from planning import planifier_concerts, sont_compatibles, temps_trajet_entre, vers_minutes
 
 
 def test_aucun_concert_a_planifier():
@@ -86,3 +87,109 @@ def test_un_concert_sans_score_ou_score_nul_est_ecarte():
     selection, score = planifier_concerts([c1, c2])
     assert selection == [c2]
     assert score == 3.0
+
+
+def test_le_temps_de_trajet_est_respecte():
+    # a finit à 20h30 (lieu 1) et c commence à 20h45 (lieu 2) : 15 min pour 30 min de trajet
+    a = Concert(id=1, debut=datetime(2026, 7, 10, 20, 0), fin=datetime(2026, 7, 10, 20, 30), score=9.0, lieu=1)
+    b = Concert(id=2, debut=datetime(2026, 7, 10, 20, 5), fin=datetime(2026, 7, 10, 20, 40), score=1.0, lieu=2)
+    c = Concert(id=3, debut=datetime(2026, 7, 10, 20, 45), fin=datetime(2026, 7, 10, 21, 15), score=5.0, lieu=2)
+    selection, score = planifier_concerts([a, b, c], trajets=30)
+    assert selection == [a]
+    assert score == 9.0
+
+
+def test_un_seul_concert():
+    c1 = Concert(id=1, debut=datetime(2026, 7, 10, 18, 0), fin=datetime(2026, 7, 10, 19, 30), score=4.5)
+    selection, score = planifier_concerts([c1])
+    assert selection == [c1]
+    assert score == 4.5
+
+
+def test_concerts_dos_a_dos_sans_trajet():
+    c1 = Concert(id=1, debut=datetime(2026, 7, 10, 18, 0), fin=datetime(2026, 7, 10, 19, 0), score=3.0, lieu="A")
+    c2 = Concert(id=2, debut=datetime(2026, 7, 10, 19, 0), fin=datetime(2026, 7, 10, 20, 0), score=4.0, lieu="B")
+    selection, score = planifier_concerts([c1, c2], trajets=0)
+    assert selection == [c1, c2]
+    assert score == 7.0
+
+
+def test_trajet_exact_a_la_limite():
+    c1 = Concert(id=1, debut=datetime(2026, 7, 10, 16, 0), fin=datetime(2026, 7, 10, 17, 0), score=4.0, lieu="A")
+    c2 = Concert(id=2, debut=datetime(2026, 7, 10, 17, 20), fin=datetime(2026, 7, 10, 18, 20), score=5.0, lieu="B")
+
+    selection_ok, score_ok = planifier_concerts([c1, c2], trajets=20)
+    assert selection_ok == [c1, c2]
+    assert score_ok == 9.0
+
+    selection_ko, score_ko = planifier_concerts([c1, c2], trajets=21)
+    assert selection_ko == [c2]
+    assert score_ko == 5.0
+
+
+def test_trajet_ignore_si_lieu_none_ou_trajet_none():
+    c1 = Concert(id=1, debut=datetime(2026, 7, 10, 16, 0), fin=datetime(2026, 7, 10, 17, 0), score=4.0, lieu=None)
+    c2 = Concert(id=2, debut=datetime(2026, 7, 10, 17, 5), fin=datetime(2026, 7, 10, 18, 0), score=5.0, lieu="B")
+
+    selection_lieu_none, score_lieu_none = planifier_concerts([c1, c2], trajets=30)
+    assert selection_lieu_none == [c1, c2]
+    assert score_lieu_none == 9.0
+
+    c1.lieu = "A"
+    selection_trajet_none, score_trajet_none = planifier_concerts([c1, c2], trajets=None)
+    assert selection_trajet_none == [c1, c2]
+    assert score_trajet_none == 9.0
+
+
+def test_tous_les_concerts_en_conflit():
+    c1 = Concert(id=1, debut=datetime(2026, 7, 10, 20, 0), fin=datetime(2026, 7, 10, 22, 0), score=2.0)
+    c2 = Concert(id=2, debut=datetime(2026, 7, 10, 20, 30), fin=datetime(2026, 7, 10, 21, 30), score=5.0)
+    c3 = Concert(id=3, debut=datetime(2026, 7, 10, 21, 0), fin=datetime(2026, 7, 10, 23, 0), score=3.5)
+    selection, score = planifier_concerts([c1, c2, c3])
+    assert selection == [c2]
+    assert score == 5.0
+
+
+def test_concerts_negatifs_ou_none_ecartes():
+    c1 = Concert(id=1, debut=datetime(2026, 7, 10, 15, 0), fin=datetime(2026, 7, 10, 16, 0), score=None)
+    c2 = Concert(id=2, debut=datetime(2026, 7, 10, 16, 0), fin=datetime(2026, 7, 10, 17, 0), score=-3.0)
+    selection, score = planifier_concerts([c1, c2])
+    assert selection == []
+    assert score == 0.0
+
+
+def test_dp_choisit_meme_lieu_compatible_plutot_qu_un_concert_bloque_par_trajet():
+    # a (lieu 1) + c (lieu 1) = 7.0, alors que b (lieu 2) vaut 5.0 mais est incompatible avec a et c
+    a = Concert(id=1, debut=datetime(2026, 7, 10, 14, 0), fin=datetime(2026, 7, 10, 15, 0), score=4.0, lieu=1)
+    b = Concert(id=2, debut=datetime(2026, 7, 10, 15, 5), fin=datetime(2026, 7, 10, 16, 0), score=5.0, lieu=2)
+    c = Concert(id=3, debut=datetime(2026, 7, 10, 15, 10), fin=datetime(2026, 7, 10, 16, 10), score=3.0, lieu=1)
+    selection, score = planifier_concerts([a, b, c], trajets=20)
+    assert selection == [a, c]
+    assert score == 7.0
+
+
+def test_fonctions_utilitaires_planning():
+    t1 = datetime(2026, 7, 10, 23, 45)
+    t2 = datetime(2026, 7, 11, 0, 15)
+    assert vers_minutes(t2, t1) == 30
+    assert temps_trajet_entre("Scène A", "Scène A", 15) == 0
+    assert temps_trajet_entre("Scène A", "Scène B", 15) == 15
+    assert temps_trajet_entre("Scène A", None, 15) == 0
+
+    c1 = Concert(id=1, debut=datetime(2026, 7, 10, 22, 30), fin=t1, lieu="Scène A")
+    c2 = Concert(id=2, debut=t2, fin=datetime(2026, 7, 11, 1, 30), lieu="Scène B")
+    assert sont_compatibles(c1, c2, trajet=30) is True
+    assert sont_compatibles(c1, c2, trajet=31) is False
+
+
+def test_journee_complete_14h_a_4h_sans_chevauchement():
+    concerts = [
+        Concert(c.id, c.debut, c.fin, c.genres, score=float((c.id % 5) + 1), lieu=c.lieu)
+        for c in PROGRAMMATION_JOURNEE
+    ]
+    selection, score = planifier_concerts(concerts, trajets=15)
+    assert len(selection) > 0
+    assert score > 0
+    for i in range(len(selection) - 1):
+        assert sont_compatibles(selection[i], selection[i + 1], trajet=15)
+
