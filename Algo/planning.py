@@ -1,19 +1,15 @@
 """Ordonnancement des concerts sans chevauchement (1.5).
 
-Algorithme de programmation dynamique (Weighted Interval Scheduling) :
+Programmation dynamique :
 - on trie les concerts par heure de fin
-- pour chaque concert, on cherche le dernier concert compatible avant lui
-- on remplit un tableau dp où chaque case donne le score maximal possible
-- on remonte la solution pour retrouver les concerts choisis
+- pour chaque concert i, on regarde tous les concerts j d'avant et on garde celui
+  qui donne le meilleur total une fois compatible avec i
+- meilleur[i] = score de i + meilleur total d'un planning qui finit par un concert compatible
+- on remonte la chaîne pour retrouver les concerts choisis
 
-Analyse de la complexité :
-- Tri par heure de fin en O(n log n).
-- Recherche du concert précédent compatible en O(n) par concert, donc O(n²) au total car on parcourt les concerts précédents à chaque étape.
-- Programmation dynamique en O(n) car on remplit le tableau en une seule passe.
-La complexité globale est donc en O(n²), dominée par la recherche des concerts précédents compatibles.
+Complexité : le tri est en O(n log n), puis deux boucles imbriquées en O(n²).
+La complexité globale est en O(n²).
 """
-from datetime import datetime
-
 
 def vers_minutes(a, b):
     """Calcule la différence en minutes entre deux datetime (a - b)."""
@@ -36,19 +32,11 @@ def temps_trajet_entre(lieu_a, lieu_b, trajet=0):
     return trajet
 
 
-def chercher_precedent_compatible(concerts, i, trajet=0):
-    """Cherche le dernier concert avant concerts[i] qui ne se chevauche pas."""
-    debut_i = concerts[i].debut
-    lieu_i = concerts[i].lieu
-
-    for j in range(i - 1, -1, -1):
-        fin_j = concerts[j].fin
-        lieu_j = concerts[j].lieu
-        delai = temps_trajet_entre(lieu_j, lieu_i, trajet)
-        # on vérifie que le temps écoulé entre la fin de j et le début de i couvre le trajet
-        if vers_minutes(debut_i, fin_j) >= delai:
-            return j
-    return -1
+def sont_compatibles(concert_avant, concert_apres, trajet=0):
+    """Vrai si on peut voir concert_apres après concert_avant : il faut que le premier
+    soit fini, et qu'il reste le temps du trajet si les deux lieux sont différents."""
+    delai = temps_trajet_entre(concert_avant.lieu, concert_apres.lieu, trajet)
+    return vers_minutes(concert_apres.debut, concert_avant.fin) >= delai
 
 
 def planifier_concerts(concerts, trajets=0):
@@ -69,40 +57,30 @@ def planifier_concerts(concerts, trajets=0):
     tries = sorted(candidats, key=heure_fin)
     n = len(tries)
 
-    # 2. pour chaque concert, indice du dernier concert compatible
-    precedent = []
+    # 2. meilleur[i] = meilleur score total d'un planning qui finit par le concert i
+    #    avant[i] = le concert qui précède i dans ce planning (-1 s'il n'y en a pas)
+    meilleur = []
+    avant = []
     for i in range(n):
-        precedent.append(chercher_precedent_compatible(tries, i, trajets))
+        meilleur.append(tries[i].score)
+        avant.append(-1)
+        for j in range(i):
+            if sont_compatibles(tries[j], tries[i], trajets):
+                if meilleur[j] + tries[i].score > meilleur[i]:
+                    meilleur[i] = meilleur[j] + tries[i].score
+                    avant[i] = j
 
-    # 3. programmation dynamique
-    dp = [0.0] * (n + 1)
-    for i in range(1, n + 1):
-        c = tries[i - 1]
-        p = precedent[i - 1]
-        score_avec = c.score
-        if p != -1:
-            score_avec = score_avec + dp[p + 1]
-        score_sans = dp[i - 1]
-        if score_avec > score_sans:
-            dp[i] = score_avec
-        else:
-            dp[i] = score_sans
+    # 3. le meilleur planning finit par le concert qui a le meilleur total
+    dernier = 0
+    for i in range(n):
+        if meilleur[i] > meilleur[dernier]:
+            dernier = i
 
-    # 4. on remonte la solution pour retrouver les concerts choisis
+    # 4. on remonte la chaîne pour retrouver les concerts choisis
     choisis = []
-    curr = n
-    while curr > 0:
-        c = tries[curr - 1]
-        p = precedent[curr - 1]
-        score_avec = c.score
-        if p != -1:
-            score_avec = score_avec + dp[p + 1]
-        score_sans = dp[curr - 1]
-        if score_avec > score_sans:
-            choisis.append(c)
-            curr = p + 1
-        else:
-            curr = curr - 1
-
+    i = dernier
+    while i != -1:
+        choisis.append(tries[i])
+        i = avant[i]
     choisis.reverse()
-    return choisis, round(dp[n], 4)
+    return choisis, round(meilleur[dernier], 4)
