@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block navbar %}
+    {% if current_user.is_authenticated %}
+        {{ super() }}
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<section class="accueil">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Fest'IUT'O" class="accueil-logo">
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('auth.compte') }}" class="btn btn-light accueil-bouton">Réservez Maintenant</a>
+    {% endif %}
+    <p class="logo-festiuto accueil-slogan">Le Festival phare d'Orléans !</p>
+</section>
+
+<script>
+    const video = document.createElement("video");
+
+    video.src = "{{ url_for('static', filename='videos/Video.mp4') }}";
+
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+
+    video.className = "accueil-video";
+
+    document.body.prepend(video);
+</script>
+{% endblock %}

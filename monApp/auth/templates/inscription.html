@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="carte-festiuto carte-formulaire">
+    <h1 class="titre-festiuto text-center">Bienvenue</h1>
+    <p class="text-center">Pour créer votre compte veuillez renseigner :</p>
+    <form role="form" method="POST" action="{{ url_for('auth.inscription') }}">
+        {{ form.hidden_tag() }}
+        <div
+            {% if form.nom.errors %}
+                class="form-group has-error"
+            {% else %}
+                class="form-group mb-3"
+            {% endif %}
+        >
+            {{ form.nom.label }}
+            {{ form.nom(size=50, class_="form-control") }}
+        </div>
+        {% if form.nom.errors %}
+            <ul class="list-group">
+            {% for e in form.nom.errors %}
+                <li class="list-group-item list-group-item-danger">{{ e }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div
+            {% if form.prenom.errors %}
+                class="form-group has-error"
+            {% else %}
+                class="form-group mb-3"
+            {% endif %}
+        >
+            {{ form.prenom.label }}
+            {{ form.prenom(size=50, class_="form-control") }}
+        </div>
+        {% if form.prenom.errors %}
+            <ul class="list-group">
+            {% for e in form.prenom.errors %}
+                <li class="list-group-item list-group-item-danger">{{ e }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div
+            {% if form.email.errors %}
+                class="form-group has-error"
+            {% else %}
+                class="form-group mb-3"
+            {% endif %}
+        >
+            {{ form.email.label }}
+            {{ form.email(size=50, class_="form-control") }}
+        </div>
+        {% if form.email.errors %}
+            <ul class="list-group">
+            {% for e in form.email.errors %}
+                <li class="list-group-item list-group-item-danger">{{ e }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div
+            {% if form.mot_de_passe.errors %}
+                class="form-group has-error"
+            {% else %}
+                class="form-group mb-3"
+            {% endif %}
+        >
+            {{ form.mot_de_passe.label }}
+            {{ form.mot_de_passe(size=50, class_="form-control") }}
+        </div>
+        {% if form.mot_de_passe.errors %}
+            <ul class="list-group">
+            {% for e in form.mot_de_passe.errors %}
+                <li class="list-group-item list-group-item-danger">{{ e }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="text-end">
+            <input class="btn btn-festiuto" type="submit" value="Créer un compte">
+        </div>
+    </form>
+</div>
+{% endblock %}

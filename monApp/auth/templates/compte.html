@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="carte-festiuto">
+    <h1 class="titre-festiuto text-center">Mon espace</h1>
+    <div class="d-flex justify-content-center gap-4 flex-wrap">
+        <div class="carte-choix">
+            <h2>Se connecter</h2>
+            <p>Vous avez déjà un compte Fest'IUT'O ? Connectez-vous.</p>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-festiuto">Se connecter</a>
+        </div>
+        <div class="carte-choix">
+            <h2>Créer votre compte</h2>
+            <p>Pas encore de compte ? Créez-le en quelques secondes.</p>
+            <a href="{{ url_for('auth.inscription') }}" class="btn btn-festiuto">Créer son compte</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
