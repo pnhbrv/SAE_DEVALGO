@@ -3,75 +3,55 @@
 Algorithme de programmation dynamique (Weighted Interval Scheduling) :
 - on trie les concerts par heure de fin
 - pour chaque concert, on cherche le dernier concert compatible avant lui
-- on choisit d'ajouter le concert ou non selon ce qui rapporte le meilleur score total
-- gestion de la journée de 14h à 4h du matin (passage de minuit)
-- prise en compte facultative du temps de trajet entre deux lieux
+- on remplit un tableau dp où chaque case donne le score maximal possible
+- on remonte la solution pour retrouver les concerts choisis
+
+Analyse de la complexité :
+- Tri par heure de fin en O(n log n).
+- Recherche du concert précédent compatible en O(n) par concert, donc O(n²) au total car on parcourt les concerts précédents à chaque étape.
+- Programmation dynamique en O(n) car on remplit le tableau en une seule passe.
+La complexité globale est donc en O(n²), dominée par la recherche des concerts précédents compatibles.
 """
-from datetime import datetime, time
+from datetime import datetime
 
 
-def vers_minutes(horaire):
-    """Convertit un horaire en minutes depuis le début de journée.
+def vers_minutes(a, b):
+    """Calcule la différence en minutes entre deux datetime (a - b)."""
+    return (a - b).total_seconds() / 60
 
-    Gère le passage de minuit : le festival va de 14h à 4h du matin.
-    Une heure entre 00h et 05h appartient au créneau nocturne (on ajoute 24h).
-    Fonctionne avec des chaînes 'HH:MM', des datetime, time ou des nombres.
+
+def heure_fin(concert):
+    """Renvoie l'heure de fin d'un concert (utilisé pour le tri sans lambda)."""
+    return concert.fin
+
+
+def temps_trajet_entre(lieu_a, lieu_b, trajet=0):
+    """Temps de déplacement en minutes entre deux lieux.
+
+    Si les deux concerts sont dans le même lieu, ou si un lieu est None,
+    le trajet est nul (0 minute).
     """
-    if isinstance(horaire, (int, float)):
-        return float(horaire)
-
-    if isinstance(horaire, datetime):
-        return horaire.timestamp() / 60.0
-
-    if isinstance(horaire, time):
-        heures = horaire.hour
-        if heures < 12:
-            heures = heures + 24
-        return heures * 60 + horaire.minute + horaire.second / 60.0
-
-    if isinstance(horaire, str):
-        if " " in horaire or "T" in horaire:
-            dt = datetime.fromisoformat(horaire)
-            return dt.timestamp() / 60.0
-
-        parties = horaire.split(":")
-        heures = int(parties[0])
-        minutes = int(parties[1])
-        if heures < 12:
-            heures = heures + 24
-        return heures * 60 + minutes
-
-    return 0.0
+    if trajet is None or lieu_a is None or lieu_b is None or lieu_a == lieu_b:
+        return 0
+    return trajet
 
 
-def temps_trajet_entre(lieu_a, lieu_b, trajets=None):
-    """Temps de déplacement en minutes entre deux lieux."""
-    if trajets is None or lieu_a is None or lieu_b is None or lieu_a == lieu_b:
-        return 0.0
-    if isinstance(trajets, (int, float)):
-        return float(trajets)
-    if isinstance(trajets, dict):
-        return float(trajets.get((lieu_a, lieu_b), trajets.get((lieu_b, lieu_a), 0.0)))
-    if callable(trajets):
-        return float(trajets(lieu_a, lieu_b))
-    return 0.0
-
-
-def chercher_precedent_compatible(concerts, i, trajets=None):
+def chercher_precedent_compatible(concerts, i, trajet=0):
     """Cherche le dernier concert avant concerts[i] qui ne se chevauche pas."""
-    debut_i = vers_minutes(concerts[i].debut)
+    debut_i = concerts[i].debut
     lieu_i = concerts[i].lieu
 
     for j in range(i - 1, -1, -1):
-        fin_j = vers_minutes(concerts[j].fin)
+        fin_j = concerts[j].fin
         lieu_j = concerts[j].lieu
-        delai = temps_trajet_entre(lieu_j, lieu_i, trajets)
-        if fin_j + delai <= debut_i:
+        delai = temps_trajet_entre(lieu_j, lieu_i, trajet)
+        # on vérifie que le temps écoulé entre la fin de j et le début de i couvre le trajet
+        if vers_minutes(debut_i, fin_j) >= delai:
             return j
     return -1
 
 
-def planifier_concerts(concerts, trajets=None):
+def planifier_concerts(concerts, trajets=0):
     """Choisit les concerts qui ne se chevauchent pas avec le meilleur score total.
 
     Renvoie (liste_concerts, score_total).
@@ -86,7 +66,7 @@ def planifier_concerts(concerts, trajets=None):
         return [], 0.0
 
     # 1. tri par heure de fin
-    tries = sorted(candidats, key=lambda c: vers_minutes(c.fin))
+    tries = sorted(candidats, key=heure_fin)
     n = len(tries)
 
     # 2. pour chaque concert, indice du dernier concert compatible
@@ -99,7 +79,9 @@ def planifier_concerts(concerts, trajets=None):
     for i in range(1, n + 1):
         c = tries[i - 1]
         p = precedent[i - 1]
-        score_avec = c.score + (dp[p + 1] if p != -1 else 0.0)
+        score_avec = c.score
+        if p != -1:
+            score_avec = score_avec + dp[p + 1]
         score_sans = dp[i - 1]
         if score_avec > score_sans:
             dp[i] = score_avec
@@ -112,7 +94,9 @@ def planifier_concerts(concerts, trajets=None):
     while curr > 0:
         c = tries[curr - 1]
         p = precedent[curr - 1]
-        score_avec = c.score + (dp[p + 1] if p != -1 else 0.0)
+        score_avec = c.score
+        if p != -1:
+            score_avec = score_avec + dp[p + 1]
         score_sans = dp[curr - 1]
         if score_avec > score_sans:
             choisis.append(c)
