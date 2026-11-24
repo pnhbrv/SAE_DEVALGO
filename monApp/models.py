@@ -1,7 +1,3 @@
-# Modèles de l'application Fest'IUT'O
-# [Source : TP 2 — définition du modèle, relations Many-To-One]
-# [Source : MLD.pdf + SQL/Creation.sql — tables, clés et types]
-# [Source : TP 6 — modèle User, UserMixin, user_loader]
 from flask_login import UserMixin
 from .app import db, login_manager
 
@@ -480,7 +476,6 @@ class Spectateur(db.Model, UserMixin):
         self.mot_de_passe = mot_de_passe
 
     def get_id(self):
-        # identifiant de session = email [Source : TP 6 — get_id]
         return self.email
 
     def __repr__(self):
@@ -643,5 +638,4 @@ class Loger(db.Model):
 
 @login_manager.user_loader
 def load_user(identifiant):
-    # spectateur identifié par son email [Source : TP 6 — user_loader ; TP 2 — filter_by().first()]
     return Spectateur.query.filter_by(email=identifiant).first()

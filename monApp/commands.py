@@ -1,5 +1,3 @@
-# Commandes en ligne [Source : TP 2 — loaddb ; TP 4 — click.command, with_appcontext, register_commands ;
-# TP 6 — syncdb, sha256]
 import click, logging as lg
 import datetime
 from hashlib import sha256
@@ -8,7 +6,6 @@ from .app import db
 
 
 def hacher(mot_de_passe):
-    # hachage SHA256 du mot de passe [Source : TP 6 — newuser]
     m = sha256()
     m.update(mot_de_passe.encode())
     return m.hexdigest()
@@ -18,23 +15,18 @@ def hacher(mot_de_passe):
 @click.argument('filename')
 @with_appcontext
 def loaddb(filename):
-    '''Creates the tables and populates them with data.'''
 
-    # création de toutes les tables
     db.drop_all()
     db.create_all()
 
-    # chargement de notre jeu de données
     import yaml
     with open(filename, 'r', encoding='utf-8') as file:
         data = yaml.safe_load(file)
 
-    # import des modèles
     from .models import (Membre, Instrument, Groupe, StyleMusical, Spectateur, TypeBillet, Journee,
                          Lieu, Hebergement, DateAchat, DateNuit, Evenement, Jouer, Composer, EstSimilaire,
                          AvoirStyle, MettreEnFavori, Acheter, DonnerAcces, PreInscrire, Participer, Loger)
 
-    # première passe : tables sans clé étrangère, puis tables qui en dépendent
     for s in data["styles"]:
         unStyle = StyleMusical(libelle_style=s["libelle_style"], id_style_parent=s["id_style_parent"])
         unStyle.set_id_style(s["id_style"])
@@ -63,7 +55,6 @@ def loaddb(filename):
         unType.set_id_type_billet(t["id_type_billet"])
         db.session.add(unType)
     for j in data["journees"]:
-        # les heures sont écrites "HH:MM:SS" dans le YAML
         db.session.add(Journee(date_jour=j["date_jour"],
                                heure_debut_officielle=datetime.time.fromisoformat(j["heure_debut_officielle"]),
                                heure_fin_officielle=datetime.time.fromisoformat(j["heure_fin_officielle"])))
@@ -82,7 +73,6 @@ def loaddb(filename):
         db.session.add(DateNuit(date_nuit=d["date_nuit"]))
     db.session.commit()
 
-    # deuxième passe : événements
     for e in data["evenements"]:
         unEvenement = Evenement(titre=e["titre"], type_evenement=e["type_evenement"],
                                 date_heure_debut=e["date_heure_debut"], duree=e["duree"],
@@ -93,7 +83,6 @@ def loaddb(filename):
         db.session.add(unEvenement)
     db.session.commit()
 
-    # troisième passe : associations
     for r in data["jouer"]:
         db.session.add(Jouer(id_membre=r["id_membre"], id_instrument=r["id_instrument"]))
     for r in data["composer"]:
@@ -123,7 +112,6 @@ def loaddb(filename):
 @click.command('syncdb')
 @with_appcontext
 def syncdb():
-    '''Creates all missing tables.'''
     db.create_all()
     lg.warning('Database synchronized!')
 

@@ -1,4 +1,3 @@
-# Tests des commandes en ligne [Source : TP 2 — test_loaddb_command ; TP 6]
 from monApp.models import *
 from monApp.commands import hacher
 from monApp.app import db
