@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="carte-festiuto carte-formulaire">
+    <h1 class="titre-festiuto text-center">Connexion</h1>
+    <p class="text-center">Entrez votre mail et votre mot de passe</p>
+    <form role="form" method="POST" action="{{ url_for('auth.login') }}">
+        {{ form.hidden_tag() }}
+        <div
+            {% if form.Login.errors %}
+                class="form-group has-error"
+            {% else %}
+                class="form-group mb-3"
+            {% endif %}
+        >
+            {{ form.Login.label }}
+            {{ form.Login(size=50, class_="form-control") }}
+        </div>
+        {% if form.Login.errors %}
+            <ul class="list-group">
+            {% for e in form.Login.errors %}
+                <li class="list-group-item list-group-item-danger">{{ e }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div
+            {% if form.Password.errors %}
+                class="form-group has-error"
+            {% else %}
+                class="form-group mb-3"
+            {% endif %}
+        >
+            {{ form.Password.label }}
+            {{ form.Password(size=50, class_="form-control") }}
+        </div>
+        {% if form.Password.errors %}
+            <ul class="list-group">
+            {% for e in form.Password.errors %}
+                <li class="list-group-item list-group-item-danger">{{ e }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="text-end">
+            <input class="btn btn-festiuto" type="submit" value="Se connecter">
+        </div>
+    </form>
+</div>
+{% endblock %}
