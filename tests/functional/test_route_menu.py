@@ -19,8 +19,8 @@ def test_index_connecte(client, testapp):
     response = login(client, "emma@mail.com", "emma", "/index/")
     assert response.request.path == "/index/"
     assert b"navbar-festiuto" not in response.data
-    assert b'href="/billeterie/"' in response.data
-    assert "Accéder à la billetterie".encode() in response.data
+    assert b'href="/compte/"' in response.data
+    assert "Réservez maintenant".encode() in response.data
 
 
 def test_index_slash(client):
