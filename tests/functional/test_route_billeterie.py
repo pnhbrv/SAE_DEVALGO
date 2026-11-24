@@ -41,6 +41,10 @@ def test_billeterie_get_defaut(client, testapp):
     assert "Sélectionner".encode() in response.data
     assert "*Accès aux Événements payants".encode() in response.data
     assert b'href="/billeterie/"' in response.data
+    assert "Evenements".encode() in response.data
+    assert "Programmation".encode() in response.data
+    assert "Artiste".encode() in response.data
+    assert "Mon espace".encode() in response.data
 
 
 def test_billeterie_avec_bdd(client, testapp):
