@@ -16,6 +16,11 @@ body {
     src: url("../fonts/Pacifico.ttf");
 }
 
+@font-face {
+    font-family: "Splash";
+    src: url("../fonts/Splash-Regular.ttf");
+}
+
 .logo-festiuto {
     font-family: "Pacifico";
     font-size: 1.8em;
@@ -25,6 +30,12 @@ body {
 .titre-festiuto {
     color: #d61fd6;
     font-weight: bold;
+}
+
+.titre-artistes {
+    font-family: "Splash";
+    font-weight: normal;
+    font-size: 3em;
 }
 
 .btn-festiuto {
@@ -218,4 +229,18 @@ body {
     font-size: 0.85em;
     color: #8e3fa0;
     margin-top: 0.5em;
+}
+
+.carte-artiste-sans-photo {
+    height: 7em;
+    border-radius: 0.5em;
+    background-color: #e2d4ea;
+    color: #8e3fa0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carte-artiste-sans-photo i {
+    font-size: 4em;
 }

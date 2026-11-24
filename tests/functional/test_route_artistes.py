@@ -61,7 +61,7 @@ def test_artistes_filtres_affiches(client, testapp):
     response = client.get('/artistes/')
     for texte in ["Filtres", "Style", "Prix", "Date", "Lieu", "Rock", "Gratuit", "10/10/2026", "Zénith"]:
         assert texte.encode() in response.data
-    assert b"style=2" not in response.data
+    assert b"style=2" in response.data
 
 
 def test_artistes_filtre_style_sous_genres(client, testapp):

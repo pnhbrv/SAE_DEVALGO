@@ -38,7 +38,7 @@ def getArtistes():
     lesGroupes = requete.distinct().order_by(Groupe.nom_groupe).all()
 
     return render_template('artistes_list.html', title="Artistes", groupes=lesGroupes,
-                           styles=StyleMusical.query.filter_by(id_style_parent=None).order_by(StyleMusical.libelle_style).all(),
+                           styles=StyleMusical.query.order_by(StyleMusical.id_style).all(),
                            journees=Journee.query.order_by(Journee.date_jour).all(),
                            lieux=Lieu.query.order_by(Lieu.nom_lieu).all(),
                            recherche=recherche, style=style, prix=prix, jour=jour, lieu=lieu)

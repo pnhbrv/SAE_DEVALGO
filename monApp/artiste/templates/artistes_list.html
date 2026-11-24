@@ -15,7 +15,7 @@
 {% block main %}
 <div class="row mt-3">
     <div class="col-md-3">
-        <h1 class="titre-festiuto text-center">Artistes</h1>
+        <h1 class="titre-festiuto titre-artistes text-center">Artistes</h1>
 
         <nav class="filtres" aria-label="Filtres">
             <p class="filtres-entete">Filtres</p>
@@ -98,6 +98,8 @@
             <div class="carte-artiste">
                 {% if unGroupe.liens_photos %}
                 <img src="{{ unGroupe.liens_photos }}" alt="Photo de {{ unGroupe.nom_groupe }}">
+                {% else %}
+                <div class="carte-artiste-sans-photo"><i class="bi bi-person-fill"></i></div>
                 {% endif %}
                 <p class="carte-artiste-nom">{{ unGroupe.nom_groupe }}</p>
                 <p class="carte-artiste-style">
