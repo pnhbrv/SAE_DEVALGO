@@ -76,12 +76,29 @@ La fonction `recommander` regarde d'abord le cache. S'il est valable, elle renvo
 
 ## Complexité
 
-- **Score d'un genre :** on remonte au plus 3 niveaux (la hauteur de l'arbre), donc c'est très rapide et ça ne dépend pas du nombre de styles.
-- **Score d'un concert qui a `g` genres :** au plus `g` remontées.
-- **Planning :** le tri est en O(n log n), puis on a deux boucles l'une dans l'autre sur les `n` concerts, donc O(n²). C'est cette partie qui domine.
-- **Une recommandation complète :** `n` scores, puis le planning, donc O(n²). Avec un cache valable, c'est juste une recherche dans un dictionnaire.
+On note `n` le nombre de concerts (environ 80 au festival), `g` le nombre de genres d'un concert et `h` la hauteur de l'arbre (3 au maximum).
 
-Avec les 80 concerts du festival, ça reste instantané.
+**Score**
+- Score d'un genre : on remonte au plus `h` niveaux, chaque saut est une lecture de dictionnaire. C'est donc en O(h), soit O(1) puisque `h` ≤ 3.
+- Score d'un concert : au plus `g` remontées, donc O(g × h).
+
+**Planning (`planifier_concerts`)**
+- On garde les concerts de score positif : O(n).
+- On les trie par heure de fin : O(n log n).
+- Programmation dynamique : pour chaque concert, on regarde tous les précédents. Cela fait 1 + 2 + … + (n−1) = n(n−1)/2 comparaisons, donc O(n²). C'est cette étape qui domine.
+- On ne peut pas descendre à O(n log n) avec une recherche dichotomique à cause des trajets : deux concerts qui finissent presque en même temps peuvent être l'un dans le même lieu (compatible), l'autre dans un autre lieu (trajet trop long). Il faut donc tester tous les précédents.
+- Reconstruction du planning : O(n).
+- Mémoire : O(n) (les listes `meilleur` et `avant`).
+
+**Cache**
+- Valable, obtenir, enregistrer, invalider : une lecture ou écriture dans un dictionnaire, donc O(1). Vider tout le cache coûte O(s), avec `s` le nombre de spectateurs.
+- Mémoire : O(s × k), avec `k` le nombre de concerts recommandés par spectateur.
+
+**Une recommandation complète (`recommander`)**
+- Cache valable : O(1), rien n'est recalculé.
+- Cache absent ou périmé : `n` scores en O(n × g × h), puis le planning en O(n²). Au total O(n²).
+
+Avec `n` = 80, le planning fait environ 3 200 comparaisons, ce qui prend moins d'une milliseconde en Python. Ensuite, tant que la programmation et les préférences ne changent pas, le même spectateur obtient sa liste en temps constant.
 
 ## Tests
 
