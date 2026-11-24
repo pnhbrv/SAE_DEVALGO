@@ -2,9 +2,10 @@
 {# Liste des artistes (TP 4) #}
 
 {# lien vers la page en gardant les filtres déjà choisis (un filtre à None n'est pas mis dans l'URL) #}
-{% macro lien_filtre(style=style, prix=prix, jour=jour, lieu=lieu) -%}
-    {{ url_for('artiste.getArtistes', recherche=recherche or None, style=style, prix=prix,
-               date=jour.isoformat() if jour else None, lieu=lieu) }}
+{# les paramètres ne portent pas le même nom que les variables de la page, sinon Jinja les perd #}
+{% macro lien_filtre(choix_style=style, choix_prix=prix, choix_jour=jour, choix_lieu=lieu) -%}
+    {{ url_for('artiste.getArtistes', recherche=recherche or None, style=choix_style, prix=choix_prix,
+               date=choix_jour.isoformat() if choix_jour else None, lieu=choix_lieu) }}
 {%- endmacro %}
 
 {# titre d'un filtre, on clique dessus pour ouvrir ou fermer la liste (collapse Bootstrap) #}
@@ -30,7 +31,7 @@
                 {% for unStyle in styles %}
                 <li>
                     {# cliquer sur le style déjà choisi l'enlève #}
-                    <a href="{{ lien_filtre(style=None if style == unStyle.id_style else unStyle.id_style) }}"
+                    <a href="{{ lien_filtre(choix_style=None if style == unStyle.id_style else unStyle.id_style) }}"
                        {% if style == unStyle.id_style %}class="active" aria-current="true"{% endif %}>
                         {{ unStyle.libelle_style }}
                     </a>
@@ -42,7 +43,7 @@
             <ul class="collapse {% if prix %}show{% endif %} filtre-liste" id="filtre-prix">
                 {% for valeur, texte in [('gratuit', 'Gratuit'), ('payant', 'Payant')] %}
                 <li>
-                    <a href="{{ lien_filtre(prix=None if prix == valeur else valeur) }}"
+                    <a href="{{ lien_filtre(choix_prix=None if prix == valeur else valeur) }}"
                        {% if prix == valeur %}class="active" aria-current="true"{% endif %}>{{ texte }}</a>
                 </li>
                 {% endfor %}
@@ -52,7 +53,7 @@
             <ul class="collapse {% if jour %}show{% endif %} filtre-liste" id="filtre-date">
                 {% for uneJournee in journees %}
                 <li>
-                    <a href="{{ lien_filtre(jour=None if jour == uneJournee.date_jour else uneJournee.date_jour) }}"
+                    <a href="{{ lien_filtre(choix_jour=None if jour == uneJournee.date_jour else uneJournee.date_jour) }}"
                        {% if jour == uneJournee.date_jour %}class="active" aria-current="true"{% endif %}>
                         {{ uneJournee.date_jour.strftime('%d/%m/%Y') }}
                     </a>
@@ -64,7 +65,7 @@
             <ul class="collapse {% if lieu %}show{% endif %} filtre-liste filtre-liste-longue" id="filtre-lieu">
                 {% for unLieu in lieux %}
                 <li>
-                    <a href="{{ lien_filtre(lieu=None if lieu == unLieu.id_lieu else unLieu.id_lieu) }}"
+                    <a href="{{ lien_filtre(choix_lieu=None if lieu == unLieu.id_lieu else unLieu.id_lieu) }}"
                        {% if lieu == unLieu.id_lieu %}class="active" aria-current="true"{% endif %}>{{ unLieu.nom_lieu }}</a>
                 </li>
                 {% endfor %}

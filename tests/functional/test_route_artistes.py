@@ -91,3 +91,20 @@ def test_artistes_filtre_invalide(client, testapp):
     # une date ou un lieu mal écrits sont ignorés
     response = client.get('/artistes/?date=nimporte&lieu=abc')
     assert response.status_code == 200
+
+
+def test_artistes_plusieurs_filtres(client, testapp):
+    ajouter_donnees_filtres(testapp)
+    # style Rock et gratuit : Gojira
+    response = client.get('/artistes/?style=1&prix=gratuit')
+    assert b"Gojira" in response.data and "Angèle".encode() not in response.data
+    # style Rock et payant : personne
+    response = client.get('/artistes/?style=1&prix=payant')
+    assert "Aucun artiste trouvé".encode() in response.data
+
+
+def test_artistes_liens_gardent_les_filtres(client, testapp):
+    ajouter_donnees_filtres(testapp)
+    # avec le style Rock choisi, le lien Gratuit garde le style
+    response = client.get('/artistes/?style=1')
+    assert b'href="/artistes/?style=1&amp;prix=gratuit"' in response.data
