@@ -15,9 +15,25 @@
         <nav class="navbar navbar-expand navbar-dark navbar-festiuto fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand logo-festiuto" href="{{ url_for('menu.index') }}">Fest'IUT'O</a>
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
                     {% if current_user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
+                    {# menu du spectateur connecté [Source : maquette « Si user connecté »] #}
+                    {# ⚠️ liens en « # » tant que les pages n'existent pas #}
+                    <li class="nav-item"><a class="nav-link" href="#">Evenements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Programmation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Artiste</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Billet</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Mon espace</a></li>
+                    {# engrenage : menu déroulant Bootstrap [Source : TP 4 — Bootstrap] #}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-reglages" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false" aria-label="Paramètres">
+                            <i class="bi bi-gear-fill"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
+                        </ul>
+                    </li>
                     {% else %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.compte') }}">Connexion</a></li>
                     {% endif %}

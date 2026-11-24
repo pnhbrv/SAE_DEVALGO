@@ -96,3 +96,19 @@ body {
 .accueil-slogan {
     font-size: 2.5em;
 }
+
+/* Liens de la barre violette : blancs et en gras [Source : maquette « Si user connecté »] */
+.navbar-festiuto .nav-link {
+    color: white;
+    font-weight: bold;
+    margin: 0 0.5em;
+}
+
+.navbar-festiuto .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* Engrenage des paramètres, plus gros que le texte */
+.nav-reglages {
+    font-size: 1.5em;
+}
