@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block main %}
+<section class="carte-festiuto paiement-page">
+    <header class="mb-4">
+        <h1 class="titre-festiuto text-center">Paiement</h1>
+        <p class="text-center">Vérifiez votre sélection et vos coordonnées.</p>
+    </header>
+
+    <div class="paiement-grille">
+        <aside class="paiement-recapitulatif" aria-labelledby="paiement-recap-titre">
+            <h2 id="paiement-recap-titre" class="h5 text-center">Formule(s) sélectionnée(s)</h2>
+            {% if billets %}
+                {% for billet in billets %}
+                <article class="paiement-pass">
+                    <h3 class="h4">{{ billet.libelle }}</h3>
+                    <p>Accès au festival selon la formule choisie</p>
+                    <p class="paiement-pass-prix">{{ "%.2f"|format(billet.prix) }}€</p>
+                </article>
+                {% endfor %}
+            {% else %}
+                <p class="alert alert-light">
+                    Les passes sélectionnés apparaîtront ici lorsque Mon espace sera relié à cette page.
+                </p>
+            {% endif %}
+        </aside>
+
+        <section class="paiement-coordonnees" aria-labelledby="paiement-coordonnees-titre">
+            <h2 id="paiement-coordonnees-titre" class="h5 mb-3">Coordonnées de facturation</h2>
+            <div class="paiement-champs">
+                <div class="paiement-champ">
+                    <label for="prenom">Prénom</label>
+                    <input id="prenom" type="text" placeholder="Votre prénom" disabled>
+                </div>
+                <div class="paiement-champ">
+                    <label for="nom">Nom</label>
+                    <input id="nom" type="text" placeholder="Votre nom de famille" disabled>
+                </div>
+                <div class="paiement-champ paiement-champ-large">
+                    <label for="courriel">Adresse e-mail</label>
+                    <input id="courriel" type="email" placeholder="Votre adresse e-mail" disabled>
+                </div>
+                <div class="paiement-champ paiement-champ-large">
+                    <label for="adresse">Adresse</label>
+                    <input id="adresse" type="text" placeholder="Adresse postale" disabled>
+                </div>
+                <div class="paiement-champ">
+                    <label for="ville">Ville</label>
+                    <input id="ville" type="text" placeholder="Ville" disabled>
+                </div>
+                <div class="paiement-champ">
+                    <label for="code-postal">Code postal</label>
+                    <input id="code-postal" type="text" placeholder="Code postal" disabled>
+                </div>
+            </div>
+        </section>
+
+        <section class="paiement-carte" aria-labelledby="paiement-carte-titre">
+            <h2 id="paiement-carte-titre" class="h5">Paiement en ligne</h2>
+            <p class="paiement-moyens" aria-label="Moyens de paiement prévus">CB · VISA · Mastercard</p>
+            <p class="paiement-securite">
+                Le paiement sera activé après l’intégration d’un prestataire sécurisé.
+            </p>
+            <div class="paiement-champ mb-3">
+                <label for="nom-carte">Nom sur la carte</label>
+                <input id="nom-carte" type="text" placeholder="Nom" disabled>
+            </div>
+            <div class="paiement-champ mb-3">
+                <label for="numero-carte">Numéro de carte</label>
+                <input id="numero-carte" type="text" placeholder="•••• •••• •••• ••••" disabled>
+            </div>
+            <div class="paiement-champs">
+                <div class="paiement-champ">
+                    <label for="expiration">Date d’expiration</label>
+                    <input id="expiration" type="text" placeholder="MM/AA" disabled>
+                </div>
+                <div class="paiement-champ">
+                    <label for="cryptogramme">Cryptogramme</label>
+                    <input id="cryptogramme" type="text" placeholder="•••" disabled>
+                </div>
+            </div>
+            <p class="paiement-securite mt-3">
+                Démonstration uniquement : aucune donnée bancaire n’est saisie ou enregistrée.
+            </p>
+            <button class="paiement-total" type="button" disabled>
+                {{ "%.2f"|format(total) }}€
+            </button>
+        </section>
+    </div>
+</section>
+{% endblock %}

@@ -20,9 +20,11 @@ def create_app(config_class="config.ProductionConfig"):
     from monApp.menu import menu_bp
     from monApp.auth import auth_bp
     from monApp.billeterie import billeterie_bp
+    from monApp.paiement import paiement_bp
     app.register_blueprint(menu_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(billeterie_bp)
+    app.register_blueprint(paiement_bp)
 
     # Enregistrement des commandes personnalisées [Source : TP 4]
     from .commands import register_commands
