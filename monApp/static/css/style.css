@@ -16,11 +16,6 @@ body {
     src: url("../fonts/Pacifico.ttf");
 }
 
-@font-face {
-    font-family: "Splash";
-    src: url("../fonts/Splash-Regular.ttf");
-}
-
 .logo-festiuto {
     font-family: "Pacifico";
     font-size: 1.8em;
