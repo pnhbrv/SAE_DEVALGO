@@ -1,3 +1,6 @@
+__pycache__/
+.pytest_cache/
+*.pyc
 # Python
 __pycache__/
 *.py[cod]
@@ -18,4 +21,7 @@ instance/
 .coverage
 .pytest_cache/
 htmlcov/
+
+# Graphify
+graphify-out/
 
