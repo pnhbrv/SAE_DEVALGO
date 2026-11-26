@@ -10,23 +10,86 @@
 
     <div class="d-flex justify-content-center justify-content-lg-between align-items-stretch flex-wrap gap-4 mb-4">
         {% for billet in billets %}
-        {% set billet_selectionne = billet.id_type_billet in billets_selectionnes %}
+        {% set quantite = quantites_billets.get(billet.id_type_billet, 0) %}
+        {% set billet_selectionne = quantite > 0 %}
         <article class="carte-choix carte-billet{% if billet_selectionne %} carte-billet-selectionnee{% endif %}">
             <h2 class="carte-billet-nom">{{ billet.libelle }}</h2>
             <p class="carte-billet-description">{{ billet.description }}</p>
-            <p class="carte-billet-prix">{{ "%.2f"|format(billet.prix) }}€*</p>
+            <p class="carte-billet-prix titre-festiuto">{{ "%.2f"|format(billet.prix) }}€*</p>
             {% if billet_selectionne %}
-            <p class="badge text-bg-success">Pass sélectionné</p>
+            <p class="badge text-bg-success">Pass sélectionné (x{{ quantite }})</p>
             {% endif %}
-            <a href="{{ url_for('billeterie.selectionner', id_type_billet=billet.id_type_billet) }}" class="btn btn-festiuto btn-billet">
-                {{ "Désélectionner" if billet_selectionne else "Sélectionner" }}
-            </a>
+            <div class="carte-billet-actions">
+                <a href="{{ url_for('billeterie.selectionner', id_type_billet=billet.id_type_billet) }}" class="btn btn-festiuto btn-billet">
+                    {{ "Désélectionner" if billet_selectionne else "Sélectionner" }}
+                </a>
+                <button type="button"
+                        class="btn btn-quantite-trigger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalQuantite{{ billet.id_type_billet }}"
+                        aria-label="Choisir la quantité pour {{ billet.libelle }}"
+                        title="Choisir la quantité">
+                    {% if quantite > 0 %}x{{ quantite }}{% else %}<i class="bi bi-plus-slash-minus"></i>{% endif %}
+                </button>
+            </div>
         </article>
+
+        <div class="modal" id="modalQuantite{{ billet.id_type_billet }}" tabindex="-1" aria-labelledby="modalQuantiteTitre{{ billet.id_type_billet }}" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content modal-quantite-contenu">
+                    <div class="modal-header border-0 pb-1">
+                        <h2 class="modal-title h6 fw-bold" id="modalQuantiteTitre{{ billet.id_type_billet }}">{{ billet.libelle }}</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <form method="POST" action="{{ url_for('billeterie.selectionner', id_type_billet=billet.id_type_billet) }}">
+                        <div class="modal-body text-center py-3">
+                            <p class="small text-muted mb-2">Choisissez la quantité</p>
+                            <div class="quantite-stepper">
+                                <button type="button" class="btn btn-quantite-pas" data-action="moins" aria-label="Diminuer la quantité">-</button>
+                                <span class="quantite-valeur">{{ quantite if quantite > 0 else 1 }}</span>
+                                <button type="button" class="btn btn-quantite-pas" data-action="plus" aria-label="Augmenter la quantité">+</button>
+                                <input type="hidden" name="quantite" value="{{ quantite if quantite > 0 else 1 }}">
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pt-0 justify-content-center">
+                            <button type="submit" class="btn btn-festiuto px-4">Valider</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         {% endfor %}
     </div>
 
-    <footer class="d-flex justify-content-end mt-4">
+    <footer class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
+        {% if billets_selectionnes %}
+        <a href="{{ url_for('paiement.paiement') }}" class="btn btn-festiuto px-4 py-2 fw-semibold">
+            Confirmer mon choix
+        </a>
+        {% else %}
+        <span></span>
+        {% endif %}
         <span class="note-billeterie">*Accès aux Événements payants</span>
     </footer>
 </div>
+
+<script>
+document.querySelectorAll('.quantite-stepper').forEach(function (stepper) {
+    const valeurEl = stepper.querySelector('.quantite-valeur');
+    const inputEl = stepper.querySelector('input[name="quantite"]');
+
+    stepper.querySelectorAll('.btn-quantite-pas').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            let val = parseInt(inputEl.value, 10) || 0;
+            if (btn.dataset.action === 'plus') {
+                val = Math.min(20, val + 1);
+            } else {
+                val = Math.max(0, val - 1);
+            }
+            inputEl.value = val;
+            valeurEl.textContent = val;
+        });
+    });
+});
+</script>
 {% endblock %}

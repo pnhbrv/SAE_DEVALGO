@@ -40,7 +40,8 @@ def test_paiement_affiche_pass_selectionnes_et_total(client, testapp):
     assert "Pass étudiant".encode() in response.data
     assert "60.00€".encode() in response.data
     assert b'Paiement</a>' not in response.data
-    assert "Le paiement sera activé après l’intégration".encode() in response.data
+    assert "Le paiement sera activé après l’intégration".encode() not in response.data
+    assert "Confirmer le paiement".encode() in response.data
 
 
 def test_paiement_retrouve_la_selection_de_billetterie(client, testapp):

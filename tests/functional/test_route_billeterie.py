@@ -41,6 +41,7 @@ def test_billeterie_get_defaut(client, testapp):
     assert "Sélectionner".encode() in response.data
     assert "*Accès aux Événements payants".encode() in response.data
     assert b'href="/billeterie/"' in response.data
+    assert "Confirmer mon choix".encode() not in response.data
     assert "Evenements".encode() in response.data
     assert "Programmation".encode() in response.data
     assert "Artiste".encode() in response.data
@@ -90,6 +91,8 @@ def test_selectionner_connecte(client, testapp):
     assert "Vous avez sélectionné : Pass 1 jour.".encode() in response.data
     assert b"carte-billet-selectionnee" in response.data
     assert "Désélectionner".encode() in response.data
+    assert "Confirmer mon choix".encode() in response.data
+    assert b'href="/paiement/"' in response.data
 
 
 def test_selectionner_pass_selectionne_peut_etre_retire(client, testapp):
@@ -119,3 +122,28 @@ def test_selectionner_formule_de_demo_sans_bdd(client, testapp):
     response = client.get('/billeterie/selection/1/', follow_redirects=True)
     assert response.status_code == 200
     assert "Vous avez sélectionné : Pass 1 jour.".encode() in response.data
+
+
+def test_selectionner_quantite_via_popup(client, testapp):
+    with testapp.app_context():
+        db.session.add(TypeBillet(libelle="Pass 1 jour", prix=19.99))
+        db.session.commit()
+
+    connecter_spectateur(client, testapp)
+    response = client.post('/billeterie/selection/1/', data={"quantite": "3"}, follow_redirects=True)
+    assert response.status_code == 200
+    assert "Quantité sélectionnée pour Pass 1 jour : 3.".encode() in response.data
+    assert "Pass sélectionné (x3)".encode() in response.data
+    assert b"quantite-stepper" in response.data
+
+    response = client.post('/billeterie/selection/1/', data={"quantite": "0"}, follow_redirects=True)
+    assert response.status_code == 200
+    assert "Vous avez retiré : Pass 1 jour.".encode() in response.data
+    assert b"carte-billet-selectionnee" not in response.data
+
+
+def test_selectionner_quantite_invalide(client, testapp):
+    connecter_spectateur(client, testapp)
+    response = client.post('/billeterie/selection/1/', data={"quantite": "abc"}, follow_redirects=True)
+    assert response.status_code == 200
+    assert "Quantité invalide.".encode() in response.data

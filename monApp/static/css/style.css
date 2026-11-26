@@ -67,20 +67,74 @@ body {
 
 .carte-billet {
     border-color: #8e3fa0;
-    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    transition: border-color 180ms ease;
 }
 
 .carte-billet:hover,
 .carte-billet:focus-within,
 .carte-billet-selectionnee {
     border-color: #d61fd6;
-    box-shadow: 0 0.75rem 1.5rem rgba(75, 29, 143, 0.2);
-    transform: translateY(-0.35rem);
+    background: linear-gradient(160deg, #e0e7ff 0%, #e9d5ff 100%);
 }
 
 .carte-billet-selectionnee {
-    background-color: #fbf2ff;
     outline: 2px solid #d61fd6;
+}
+
+.carte-billet-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-quantite-trigger {
+    border: 2px solid #8e3fa0;
+    color: #4b1d8f;
+    background-color: white;
+    border-radius: 0.8em;
+    font-weight: 600;
+    padding: 0.375rem 0.65rem;
+}
+
+.btn-quantite-trigger:hover {
+    background-color: #f3e0fb;
+    border-color: #4b1d8f;
+    color: #4b1d8f;
+}
+
+.modal-quantite-contenu {
+    border: 2px solid #8e3fa0;
+    border-radius: 1rem;
+}
+
+.quantite-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-quantite-pas {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 2px solid #8e3fa0;
+    color: #4b1d8f;
+    font-weight: bold;
+    line-height: 1;
+    padding: 0;
+}
+
+.btn-quantite-pas:hover {
+    background-color: #8e3fa0;
+    color: white;
+}
+
+.quantite-valeur {
+    font-size: 1.4rem;
+    font-weight: bold;
+    min-width: 2rem;
+    text-align: center;
 }
 
 .paiement-page {

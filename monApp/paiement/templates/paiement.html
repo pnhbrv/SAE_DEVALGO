@@ -59,9 +59,6 @@
         <section class="paiement-carte" aria-labelledby="paiement-carte-titre">
             <h2 id="paiement-carte-titre" class="h5">Paiement en ligne</h2>
             <p class="paiement-moyens" aria-label="Moyens de paiement prévus">CB · VISA · Mastercard</p>
-            <p class="paiement-securite">
-                Le paiement sera activé après l’intégration d’un prestataire sécurisé.
-            </p>
             <div class="paiement-champ mb-3">
                 <label for="nom-carte">Nom sur la carte</label>
                 <input id="nom-carte" type="text" placeholder="Nom" disabled>
@@ -84,7 +81,7 @@
                 Démonstration uniquement : aucune donnée bancaire n’est saisie ou enregistrée.
             </p>
             <button class="paiement-total" type="button" disabled>
-                {{ "%.2f"|format(total) }}€
+                Confirmer le paiement · {{ "%.2f"|format(total) }}€
             </button>
         </section>
     </div>

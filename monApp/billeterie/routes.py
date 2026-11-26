@@ -1,5 +1,5 @@
 # Vues de la billetterie [Source : TP 3 — render_template ; TP 4 — Blueprint ; maquettes — formules disponibles]
-from flask import flash, redirect, render_template, session, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user
 from . import billeterie_bp
 from monApp.models import TypeBillet
@@ -69,16 +69,20 @@ def billeterie():
         if id_billet in billets_disponibles
     ]
     session["selected_ticket_ids"] = billets_selectionnes
+    quantites_billets = {}
+    for id_billet in billets_selectionnes:
+        quantites_billets[id_billet] = quantites_billets.get(id_billet, 0) + 1
 
     return render_template(
         "billeterie.html",
         title="Billeterie",
         billets=billets,
         billets_selectionnes=billets_selectionnes,
+        quantites_billets=quantites_billets,
     )
 
 
-@billeterie_bp.route('/billeterie/selection/<int:id_type_billet>/')
+@billeterie_bp.route('/billeterie/selection/<int:id_type_billet>/', methods=("GET", "POST"))
 def selectionner(id_type_billet):
     if not current_user.is_authenticated:
         flash("Veuillez vous connecter pour réserver votre billet.", "danger")
@@ -102,8 +106,22 @@ def selectionner(id_type_billet):
         return redirect(url_for('billeterie.billeterie'))
 
     billets_selectionnes = session.get("selected_ticket_ids", [])
-    if id_type_billet in billets_selectionnes:
-        billets_selectionnes.remove(id_type_billet)
+    quantite_brute = request.form.get("quantite") or request.args.get("quantite")
+    if quantite_brute is not None:
+        try:
+            quantite = max(0, min(20, int(quantite_brute)))
+        except ValueError:
+            flash("Quantité invalide.", "danger")
+            return redirect(url_for('billeterie.billeterie'))
+
+        billets_selectionnes = [b for b in billets_selectionnes if b != id_type_billet]
+        if quantite > 0:
+            billets_selectionnes.extend([id_type_billet] * quantite)
+            flash(f"Quantité sélectionnée pour {nom_billet} : {quantite}.", "succes")
+        else:
+            flash(f"Vous avez retiré : {nom_billet}.", "succes")
+    elif id_type_billet in billets_selectionnes:
+        billets_selectionnes = [b for b in billets_selectionnes if b != id_type_billet]
         flash(f"Vous avez retiré : {nom_billet}.", "succes")
     else:
         billets_selectionnes.append(id_type_billet)
