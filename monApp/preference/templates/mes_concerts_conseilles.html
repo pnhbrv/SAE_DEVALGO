@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="carte-festiuto mt-3">
+    <h1 class="titre-festiuto">Mes concerts conseillés</h1>
+
+    {% if not a_des_preferences %}
+    <p>
+        Vous n'avez pas encore noté de style.
+        <a href="{{ url_for('preference.mesStyles') }}">Indiquez vos styles préférés</a> pour recevoir des conseils.
+    </p>
+    {% elif evenements|length == 0 %}
+    <p>Aucun concert ne correspond à vos goûts pour le moment.</p>
+    {% else %}
+    <p>
+        Un planning sans concerts qui se chevauchent, avec le temps d'aller d'une scène à l'autre.
+        <a href="{{ url_for('preference.mesStyles') }}">Modifier mes styles préférés</a>
+    </p>
+    {% for unEvenement in evenements %}
+        {% if loop.first or unEvenement.date_jour != evenements[loop.index0 - 1].date_jour %}
+        <h2 class="h5 mt-4">{{ unEvenement.date_jour.strftime('%d/%m/%Y') }}</h2>
+        {% endif %}
+        <div class="border-bottom">
+            <p class="mb-1">
+                <strong>{{ unEvenement.date_heure_debut.strftime('%H:%M') }}</strong>
+                &middot; {{ unEvenement.titre }}
+                &middot; {{ unEvenement.lieu.nom_lieu }}
+            </p>
+            <p class="text-muted mb-2">
+                {% for uneParticipation in unEvenement.participations %}{{ uneParticipation.groupe.nom_groupe }}{% if not loop.last %}, {% endif %}{% endfor %}
+                &middot; {{ unEvenement.duree }} min
+                {% if unEvenement.est_gratuit %}&middot; gratuit{% endif %}
+            </p>
+        </div>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

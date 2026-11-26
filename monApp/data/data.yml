@@ -4387,3 +4387,28 @@ loger:
   id_hebergement: 5
   date_nuit: *id006
   nb_places_necessaires: 2
+preferences:
+- id_spectateur: 1
+  id_style: 1
+  note: 5
+- id_spectateur: 1
+  id_style: 6
+  note: -3
+- id_spectateur: 1
+  id_style: 3
+  note: 2
+- id_spectateur: 2
+  id_style: 5
+  note: 4
+- id_spectateur: 2
+  id_style: 10
+  note: -4
+- id_spectateur: 3
+  id_style: 3
+  note: 5
+- id_spectateur: 3
+  id_style: 2
+  note: -2
+- id_spectateur: 4
+  id_style: 1
+  note: 5

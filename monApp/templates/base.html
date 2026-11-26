@@ -25,6 +25,8 @@
                             <i class="bi bi-gear-fill"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('preference.mesStyles') }}">Mes styles préférés</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('preference.mesConcertsConseilles') }}">Mes concerts conseillés</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
                         </ul>
                     </li>

@@ -25,7 +25,8 @@ def loaddb(filename):
 
     from .models import (Membre, Instrument, Groupe, StyleMusical, Spectateur, TypeBillet, Journee,
                          Lieu, Hebergement, DateAchat, DateNuit, Evenement, Jouer, Composer, EstSimilaire,
-                         AvoirStyle, MettreEnFavori, Acheter, DonnerAcces, PreInscrire, Participer, Loger)
+                         AvoirStyle, MettreEnFavori, Acheter, DonnerAcces, PreInscrire, Participer, Loger,
+                         PreferenceStyle)
 
     for s in data["styles"]:
         unStyle = StyleMusical(libelle_style=s["libelle_style"], id_style_parent=s["id_style_parent"])
@@ -105,6 +106,8 @@ def loaddb(filename):
     for r in data["loger"]:
         db.session.add(Loger(id_groupe=r["id_groupe"], id_hebergement=r["id_hebergement"],
                              date_nuit=r["date_nuit"], nb_places_necessaires=r["nb_places_necessaires"]))
+    for r in data["preferences"]:
+        db.session.add(PreferenceStyle(id_spectateur=r["id_spectateur"], id_style=r["id_style"], note=r["note"]))
     db.session.commit()
     lg.warning('Database initialized!')
 

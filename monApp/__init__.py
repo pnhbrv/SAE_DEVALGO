@@ -15,9 +15,11 @@ def create_app(config_class="config.ProductionConfig"):
     from monApp.menu import menu_bp
     from monApp.auth import auth_bp
     from monApp.artiste import artiste_bp
+    from monApp.preference import preference_bp
     app.register_blueprint(menu_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(artiste_bp)
+    app.register_blueprint(preference_bp)
 
     from .commands import register_commands
     register_commands(app)
