@@ -13,7 +13,7 @@ from genres import construire_arbre
 from modeles import Concert
 from scoring import SCORE_NEUTRE, score_concert
 
-from .models import Evenement, Groupe, PreferenceStyle, StyleMusical
+from .models import EstSimilaire, Evenement, Groupe, PreferenceStyle, StyleMusical
 
 # temps (en minutes) pour aller d'un lieu du festival à un autre
 TEMPS_TRAJET = 15
@@ -47,12 +47,11 @@ def styles_du_groupe(unGroupe):
     return ids
 
 
-def suggestions_groupes(id_spectateur, nombre=6):
-    """Les groupes que le spectateur aimera le plus, du meilleur score au moins bon.
+def classer_groupes(prefs, nombre, ids_exclus=()):
+    """Les groupes du meilleur score au moins bon pour ces préférences.
 
-    Un groupe écarté (style refusé) ou sans rapport avec ses goûts (score neutre) n'est pas proposé.
+    Un groupe écarté (style refusé) ou sans rapport avec les préférences (score neutre) n'est pas gardé.
     """
-    prefs = preferences_du_spectateur(id_spectateur)
     if len(prefs) == 0:
         return []
     arbre = arbre_des_styles()
@@ -60,18 +59,47 @@ def suggestions_groupes(id_spectateur, nombre=6):
     resultats = []
     groupes_par_id = {}
     for unGroupe in Groupe.query.all():
-        score = score_concert(arbre, prefs, styles_du_groupe(unGroupe))
-        if score is not None and score > SCORE_NEUTRE:
-            resultats.append((score, unGroupe.id_groupe))
-            groupes_par_id[unGroupe.id_groupe] = unGroupe
+        if unGroupe.id_groupe not in ids_exclus:
+            score = score_concert(arbre, prefs, styles_du_groupe(unGroupe))
+            if score is not None and score > SCORE_NEUTRE:
+                resultats.append((score, unGroupe.id_groupe))
+                groupes_par_id[unGroupe.id_groupe] = unGroupe
 
     # les tuples se trient d'abord sur le score : du meilleur au moins bon
     resultats.sort(reverse=True)
 
-    suggestions = []
+    groupes = []
     for score, id_groupe in resultats[:nombre]:
-        suggestions.append(groupes_par_id[id_groupe])
-    return suggestions
+        groupes.append(groupes_par_id[id_groupe])
+    return groupes
+
+
+def suggestions_groupes(id_spectateur, nombre=6):
+    """Les groupes que le spectateur aimera le plus."""
+    return classer_groupes(preferences_du_spectateur(id_spectateur), nombre)
+
+
+def groupes_similaires(unGroupe, nombre=4):
+    """Les groupes proches de celui-ci.
+
+    D'abord ceux que l'organisateur a déclarés similaires (table EST_SIMILAIRE), puis on complète avec
+    l'algo : on fait comme si un spectateur aimait (+5) les styles du groupe, et on garde ses meilleures
+    suggestions. Un groupe d'un sous-genre voisin arrive donc avant un groupe d'un autre genre.
+    """
+    similaires = []
+    ids_deja_pris = [unGroupe.id_groupe]
+    for unLien in EstSimilaire.query.filter_by(id_groupe=unGroupe.id_groupe).all():
+        unSimilaire = Groupe.query.filter_by(id_groupe=unLien.id_groupe_similaire).first()
+        if unSimilaire is not None and len(similaires) < nombre:
+            similaires.append(unSimilaire)
+            ids_deja_pris.append(unSimilaire.id_groupe)
+
+    prefs = {}
+    for id_style in styles_du_groupe(unGroupe):
+        prefs[id_style] = 5
+    for unProche in classer_groupes(prefs, nombre - len(similaires), ids_deja_pris):
+        similaires.append(unProche)
+    return similaires
 
 
 def concert_depuis_evenement(unEvenement):
