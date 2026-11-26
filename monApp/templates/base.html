@@ -16,7 +16,7 @@
                     {% if current_user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="#">Evenements</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Programmation</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Artiste</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('artiste.getArtistes') }}">Artiste</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Billet</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Mon espace</a></li>
                     <li class="nav-item dropdown">
