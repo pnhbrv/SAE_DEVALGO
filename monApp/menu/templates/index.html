@@ -14,17 +14,5 @@
     <p class="logo-festiuto accueil-slogan">Le Festival phare d'Orléans !</p>
 </section>
 
-<script>
-    const video = document.createElement("video");
-
-    video.src = "{{ url_for('static', filename='videos/Video.mp4') }}";
-
-    video.autoplay = true;
-    video.loop = true;
-    video.muted = true;
-
-    video.className = "accueil-video";
-
-    document.body.prepend(video);
-</script>
+{% include "_video_fond.html" %}
 {% endblock %}

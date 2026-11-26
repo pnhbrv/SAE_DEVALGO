@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block main %}
+{% include "_video_fond.html" %}
 <div class="carte-festiuto carte-formulaire">
-    <h1 class="titre-festiuto text-center">Connexion</h1>
+    <h1 class="titre-festiuto titre-splash text-center">Connexion</h1>
+
     <p class="text-center">Entrez votre mail et votre mot de passe</p>
     <form role="form" method="POST" action="{{ url_for('auth.login') }}">
         {{ form.hidden_tag() }}
