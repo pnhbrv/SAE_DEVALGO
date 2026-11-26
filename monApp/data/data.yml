@@ -2988,6 +2988,16 @@ favoris:
   id_groupe: 29
 - id_spectateur: 80
   id_groupe: 33
+preferences_styles:
+- id_spectateur: 1
+  id_style: 2
+  note: 5
+- id_spectateur: 1
+  id_style: 5
+  note: 3
+- id_spectateur: 1
+  id_style: 6
+  note: -4
 acheter:
 - id_spectateur: 1
   id_type_billet: 1

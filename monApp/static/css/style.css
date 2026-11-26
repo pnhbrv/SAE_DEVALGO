@@ -244,3 +244,73 @@ body {
 .carte-artiste-sans-photo i {
     font-size: 4em;
 }
+
+.espace-bandeau {
+    background: linear-gradient(135deg, #4b1d8f, #d61fd6);
+    color: white;
+    border-radius: 0.5em;
+    padding: 2.5em 1.5em 1.5em;
+}
+
+.espace-bandeau h1 {
+    font-size: 1.6em;
+    margin: 0;
+}
+
+.espace-bandeau p {
+    font-size: 0.8em;
+    margin: 0;
+}
+
+.bulle-espace {
+    background-color: #eeeeee;
+    border-radius: 1em;
+    padding: 1em 1.2em;
+    height: 100%;
+}
+
+.bulle-titre {
+    color: #d61fd6;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.bulle-modifier {
+    float: right;
+    font-size: 0.6em;
+    color: black;
+    text-decoration: none;
+}
+
+.bulle-ligne {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-bottom: 0.6em;
+}
+
+.bulle-sous-titre {
+    font-size: 0.8em;
+    color: grey;
+    margin: 1em 0 0.4em;
+}
+
+.bulle-defilante {
+    max-height: 14em;
+    overflow-y: auto;
+}
+
+.favori-photo {
+    width: 3.5em;
+    height: 3.5em;
+    object-fit: cover;
+    border: 2px solid black;
+    border-radius: 0.5em;
+}
+
+.favori-sans-photo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e2d4ea;
+    color: #8e3fa0;
+}

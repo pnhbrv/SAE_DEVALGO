@@ -555,6 +555,23 @@ class MettreEnFavori(db.Model):
         return "<MettreEnFavori %s>" % ([self.id_spectateur, self.id_groupe],)
 
 
+class PreferenceStyle(db.Model):
+    __tablename__ = "preference_style"
+    id_spectateur = db.Column(db.Integer, db.ForeignKey("spectateur.id_spectateur"), primary_key=True)
+    id_style = db.Column(db.Integer, db.ForeignKey("style_musical.id_style"), primary_key=True)
+    note = db.Column(db.Integer, nullable=False)
+    spectateur = db.relationship("Spectateur", backref=db.backref("preferences", lazy="dynamic"))
+    style = db.relationship("StyleMusical", backref=db.backref("preferences", lazy="dynamic"))
+
+    def __init__(self, id_spectateur=None, id_style=None, note=None):
+        self.id_spectateur = id_spectateur
+        self.id_style = id_style
+        self.note = note
+
+    def __repr__(self):
+        return "<PreferenceStyle %s>" % ([self.id_spectateur, self.id_style, self.note],)
+
+
 class Acheter(db.Model):
     __tablename__ = "acheter"
     id_spectateur = db.Column(db.Integer, db.ForeignKey("spectateur.id_spectateur"), primary_key=True)

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="carte-festiuto carte-formulaire">
+    <h1 class="titre-festiuto">Mes styles préférés</h1>
+    <p>Notez chaque style de -5 (je n'aime pas) à +5 (j'adore). 0 signifie aucune préférence.
+       La note d'un style s'applique aussi à ses sous-styles.</p>
+    <form role="form" method="POST" action="{{ url_for('espace.modifierStyles') }}">
+        {{ form.hidden_tag() }}
+        {% for unStyle in styles %}
+        <div class="row align-items-center mb-2">
+            <label class="col-6" for="note_{{ unStyle.id_style }}">{{ unStyle.libelle_style }}</label>
+            <div class="col-6">
+                <select class="form-select" id="note_{{ unStyle.id_style }}" name="note_{{ unStyle.id_style }}">
+                    {% for n in range(5, -6, -1) %}
+                    <option value="{{ n }}" {% if notes.get(unStyle.id_style, 0) == n %}selected{% endif %}>
+                        {% if n > 0 %}+{% endif %}{{ n }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {% endfor %}
+        <input class="btn btn-festiuto" type="submit" value="Enregistrer">
+        <a href="{{ url_for('espace.getEspace') }}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

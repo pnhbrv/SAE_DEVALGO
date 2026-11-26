@@ -25,7 +25,7 @@ def loaddb(filename):
 
     from .models import (Membre, Instrument, Groupe, StyleMusical, Spectateur, TypeBillet, Journee,
                          Lieu, Hebergement, DateAchat, DateNuit, Evenement, Jouer, Composer, EstSimilaire,
-                         AvoirStyle, MettreEnFavori, Acheter, DonnerAcces, PreInscrire, Participer, Loger)
+                         AvoirStyle, MettreEnFavori, PreferenceStyle, Acheter, DonnerAcces, PreInscrire, Participer, Loger)
 
     for s in data["styles"]:
         unStyle = StyleMusical(libelle_style=s["libelle_style"], id_style_parent=s["id_style_parent"])
@@ -93,6 +93,8 @@ def loaddb(filename):
         db.session.add(AvoirStyle(id_groupe=r["id_groupe"], id_style=r["id_style"]))
     for r in data["favoris"]:
         db.session.add(MettreEnFavori(id_spectateur=r["id_spectateur"], id_groupe=r["id_groupe"]))
+    for r in data.get("preferences_styles", []):
+        db.session.add(PreferenceStyle(id_spectateur=r["id_spectateur"], id_style=r["id_style"], note=r["note"]))
     for r in data["acheter"]:
         db.session.add(Acheter(id_spectateur=r["id_spectateur"], id_type_billet=r["id_type_billet"],
                                date_achat=r["date_achat"]))

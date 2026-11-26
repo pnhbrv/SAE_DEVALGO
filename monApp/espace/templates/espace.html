@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="espace-bandeau">
+    <h1>Bonjour {{ current_user.prenom }} {{ current_user.nom }}</h1>
+    <p>Bienvenue dans votre espace client</p>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-md-8">
+        <section class="bulle-espace" id="mes-billets">
+            <h2 class="bulle-titre">Mes billets</h2>
+            {% for unAchat in achats %}
+            <p class="bulle-ligne">
+                1 {{ unAchat.type_billet.libelle }} ({{ unAchat.date_achat.strftime('%d/%m/%Y') }})
+                <button class="btn btn-link p-0 float-end" type="button" disabled title="Téléchargement bientôt disponible"
+                        aria-label="Télécharger le billet"><i class="bi bi-download"></i></button>
+            </p>
+            {% else %}
+            <p class="text-muted">Vous n'avez pas encore de billet.</p>
+            {% endfor %}
+        </section>
+
+        <div class="row g-3 mt-0">
+            <div class="col-md-5">
+                <section class="bulle-espace" id="mes-infos">
+                    <h2 class="bulle-titre">Mes infos</h2>
+                    <p class="bulle-ligne">{{ current_user.prenom }} {{ current_user.nom }}</p>
+                    <p class="bulle-ligne">{{ current_user.email }}</p>
+                </section>
+            </div>
+            <div class="col-md-7">
+                <section class="bulle-espace" id="mes-concerts">
+                    <h2 class="bulle-titre">Mes concerts</h2>
+                    <div class="bulle-defilante">
+                    {% for unConcert in concerts %}
+                    <p class="bulle-ligne">
+                        <strong>{{ unConcert.titre }}</strong><br>
+                        <small class="text-muted">{{ unConcert.date_heure_debut.strftime('%d/%m/%Y, %Hh%M') }}<br>
+                        {{ unConcert.lieu.nom_lieu }}</small>
+                    </p>
+                    {% else %}
+                    <p class="text-muted">Aucun concert pour le moment.</p>
+                    {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <section class="bulle-espace" id="mes-styles">
+            <h2 class="bulle-titre">Mes styles préférés
+                <a href="{{ url_for('espace.modifierStyles') }}" class="bulle-modifier">Modifier <i class="bi bi-caret-down-fill"></i></a>
+            </h2>
+            {% for unePref in aimes %}
+            <p class="bulle-ligne">{{ unePref.style.libelle_style }} <span class="badge bg-success">+{{ unePref.note }}</span></p>
+            {% else %}
+            <p class="text-muted">Aucun style préféré.</p>
+            {% endfor %}
+            {% if pas_aimes %}
+            <p class="bulle-sous-titre">Styles que je n'aime pas</p>
+            {% for unePref in pas_aimes %}
+            <p class="bulle-ligne">{{ unePref.style.libelle_style }} <span class="badge bg-danger">{{ unePref.note }}</span></p>
+            {% endfor %}
+            {% endif %}
+        </section>
+
+        <section class="bulle-espace mt-3" id="mes-favoris">
+            <h2 class="bulle-titre">Mes favoris</h2>
+            <div class="d-flex flex-wrap gap-2">
+                {% for unGroupe in favoris %}
+                {% if unGroupe.liens_photos %}
+                <img class="favori-photo" src="{{ unGroupe.liens_photos }}" alt="{{ unGroupe.nom_groupe }}" title="{{ unGroupe.nom_groupe }}">
+                {% else %}
+                <span class="favori-photo favori-sans-photo" title="{{ unGroupe.nom_groupe }}"><i class="bi bi-person-fill"></i></span>
+                {% endif %}
+                {% else %}
+                <p class="text-muted">Aucun favori.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
