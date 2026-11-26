@@ -1,7 +1,9 @@
 from datetime import date
 from flask import render_template, request
+from flask_login import current_user
 from . import artiste_bp
 from monApp.models import AvoirStyle, Evenement, Groupe, Journee, Lieu, Participer, StyleMusical
+from monApp.recommandation import suggestions_groupes
 
 
 def styles_avec_sous_genres(id_style):
@@ -37,8 +39,13 @@ def getArtistes():
 
     lesGroupes = requete.distinct().order_by(Groupe.nom_groupe).all()
 
-    return render_template('artistes_list.html', title="Artistes", groupes=lesGroupes,
-                           styles=StyleMusical.query.order_by(StyleMusical.id_style).all(),
-                           journees=Journee.query.order_by(Journee.date_jour).all(),
-                           lieux=Lieu.query.order_by(Lieu.nom_lieu).all(),
-                           recherche=recherche, style=style, prix=prix, jour=jour, lieu=lieu)
+    # suggestions de l'Algo : seulement sur la liste complète, pour un spectateur connecté
+    lesSuggestions = []
+    if current_user.is_authenticated and not (recherche or style or prix or jour or lieu):
+        lesSuggestions = suggestions_groupes(current_user.id_spectateur)
+
+    return render_template('artistes_list.html', title="Artistes", groupes=lesGroupes, suggestions=lesSuggestions,
+                        styles=StyleMusical.query.order_by(StyleMusical.id_style).all(),
+                        journees=Journee.query.order_by(Journee.date_jour).all(),
+                        lieux=Lieu.query.order_by(Lieu.nom_lieu).all(),
+                        recherche=recherche, style=style, prix=prix, jour=jour, lieu=lieu)

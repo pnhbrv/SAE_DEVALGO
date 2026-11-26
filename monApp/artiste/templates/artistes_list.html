@@ -88,6 +88,25 @@
             <input class="btn btn-festiuto ms-2" type="submit" value="Rechercher">
         </form>
 
+        {% if suggestions %}
+        <h2 class="h5 fw-bold mb-3">Suggestions selon vos goûts</h2>
+        <div class="liste-artistes mb-4">
+            {% for unGroupe in suggestions %}
+            <div class="carte-artiste">
+                {% if unGroupe.liens_photos %}
+                <img src="{{ unGroupe.liens_photos }}" alt="Photo de {{ unGroupe.nom_groupe }}">
+                {% else %}
+                <div class="carte-artiste-sans-photo"><i class="bi bi-person-fill"></i></div>
+                {% endif %}
+                <p class="carte-artiste-nom">{{ unGroupe.nom_groupe }}</p>
+                <p class="carte-artiste-style">
+                    {% for unLien in unGroupe.styles %}{{ unLien.style.libelle_style }}{% if not loop.last %}, {% endif %}{% endfor %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <p>Nombre d'artistes : {{ groupes|length }}</p>
         {% if groupes|length == 0 %}
             <p>Aucun artiste trouvé.</p>
