@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block main %}
 {% include "_video_fond.html" %}
-<div class="carte-festiuto carte-formulaire">
+<div class="carte-festiuto carte-video carte-formulaire">
     <h1 class="titre-festiuto titre-splash text-center">Bienvenue</h1>
     <p class="text-center">Pour créer votre compte veuillez renseigner :</p>
     <form role="form" method="POST" action="{{ url_for('auth.inscription') }}">
