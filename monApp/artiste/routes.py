@@ -1,8 +1,10 @@
 from datetime import date
-from flask import render_template, request
-from flask_login import current_user
+from flask import flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
 from . import artiste_bp
-from monApp.models import AvoirStyle, Evenement, Groupe, Journee, Lieu, Participer, StyleMusical
+from .forms import FavoriForm
+from monApp.app import db
+from monApp.models import AvoirStyle, Evenement, Groupe, Journee, Lieu, MettreEnFavori, Participer, StyleMusical
 from monApp.recommandation import groupes_similaires, suggestions_groupes
 
 
@@ -73,6 +75,32 @@ def getArtiste(id_groupe):
 
     lesConcerts = Evenement.query.join(Participer, Participer.id_evenement == Evenement.id_evenement)                                  .filter(Participer.id_groupe == id_groupe)                                  .order_by(Evenement.date_heure_debut).all()
 
+    est_favori = False
+    if current_user.is_authenticated:
+        est_favori = trouver_favori(current_user.id_spectateur, id_groupe) is not None
+
     return render_template('artiste_fiche.html', title=unGroupe.nom_groupe, groupe=unGroupe, membres=lesMembres,
                            concerts=lesConcerts, similaires=groupes_similaires(unGroupe),
-                           video=lien_video_integree(unGroupe.liens_videos))
+                           video=lien_video_integree(unGroupe.liens_videos),
+                           est_favori=est_favori, form_favori=FavoriForm())
+
+
+def trouver_favori(id_spectateur, id_groupe):
+    return MettreEnFavori.query.filter_by(id_spectateur=id_spectateur, id_groupe=id_groupe).first()
+
+
+@artiste_bp.route('/artistes/<int:id_groupe>/favori/', methods=("POST",))
+@login_required
+def changerFavori(id_groupe):
+    """Ajoute le groupe aux favoris du spectateur, ou l'en retire s'il y est déjà."""
+    unGroupe = Groupe.query.filter_by(id_groupe=id_groupe).first_or_404()
+    if FavoriForm().validate_on_submit():
+        unFavori = trouver_favori(current_user.id_spectateur, id_groupe)
+        if unFavori is None:
+            db.session.add(MettreEnFavori(id_spectateur=current_user.id_spectateur, id_groupe=id_groupe))
+            flash(unGroupe.nom_groupe + " est ajouté à vos favoris.", "succes")
+        else:
+            db.session.delete(unFavori)
+            flash(unGroupe.nom_groupe + " est retiré de vos favoris.", "succes")
+        db.session.commit()
+    return redirect(url_for('artiste.getArtiste', id_groupe=id_groupe))

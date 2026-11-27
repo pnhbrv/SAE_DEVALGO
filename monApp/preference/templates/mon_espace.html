@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% from "carte_artiste.html" import carte_artiste %}
+
+{% block main %}
+<div class="carte-festiuto mt-3 mb-3">
+    <h1 class="titre-festiuto">Bonjour {{ current_user.prenom }}</h1>
+    <p class="mb-0">Bienvenue dans votre espace.</p>
+</div>
+
+{# h-100 : les blocs d'une même ligne ont la même hauteur, sans zone vide #}
+<div class="row g-3">
+    <div class="col-md-4">
+        <section class="carte-festiuto h-100 m-0">
+            <h2 class="h5 titre-festiuto">Mes billets</h2>
+            {% if achats|length == 0 %}
+            <p>Vous n'avez pas encore de billet.</p>
+            {% endif %}
+            <ul class="mb-0">
+                {% for unAchat in achats %}
+                <li>
+                    {{ unAchat.type_billet.libelle }} &middot; {{ unAchat.type_billet.prix }} &euro;
+                    &middot; acheté le {{ unAchat.date_achat.strftime('%d/%m/%Y') }}
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+
+    <div class="col-md-4">
+        <section class="carte-festiuto h-100 m-0">
+            <h2 class="h5 titre-festiuto">Mes infos</h2>
+            <p class="mb-1"><strong>Prénom et nom :</strong> {{ current_user.prenom }} {{ current_user.nom }}</p>
+            <p class="mb-0"><strong>Adresse mail :</strong> {{ current_user.email }}</p>
+        </section>
+    </div>
+
+    <div class="col-md-4">
+        <section class="carte-festiuto h-100 m-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="h5 titre-festiuto">Mes styles préférés</h2>
+                <a href="{{ url_for('preference.mesStyles') }}">Modifier</a>
+            </div>
+            {% if preferences|length == 0 %}
+            <p>Vous n'avez pas encore noté de style.</p>
+            {% endif %}
+            <ul class="mb-0">
+                {% for unePreference in preferences %}
+                <li>{{ unePreference.style.libelle_style }} : {% if unePreference.note > 0 %}+{% endif %}{{ unePreference.note }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+</div>
+
+<div class="row g-3 mt-0 mb-4">
+    <div class="col-md-6">
+        <section class="carte-festiuto h-100 m-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="h5 titre-festiuto">Mes concerts</h2>
+                <a href="{{ url_for('preference.mesConcertsConseilles') }}">Concerts conseillés</a>
+            </div>
+            {% if concerts|length == 0 %}
+            <p>Vous n'êtes pré-inscrit à aucun concert.</p>
+            {% endif %}
+            <ul class="mb-0">
+                {% for unEvenement in concerts %}
+                <li>
+                    {{ unEvenement.date_heure_debut.strftime('%d/%m/%Y à %H:%M') }} &middot; {{ unEvenement.titre }}
+                    &middot; {{ unEvenement.lieu.nom_lieu }}
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+
+    <div class="col-md-6">
+        <section class="carte-festiuto h-100 m-0">
+            <h2 class="h5 titre-festiuto">Mes favoris</h2>
+            {% if favoris|length == 0 %}
+            <p>Vous n'avez pas encore de groupe favori. Ajoutez-en depuis la fiche d'un groupe.</p>
+            {% endif %}
+            <div class="liste-artistes">
+                {% for unGroupe in favoris %}
+                {{ carte_artiste(unGroupe) }}
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

@@ -27,6 +27,16 @@
                 <span class="badge text-bg-secondary">{{ unLien.style.libelle_style }}</span>
                 {% endfor %}
             </p>
+            {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('artiste.changerFavori', id_groupe=groupe.id_groupe) }}" class="mt-3">
+                {{ form_favori.hidden_tag() }}
+                {% if est_favori %}
+                <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-heart-fill"></i> Retirer de mes favoris</button>
+                {% else %}
+                <button type="submit" class="btn btn-festiuto"><i class="bi bi-heart"></i> Ajouter à mes favoris</button>
+                {% endif %}
+            </form>
+            {% endif %}
         </div>
     </div>
 

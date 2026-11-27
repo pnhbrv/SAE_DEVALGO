@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from . import preference_bp
 from .forms import PreferencesForm
 from monApp.app import db
-from monApp.models import PreferenceStyle, StyleMusical
+from monApp.models import Acheter, Evenement, Groupe, MettreEnFavori, PreferenceStyle, PreInscrire, StyleMusical
 from monApp.recommandation import cache, concerts_conseilles, preferences_du_spectateur
 
 # notes possibles : de -5 à +5, sans 0 (pas de préférence = pas de ligne dans la table)
@@ -56,3 +56,15 @@ def mesConcertsConseilles():
     a_des_preferences = len(preferences_du_spectateur(id_spectateur)) > 0
     return render_template("mes_concerts_conseilles.html", title="Mes concerts conseillés",
                            evenements=lesEvenements, a_des_preferences=a_des_preferences)
+
+
+@preference_bp.route("/mon-espace/")
+@login_required
+def monEspace():
+    id_spectateur = current_user.id_spectateur
+    lesAchats = Acheter.query.filter_by(id_spectateur=id_spectateur).order_by(Acheter.date_achat).all()
+    lesConcerts = Evenement.query.join(PreInscrire, PreInscrire.id_evenement == Evenement.id_evenement)                                  .filter(PreInscrire.id_spectateur == id_spectateur)                                  .order_by(Evenement.date_heure_debut).all()
+    lesPreferences = PreferenceStyle.query.filter_by(id_spectateur=id_spectateur)                                           .order_by(PreferenceStyle.note.desc()).all()
+    lesFavoris = Groupe.query.join(MettreEnFavori, MettreEnFavori.id_groupe == Groupe.id_groupe)                              .filter(MettreEnFavori.id_spectateur == id_spectateur)                              .order_by(Groupe.nom_groupe).all()
+    return render_template("mon_espace.html", title="Mon espace", achats=lesAchats, concerts=lesConcerts,
+                           preferences=lesPreferences, favoris=lesFavoris)
