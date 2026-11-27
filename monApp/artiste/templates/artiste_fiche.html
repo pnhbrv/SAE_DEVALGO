@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% from "carte_artiste.html" import carte_artiste %}
+
+{% macro onglet(cible, nom, actif=false) %}
+<li class="nav-item" role="presentation">
+    <button class="nav-link {% if actif %}active{% endif %}" id="bouton-{{ cible }}" data-bs-toggle="tab"
+            data-bs-target="#{{ cible }}" type="button" role="tab" aria-controls="{{ cible }}"
+            aria-selected="{{ 'true' if actif else 'false' }}">{{ nom }}</button>
+</li>
+{% endmacro %}
+
+{% block main %}
+<div class="mt-3">
+    <a href="{{ url_for('artiste.getArtistes') }}"><i class="bi bi-arrow-left"></i> Retour aux artistes</a>
+</div>
+
+<div class="carte-festiuto mt-2">
+    <div class="d-flex align-items-center gap-4 flex-wrap">
+        {% if groupe.liens_photos %}
+        <img src="{{ groupe.liens_photos }}" alt="Photo de {{ groupe.nom_groupe }}" class="rounded"
+             style="width: 12em; height: 12em; object-fit: cover;">
+        {% endif %}
+        <div>
+            <h1 class="titre-festiuto">{{ groupe.nom_groupe }}</h1>
+            <p class="mb-0">
+                {% for unLien in groupe.styles %}
+                <span class="badge text-bg-secondary">{{ unLien.style.libelle_style }}</span>
+                {% endfor %}
+            </p>
+            {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('artiste.changerFavori', id_groupe=groupe.id_groupe) }}" class="mt-3">
+                {{ form_favori.hidden_tag() }}
+                {% if est_favori %}
+                <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-heart-fill"></i> Retirer de mes favoris</button>
+                {% else %}
+                <button type="submit" class="btn btn-festiuto"><i class="bi bi-heart"></i> Ajouter à mes favoris</button>
+                {% endif %}
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs mt-4" role="tablist">
+        {{ onglet("onglet-presentation", "Présentation", true) }}
+        {{ onglet("onglet-membres", "Membres") }}
+        {{ onglet("onglet-concerts", "Concerts") }}
+        {{ onglet("onglet-videos", "Vidéos") }}
+        {{ onglet("onglet-reseaux", "Réseaux") }}
+    </ul>
+
+    <div class="tab-content pt-3">
+        <div class="tab-pane fade show active" id="onglet-presentation" role="tabpanel" aria-labelledby="bouton-onglet-presentation">
+            <h2 class="h5">Description</h2>
+            <p>{{ groupe.description or "Pas encore de description." }}</p>
+        </div>
+
+        <div class="tab-pane fade" id="onglet-membres" role="tabpanel" aria-labelledby="bouton-onglet-membres">
+            {% if membres|length == 0 %}
+            <p>Aucun membre renseigné.</p>
+            {% endif %}
+            <ul>
+                {% for unMembre, instruments in membres %}
+                <li>
+                    <strong>{{ unMembre.prenom }} {{ unMembre.nom }}</strong>
+                    {% if instruments %}: {{ instruments|join(", ") }}{% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="tab-pane fade" id="onglet-concerts" role="tabpanel" aria-labelledby="bouton-onglet-concerts">
+            {% if concerts|length == 0 %}
+            <p>Aucun concert programmé.</p>
+            {% endif %}
+            <ul>
+                {% for unEvenement in concerts %}
+                <li>
+                    {{ unEvenement.date_heure_debut.strftime('%d/%m/%Y à %H:%M') }} &middot; {{ unEvenement.titre }}
+                    &middot; {{ unEvenement.lieu.nom_lieu }}
+                    {% if unEvenement.est_gratuit %}&middot; gratuit{% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="tab-pane fade" id="onglet-videos" role="tabpanel" aria-labelledby="bouton-onglet-videos">
+            {% if video %}
+            <div class="ratio ratio-16x9" style="max-width: 40em;">
+                <iframe src="{{ video }}" title="Vidéo de {{ groupe.nom_groupe }}" allowfullscreen></iframe>
+            </div>
+            {% elif groupe.liens_videos %}
+            <a href="{{ groupe.liens_videos }}" target="_blank" rel="noopener">Voir les vidéos de {{ groupe.nom_groupe }}</a>
+            {% else %}
+            <p>Aucune vidéo.</p>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade" id="onglet-reseaux" role="tabpanel" aria-labelledby="bouton-onglet-reseaux">
+            {% if groupe.liens_reseaux_sociaux %}
+            <a href="{{ groupe.liens_reseaux_sociaux }}" target="_blank" rel="noopener">
+                <i class="bi bi-link-45deg"></i> {{ groupe.liens_reseaux_sociaux }}
+            </a>
+            {% else %}
+            <p>Aucun réseau social.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if similaires %}
+<div class="carte-festiuto mt-3">
+    <h2 class="h5 fw-bold mb-3">Groupes similaires</h2>
+    <div class="liste-artistes">
+        {% for unSimilaire in similaires %}
+        {{ carte_artiste(unSimilaire) }}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

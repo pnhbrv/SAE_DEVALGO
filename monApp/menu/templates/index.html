@@ -1,25 +1,18 @@
 {% extends "base.html" %}
-{# Page d'accueil [Source : maquette accueil — « Réservez maintenant », « Le Festival phare d'Orléans ! »] #}
-{% block navbar %}{% endblock %}
+{% block navbar %}
+    {% if current_user.is_authenticated %}
+        {{ super() }}
+    {% endif %}
+{% endblock %}
 
 {% block main %}
 <section class="accueil">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Fest'IUT'O" class="accueil-logo">
-    <a href="{{ url_for('auth.compte') }}" class="btn btn-light accueil-bouton">Réservez maintenant</a>
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('auth.compte') }}" class="btn btn-light accueil-bouton">Réservez Maintenant</a>
+    {% endif %}
     <p class="logo-festiuto accueil-slogan">Le Festival phare d'Orléans !</p>
 </section>
 
-<script>
-    const video = document.createElement("video");
-
-    video.src = "{{ url_for('static', filename='videos/Video.mp4') }}";
-
-    video.autoplay = true;   // elle démarre toute seule
-    video.loop = true;       // elle recommence quand elle est finie
-    video.muted = true;      // sans le son (obligatoire pour que le navigateur accepte l'autoplay)
-
-    video.className = "accueil-video";
-
-    document.body.prepend(video);
-</script>
+{% include "_video_fond.html" %}
 {% endblock %}

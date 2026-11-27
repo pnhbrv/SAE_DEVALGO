@@ -1,7 +1,3 @@
-# Modèles de l'application Fest'IUT'O
-# [Source : TP 2 — définition du modèle, relations Many-To-One]
-# [Source : MLD.pdf + SQL/Creation.sql — tables, clés et types]
-# [Source : TP 6 — modèle User, UserMixin, user_loader]
 from flask_login import UserMixin
 from .app import db, login_manager
 
@@ -480,7 +476,6 @@ class Spectateur(db.Model, UserMixin):
         self.mot_de_passe = mot_de_passe
 
     def get_id(self):
-        # identifiant de session = email [Source : TP 6 — get_id]
         return self.email
 
     def __repr__(self):
@@ -641,7 +636,25 @@ class Loger(db.Model):
         return "<Loger %s>" % ([self.id_groupe, self.id_hebergement, self.date_nuit, self.nb_places_necessaires],)
 
 
+class PreferenceStyle(db.Model):
+    __tablename__ = "preference_style"
+    # comme dans Creation.sql : une note de -5 à +5, jamais 0 (pas de ligne = pas de préférence)
+    __table_args__ = (db.CheckConstraint("note BETWEEN -5 AND 5 AND note <> 0", name="ck_preference_note"),)
+    id_spectateur = db.Column(db.Integer, db.ForeignKey("spectateur.id_spectateur"), primary_key=True)
+    id_style = db.Column(db.Integer, db.ForeignKey("style_musical.id_style"), primary_key=True)
+    note = db.Column(db.Integer, nullable=False)
+    spectateur = db.relationship("Spectateur", backref=db.backref("preferences", lazy="dynamic"))
+    style = db.relationship("StyleMusical", backref=db.backref("preferences", lazy="dynamic"))
+
+    def __init__(self, id_spectateur=None, id_style=None, note=None):
+        self.id_spectateur = id_spectateur
+        self.id_style = id_style
+        self.note = note
+
+    def __repr__(self):
+        return "<PreferenceStyle %s>" % ([self.id_spectateur, self.id_style, self.note],)
+
+
 @login_manager.user_loader
 def load_user(identifiant):
-    # spectateur identifié par son email [Source : TP 6 — user_loader ; TP 2 — filter_by().first()]
     return Spectateur.query.filter_by(email=identifiant).first()

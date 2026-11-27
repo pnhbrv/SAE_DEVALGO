@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="carte-festiuto mt-3">
+    <h1 class="titre-festiuto">Mes styles préférés</h1>
+    <p>
+        Notez les styles de -5 (je n'aime pas du tout) à +5 (j'adore). Une note compte aussi pour les sous-genres
+        du style. Un style noté négativement écarte ses concerts de vos recommandations.
+    </p>
+
+    <form method="POST" action="{{ url_for('preference.mesStyles') }}">
+        {{ form.hidden_tag() }}
+        <table class="table align-middle">
+            <thead>
+                <tr><th scope="col">Style</th><th scope="col">Ma note</th></tr>
+            </thead>
+            <tbody>
+                {% for unStyle in styles %}
+                <tr>
+                    <td>
+                        <label for="note_{{ unStyle.id_style }}">
+                            {% if unStyle.id_style_parent %}&mdash; {% endif %}{{ unStyle.libelle_style }}
+                        </label>
+                    </td>
+                    <td>
+                        <select class="form-select" id="note_{{ unStyle.id_style }}" name="note_{{ unStyle.id_style }}">
+                            <option value="">Pas d'avis</option>
+                            {% for note in notes %}
+                            <option value="{{ note }}" {% if prefs.get(unStyle.id_style) == note %}selected{% endif %}>
+                                {% if note > 0 %}+{% endif %}{{ note }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input class="btn btn-festiuto" type="submit" value="Enregistrer">
+        <a class="ms-3" href="{{ url_for('preference.mesConcertsConseilles') }}">Voir mes concerts conseillés</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,4 +1,3 @@
-# Tests de l'authentification [Source : TP 6 ; TP 5 — tests des formulaires POST]
 from monApp.app import db
 from monApp.commands import hacher
 from monApp.models import Spectateur
@@ -28,7 +27,7 @@ def test_login_spectateur(client, testapp):
     ajouter_comptes(testapp)
     response = login(client, "emma@mail.com", "emma", "")
     assert response.status_code == 200
-    assert "Réservez maintenant".encode() in response.data
+    assert "Déconnexion".encode() in response.data
 
 
 def test_login_echec(client, testapp):
@@ -62,7 +61,7 @@ def test_inscription_post(client, testapp):
         unSpectateur = Spectateur.query.filter_by(email="louis@mail.com").first()
         assert unSpectateur.mot_de_passe == hacher("louis")
     response = login(client, "louis@mail.com", "louis", "")
-    assert "Réservez maintenant".encode() in response.data
+    assert "Déconnexion".encode() in response.data
 
 
 def test_inscription_email_existant(client, testapp):

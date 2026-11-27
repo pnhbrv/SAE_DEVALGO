@@ -22,3 +22,6 @@ instance/
 .pytest_cache/
 htmlcov/
 
+# Graphify
+graphify-out/
+

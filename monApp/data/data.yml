@@ -1,244 +1,43 @@
 styles:
 - id_style: 1
-  libelle_style: Rap
-  id_style_parent: null
-- id_style: 2
-  libelle_style: Hip-Hop
-  id_style_parent: 1
-- id_style: 3
   libelle_style: Rock
   id_style_parent: null
-- id_style: 4
+- id_style: 2
   libelle_style: Pop
   id_style_parent: null
+- id_style: 3
+  libelle_style: HipHop
+  id_style_parent: null
+- id_style: 4
+  libelle_style: RnB / Soul
+  id_style_parent: null
 - id_style: 5
-  libelle_style: Electro
+  libelle_style: Électro
   id_style_parent: null
 - id_style: 6
-  libelle_style: RnB
+  libelle_style: Metal
   id_style_parent: null
 - id_style: 7
-  libelle_style: Soul
-  id_style_parent: 6
-- id_style: 8
-  libelle_style: Drill
-  id_style_parent: 2
-- id_style: 9
   libelle_style: Jazz
   id_style_parent: null
-- id_style: 10
-  libelle_style: Reggae
-  id_style_parent: null
-- id_style: 11
-  libelle_style: Funk
-  id_style_parent: null
-- id_style: 12
-  libelle_style: Metal
-  id_style_parent: 3
-- id_style: 13
-  libelle_style: Punk
-  id_style_parent: 3
-- id_style: 14
+- id_style: 8
   libelle_style: Blues
   id_style_parent: null
-- id_style: 15
-  libelle_style: Country
+- id_style: 9
+  libelle_style: Reggae
   id_style_parent: null
-- id_style: 16
-  libelle_style: Folk
-  id_style_parent: null
-- id_style: 17
-  libelle_style: Disco
-  id_style_parent: null
-- id_style: 18
-  libelle_style: Techno
-  id_style_parent: 5
-- id_style: 19
-  libelle_style: House
-  id_style_parent: 5
-- id_style: 20
-  libelle_style: Trance
-  id_style_parent: 5
-- id_style: 21
-  libelle_style: Dubstep
-  id_style_parent: 5
-- id_style: 22
-  libelle_style: Drum and Bass
-  id_style_parent: 5
-- id_style: 23
-  libelle_style: Ambient
-  id_style_parent: 5
-- id_style: 24
+- id_style: 10
   libelle_style: Classique
   id_style_parent: null
-- id_style: 25
-  libelle_style: Lo-Fi
+- id_style: 11
+  libelle_style: Chanson française
   id_style_parent: null
-- id_style: 26
-  libelle_style: Indie Rock
-  id_style_parent: 3
-- id_style: 27
-  libelle_style: Synthpop
-  id_style_parent: 4
-- id_style: 28
-  libelle_style: Grunge
-  id_style_parent: 3
-- id_style: 29
-  libelle_style: Ska
-  id_style_parent: 10
-- id_style: 30
-  libelle_style: Dancehall
-  id_style_parent: 10
-- id_style: 31
-  libelle_style: Afrobeat
+- id_style: 12
+  libelle_style: Musiques du monde
   id_style_parent: null
-- id_style: 32
-  libelle_style: K-Pop
-  id_style_parent: 4
-- id_style: 33
-  libelle_style: J-Pop
-  id_style_parent: 4
-- id_style: 34
-  libelle_style: Latin
+- id_style: 13
+  libelle_style: Country
   id_style_parent: null
-- id_style: 35
-  libelle_style: Reggaeton
-  id_style_parent: 34
-- id_style: 36
-  libelle_style: Salsa
-  id_style_parent: 34
-- id_style: 37
-  libelle_style: Bossa Nova
-  id_style_parent: 34
-- id_style: 38
-  libelle_style: Flamenco
-  id_style_parent: null
-- id_style: 39
-  libelle_style: Tango
-  id_style_parent: 34
-- id_style: 40
-  libelle_style: Chanson Française
-  id_style_parent: null
-- id_style: 41
-  libelle_style: Variété
-  id_style_parent: null
-- id_style: 42
-  libelle_style: Zouk
-  id_style_parent: null
-- id_style: 43
-  libelle_style: Raï
-  id_style_parent: null
-- id_style: 44
-  libelle_style: Gospel
-  id_style_parent: null
-- id_style: 45
-  libelle_style: Bluegrass
-  id_style_parent: 15
-- id_style: 46
-  libelle_style: Americana
-  id_style_parent: 15
-- id_style: 47
-  libelle_style: Emo
-  id_style_parent: 13
-- id_style: 48
-  libelle_style: Hardcore
-  id_style_parent: 13
-- id_style: 49
-  libelle_style: Doom Metal
-  id_style_parent: 12
-- id_style: 50
-  libelle_style: Black Metal
-  id_style_parent: 12
-- id_style: 51
-  libelle_style: Death Metal
-  id_style_parent: 12
-- id_style: 52
-  libelle_style: Thrash Metal
-  id_style_parent: 12
-- id_style: 53
-  libelle_style: Nu Metal
-  id_style_parent: 12
-- id_style: 54
-  libelle_style: Metal Industriel
-  id_style_parent: 12
-- id_style: 55
-  libelle_style: Shoegaze
-  id_style_parent: 26
-- id_style: 56
-  libelle_style: Post-Rock
-  id_style_parent: 3
-- id_style: 57
-  libelle_style: Math Rock
-  id_style_parent: 3
-- id_style: 58
-  libelle_style: Krautrock
-  id_style_parent: 3
-- id_style: 59
-  libelle_style: Rock Psychédélique
-  id_style_parent: 3
-- id_style: 60
-  libelle_style: Garage Rock
-  id_style_parent: 3
-- id_style: 61
-  libelle_style: Britpop
-  id_style_parent: 4
-- id_style: 62
-  libelle_style: New Wave
-  id_style_parent: 4
-- id_style: 63
-  libelle_style: Post-Punk
-  id_style_parent: 13
-- id_style: 64
-  libelle_style: Gothique
-  id_style_parent: 63
-- id_style: 65
-  libelle_style: Synthwave
-  id_style_parent: 5
-- id_style: 66
-  libelle_style: Vaporwave
-  id_style_parent: 5
-- id_style: 67
-  libelle_style: Glitch
-  id_style_parent: 5
-- id_style: 68
-  libelle_style: IDM
-  id_style_parent: 5
-- id_style: 69
-  libelle_style: Breakbeat
-  id_style_parent: 5
-- id_style: 70
-  libelle_style: UK Garage
-  id_style_parent: 5
-- id_style: 71
-  libelle_style: Grime
-  id_style_parent: 1
-- id_style: 72
-  libelle_style: Trap
-  id_style_parent: 1
-- id_style: 73
-  libelle_style: Boom Bap
-  id_style_parent: 1
-- id_style: 74
-  libelle_style: G-Funk
-  id_style_parent: 1
-- id_style: 75
-  libelle_style: Crunk
-  id_style_parent: 1
-- id_style: 76
-  libelle_style: Mumble Rap
-  id_style_parent: 1
-- id_style: 77
-  libelle_style: Conscious Rap
-  id_style_parent: 1
-- id_style: 78
-  libelle_style: Cloud Rap
-  id_style_parent: 1
-- id_style: 79
-  libelle_style: Bounce
-  id_style_parent: 1
-- id_style: 80
-  libelle_style: Drill UK
-  id_style_parent: 8
 instruments:
 - id_instrument: 1
   libelle_instrument: Guitare électrique
@@ -793,6 +592,198 @@ groupes:
   liens_photos: https://i.ytimg.com/vi/TrQcnBHa2QI/maxresdefault.jpg
   liens_reseaux_sociaux: https://www.instagram.com/saisai/
   liens_videos: https://www.youtube.com/results?search_query=Saisai+clip
+  date_heure_arrivee: 2026-10-15 10:00:00
+  date_heure_depart: 2026-10-16 12:00:00
+- id_groupe: 36
+  nom_groupe: Arctic Monkeys
+  description: Groupe de rock indé britannique.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Arctic+Monkeys+clip
+  date_heure_arrivee: 2026-10-10 10:00:00
+  date_heure_depart: 2026-10-11 12:00:00
+- id_groupe: 37
+  nom_groupe: Muse
+  description: Groupe de rock alternatif britannique.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Muse+clip
+  date_heure_arrivee: 2026-10-11 10:00:00
+  date_heure_depart: 2026-10-12 12:00:00
+- id_groupe: 38
+  nom_groupe: Indochine
+  description: Groupe de rock français.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Indochine+clip
+  date_heure_arrivee: 2026-10-12 10:00:00
+  date_heure_depart: 2026-10-13 12:00:00
+- id_groupe: 39
+  nom_groupe: Gojira
+  description: Groupe de metal français.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Gojira+clip
+  date_heure_arrivee: 2026-10-13 10:00:00
+  date_heure_depart: 2026-10-14 12:00:00
+- id_groupe: 40
+  nom_groupe: Metallica
+  description: Groupe de heavy et thrash metal américain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Metallica+clip
+  date_heure_arrivee: 2026-10-14 10:00:00
+  date_heure_depart: 2026-10-15 12:00:00
+- id_groupe: 41
+  nom_groupe: Rammstein
+  description: Groupe de metal industriel allemand.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Rammstein+clip
+  date_heure_arrivee: 2026-10-15 10:00:00
+  date_heure_depart: 2026-10-16 12:00:00
+- id_groupe: 42
+  nom_groupe: Ibrahim Maalouf
+  description: Trompettiste de jazz franco-libanais.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Ibrahim+Maalouf+clip
+  date_heure_arrivee: 2026-10-10 10:00:00
+  date_heure_depart: 2026-10-11 12:00:00
+- id_groupe: 43
+  nom_groupe: Kamasi Washington
+  description: Saxophoniste de jazz américain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Kamasi+Washington+clip
+  date_heure_arrivee: 2026-10-11 10:00:00
+  date_heure_depart: 2026-10-12 12:00:00
+- id_groupe: 44
+  nom_groupe: Norah Jones
+  description: Chanteuse et pianiste de jazz américaine.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Norah+Jones+clip
+  date_heure_arrivee: 2026-10-12 10:00:00
+  date_heure_depart: 2026-10-13 12:00:00
+- id_groupe: 45
+  nom_groupe: The Black Keys
+  description: Duo de blues rock américain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=The+Black+Keys+clip
+  date_heure_arrivee: 2026-10-13 10:00:00
+  date_heure_depart: 2026-10-14 12:00:00
+- id_groupe: 46
+  nom_groupe: Gary Clark Jr.
+  description: Guitariste et chanteur de blues américain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Gary+Clark+Jr.+clip
+  date_heure_arrivee: 2026-10-14 10:00:00
+  date_heure_depart: 2026-10-15 12:00:00
+- id_groupe: 47
+  nom_groupe: Christone Kingfish Ingram
+  description: Guitariste de blues américain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Christone+Kingfish+Ingram+clip
+  date_heure_arrivee: 2026-10-15 10:00:00
+  date_heure_depart: 2026-10-16 12:00:00
+- id_groupe: 48
+  nom_groupe: Damian Marley
+  description: Chanteur de reggae jamaïcain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Damian+Marley+clip
+  date_heure_arrivee: 2026-10-10 10:00:00
+  date_heure_depart: 2026-10-11 12:00:00
+- id_groupe: 49
+  nom_groupe: Alpha Blondy
+  description: Chanteur de reggae ivoirien.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Alpha+Blondy+clip
+  date_heure_arrivee: 2026-10-11 10:00:00
+  date_heure_depart: 2026-10-12 12:00:00
+- id_groupe: 50
+  nom_groupe: Protoje
+  description: Chanteur de reggae jamaïcain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Protoje+clip
+  date_heure_arrivee: 2026-10-12 10:00:00
+  date_heure_depart: 2026-10-13 12:00:00
+- id_groupe: 51
+  nom_groupe: Lang Lang
+  description: Pianiste classique chinois.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Lang+Lang+clip
+  date_heure_arrivee: 2026-10-13 10:00:00
+  date_heure_depart: 2026-10-14 12:00:00
+- id_groupe: 52
+  nom_groupe: Renaud Capuçon
+  description: Violoniste classique français.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Renaud+Capuçon+clip
+  date_heure_arrivee: 2026-10-14 10:00:00
+  date_heure_depart: 2026-10-15 12:00:00
+- id_groupe: 53
+  nom_groupe: Khatia Buniatishvili
+  description: Pianiste classique franco-géorgienne.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Khatia+Buniatishvili+clip
+  date_heure_arrivee: 2026-10-15 10:00:00
+  date_heure_depart: 2026-10-16 12:00:00
+- id_groupe: 54
+  nom_groupe: Zaz
+  description: Chanteuse française.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Zaz+clip
+  date_heure_arrivee: 2026-10-10 10:00:00
+  date_heure_depart: 2026-10-11 12:00:00
+- id_groupe: 55
+  nom_groupe: Vianney
+  description: Auteur-compositeur-interprète français.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Vianney+clip
+  date_heure_arrivee: 2026-10-11 10:00:00
+  date_heure_depart: 2026-10-12 12:00:00
+- id_groupe: 56
+  nom_groupe: Clara Luciani
+  description: Chanteuse française.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Clara+Luciani+clip
+  date_heure_arrivee: 2026-10-12 10:00:00
+  date_heure_depart: 2026-10-13 12:00:00
+- id_groupe: 57
+  nom_groupe: Kacey Musgraves
+  description: Chanteuse de country américaine.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Kacey+Musgraves+clip
+  date_heure_arrivee: 2026-10-13 10:00:00
+  date_heure_depart: 2026-10-14 12:00:00
+- id_groupe: 58
+  nom_groupe: Chris Stapleton
+  description: Chanteur et guitariste de country américain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Chris+Stapleton+clip
+  date_heure_arrivee: 2026-10-14 10:00:00
+  date_heure_depart: 2026-10-15 12:00:00
+- id_groupe: 59
+  nom_groupe: Zach Bryan
+  description: Chanteur de country américain.
+  liens_photos: null
+  liens_reseaux_sociaux: null
+  liens_videos: https://www.youtube.com/results?search_query=Zach+Bryan+clip
   date_heure_arrivee: 2026-10-15 10:00:00
   date_heure_depart: 2026-10-16 12:00:00
 spectateurs:
@@ -1822,6 +1813,270 @@ evenements:
   est_public: true
   date_jour: *id006
   id_lieu: 13
+- id_evenement: 42
+  titre: Concert Arctic Monkeys
+  type_evenement: Concert
+  date_heure_debut: 2026-10-10 22:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-10
+  id_lieu: 2
+- id_evenement: 43
+  titre: Concert Muse
+  type_evenement: Concert
+  date_heure_debut: 2026-10-11 22:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-11
+  id_lieu: 11
+- id_evenement: 44
+  titre: Concert Indochine
+  type_evenement: Concert
+  date_heure_debut: 2026-10-12 22:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-12
+  id_lieu: 11
+- id_evenement: 45
+  titre: Concert Gojira
+  type_evenement: Concert
+  date_heure_debut: 2026-10-13 22:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-13
+  id_lieu: 2
+- id_evenement: 46
+  titre: Concert Metallica
+  type_evenement: Concert
+  date_heure_debut: 2026-10-14 22:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-14
+  id_lieu: 11
+- id_evenement: 47
+  titre: Concert Rammstein
+  type_evenement: Concert
+  date_heure_debut: 2026-10-15 22:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-15
+  id_lieu: 1
+- id_evenement: 48
+  titre: Concert Ibrahim Maalouf
+  type_evenement: Concert
+  date_heure_debut: 2026-10-10 20:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-10
+  id_lieu: 5
+- id_evenement: 49
+  titre: Concert Kamasi Washington
+  type_evenement: Concert
+  date_heure_debut: 2026-10-11 20:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-11
+  id_lieu: 3
+- id_evenement: 50
+  titre: Concert Norah Jones
+  type_evenement: Concert
+  date_heure_debut: 2026-10-12 20:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-12
+  id_lieu: 5
+- id_evenement: 51
+  titre: Concert The Black Keys
+  type_evenement: Concert
+  date_heure_debut: 2026-10-13 20:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-13
+  id_lieu: 5
+- id_evenement: 52
+  titre: Concert Gary Clark Jr.
+  type_evenement: Concert
+  date_heure_debut: 2026-10-14 20:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-14
+  id_lieu: 5
+- id_evenement: 53
+  titre: Concert Christone Kingfish Ingram
+  type_evenement: Concert
+  date_heure_debut: 2026-10-15 20:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-15
+  id_lieu: 5
+- id_evenement: 54
+  titre: Concert Damian Marley
+  type_evenement: Concert
+  date_heure_debut: 2026-10-10 18:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-10
+  id_lieu: 12
+- id_evenement: 55
+  titre: Concert Alpha Blondy
+  type_evenement: Concert
+  date_heure_debut: 2026-10-11 18:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-11
+  id_lieu: 12
+- id_evenement: 56
+  titre: Concert Protoje
+  type_evenement: Concert
+  date_heure_debut: 2026-10-12 18:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-12
+  id_lieu: 12
+- id_evenement: 57
+  titre: Concert Lang Lang
+  type_evenement: Concert
+  date_heure_debut: 2026-10-13 18:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-13
+  id_lieu: 3
+- id_evenement: 58
+  titre: Concert Renaud Capuçon
+  type_evenement: Concert
+  date_heure_debut: 2026-10-14 18:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-14
+  id_lieu: 4
+- id_evenement: 59
+  titre: Concert Khatia Buniatishvili
+  type_evenement: Concert
+  date_heure_debut: 2026-10-15 18:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: false
+  est_public: true
+  date_jour: 2026-10-15
+  id_lieu: 3
+- id_evenement: 60
+  titre: Concert Zaz
+  type_evenement: Concert
+  date_heure_debut: 2026-10-10 16:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-10
+  id_lieu: 8
+- id_evenement: 61
+  titre: Concert Vianney
+  type_evenement: Concert
+  date_heure_debut: 2026-10-11 16:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-11
+  id_lieu: 6
+- id_evenement: 62
+  titre: Concert Clara Luciani
+  type_evenement: Concert
+  date_heure_debut: 2026-10-12 16:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-12
+  id_lieu: 13
+- id_evenement: 63
+  titre: Concert Kacey Musgraves
+  type_evenement: Concert
+  date_heure_debut: 2026-10-13 16:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-13
+  id_lieu: 11
+- id_evenement: 64
+  titre: Concert Chris Stapleton
+  type_evenement: Concert
+  date_heure_debut: 2026-10-14 16:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-14
+  id_lieu: 11
+- id_evenement: 65
+  titre: Concert Zach Bryan
+  type_evenement: Concert
+  date_heure_debut: 2026-10-15 16:00:00
+  duree: 75
+  temps_montage: 30
+  temps_demontage: 20
+  est_gratuit: true
+  est_public: true
+  date_jour: 2026-10-15
+  id_lieu: 11
 jouer:
 - id_membre: 1
   id_instrument: 81
@@ -2257,145 +2512,167 @@ est_similaire:
   id_groupe_similaire: 35
 avoir_style:
 - id_groupe: 1
-  id_style: 4
+  id_style: 2
 - id_groupe: 1
   id_style: 5
 - id_groupe: 2
-  id_style: 4
+  id_style: 2
 - id_groupe: 2
-  id_style: 7
+  id_style: 4
 - id_groupe: 3
-  id_style: 1
-- id_groupe: 3
+  id_style: 3
+- id_groupe: 4
   id_style: 2
+- id_groupe: 4
+  id_style: 5
 - id_groupe: 4
   id_style: 4
-- id_groupe: 4
-  id_style: 5
-- id_groupe: 4
-  id_style: 6
 - id_groupe: 5
   id_style: 5
 - id_groupe: 5
-  id_style: 72
-- id_groupe: 5
-  id_style: 2
+  id_style: 3
 - id_groupe: 6
-  id_style: 2
-- id_groupe: 6
-  id_style: 1
+  id_style: 3
 - id_groupe: 7
-  id_style: 1
-- id_groupe: 7
-  id_style: 72
+  id_style: 3
 - id_groupe: 8
-  id_style: 4
+  id_style: 2
 - id_groupe: 8
   id_style: 5
 - id_groupe: 9
-  id_style: 1
+  id_style: 3
 - id_groupe: 9
+  id_style: 2
+- id_groupe: 10
+  id_style: 3
+- id_groupe: 11
+  id_style: 3
+- id_groupe: 12
+  id_style: 3
+- id_groupe: 13
+  id_style: 3
+- id_groupe: 14
+  id_style: 3
+- id_groupe: 15
   id_style: 4
-- id_groupe: 10
-  id_style: 1
-- id_groupe: 10
-  id_style: 72
-- id_groupe: 11
-  id_style: 1
-- id_groupe: 11
-  id_style: 72
-- id_groupe: 12
-  id_style: 1
-- id_groupe: 12
-  id_style: 72
-- id_groupe: 13
-  id_style: 2
-- id_groupe: 13
-  id_style: 72
-- id_groupe: 14
-  id_style: 1
-- id_groupe: 14
-  id_style: 2
-- id_groupe: 15
-  id_style: 6
-- id_groupe: 15
-  id_style: 7
 - id_groupe: 16
-  id_style: 4
+  id_style: 2
+- id_groupe: 17
+  id_style: 2
 - id_groupe: 17
   id_style: 4
-- id_groupe: 17
-  id_style: 6
 - id_groupe: 18
-  id_style: 1
+  id_style: 3
 - id_groupe: 19
-  id_style: 1
-- id_groupe: 19
-  id_style: 72
+  id_style: 3
 - id_groupe: 20
-  id_style: 1
+  id_style: 3
 - id_groupe: 20
-  id_style: 31
+  id_style: 12
 - id_groupe: 21
-  id_style: 1
-- id_groupe: 21
-  id_style: 8
+  id_style: 3
 - id_groupe: 22
-  id_style: 1
+  id_style: 3
 - id_groupe: 22
-  id_style: 72
-- id_groupe: 22
-  id_style: 6
-- id_groupe: 23
-  id_style: 1
-- id_groupe: 24
-  id_style: 1
-- id_groupe: 25
-  id_style: 1
-- id_groupe: 25
-  id_style: 72
-- id_groupe: 26
-  id_style: 6
-- id_groupe: 26
-  id_style: 31
-- id_groupe: 27
   id_style: 4
+- id_groupe: 23
+  id_style: 3
+- id_groupe: 24
+  id_style: 3
+- id_groupe: 25
+  id_style: 3
+- id_groupe: 26
+  id_style: 4
+- id_groupe: 26
+  id_style: 12
+- id_groupe: 27
+  id_style: 2
 - id_groupe: 27
   id_style: 5
 - id_groupe: 27
-  id_style: 40
+  id_style: 11
 - id_groupe: 28
-  id_style: 2
+  id_style: 3
 - id_groupe: 28
-  id_style: 6
+  id_style: 4
 - id_groupe: 29
+  id_style: 3
+- id_groupe: 30
+  id_style: 3
+- id_groupe: 31
   id_style: 2
-- id_groupe: 29
-  id_style: 72
-- id_groupe: 30
-  id_style: 80
-- id_groupe: 30
-  id_style: 1
-- id_groupe: 31
-  id_style: 4
-- id_groupe: 31
-  id_style: 17
 - id_groupe: 32
-  id_style: 38
+  id_style: 12
 - id_groupe: 32
-  id_style: 4
-- id_groupe: 32
-  id_style: 35
+  id_style: 2
 - id_groupe: 33
-  id_style: 35
-- id_groupe: 33
-  id_style: 34
+  id_style: 12
 - id_groupe: 34
-  id_style: 31
+  id_style: 12
 - id_groupe: 35
-  id_style: 8
-- id_groupe: 35
+  id_style: 3
+- id_groupe: 36
   id_style: 1
+- id_groupe: 37
+  id_style: 1
+- id_groupe: 38
+  id_style: 1
+- id_groupe: 38
+  id_style: 11
+- id_groupe: 39
+  id_style: 6
+- id_groupe: 40
+  id_style: 6
+- id_groupe: 41
+  id_style: 6
+- id_groupe: 42
+  id_style: 7
+- id_groupe: 43
+  id_style: 7
+- id_groupe: 44
+  id_style: 7
+- id_groupe: 44
+  id_style: 2
+- id_groupe: 45
+  id_style: 8
+- id_groupe: 45
+  id_style: 1
+- id_groupe: 46
+  id_style: 8
+- id_groupe: 47
+  id_style: 8
+- id_groupe: 48
+  id_style: 9
+- id_groupe: 49
+  id_style: 9
+- id_groupe: 50
+  id_style: 9
+- id_groupe: 51
+  id_style: 10
+- id_groupe: 52
+  id_style: 10
+- id_groupe: 53
+  id_style: 10
+- id_groupe: 54
+  id_style: 11
+- id_groupe: 55
+  id_style: 11
+- id_groupe: 55
+  id_style: 2
+- id_groupe: 56
+  id_style: 11
+- id_groupe: 56
+  id_style: 2
+- id_groupe: 57
+  id_style: 13
+- id_groupe: 57
+  id_style: 2
+- id_groupe: 58
+  id_style: 13
+- id_groupe: 58
+  id_style: 8
+- id_groupe: 59
+  id_style: 13
 favoris:
 - id_spectateur: 1
   id_groupe: 1
@@ -3921,6 +4198,54 @@ participer:
   id_evenement: 40
 - id_groupe: 31
   id_evenement: 41
+- id_groupe: 36
+  id_evenement: 42
+- id_groupe: 37
+  id_evenement: 43
+- id_groupe: 38
+  id_evenement: 44
+- id_groupe: 39
+  id_evenement: 45
+- id_groupe: 40
+  id_evenement: 46
+- id_groupe: 41
+  id_evenement: 47
+- id_groupe: 42
+  id_evenement: 48
+- id_groupe: 43
+  id_evenement: 49
+- id_groupe: 44
+  id_evenement: 50
+- id_groupe: 45
+  id_evenement: 51
+- id_groupe: 46
+  id_evenement: 52
+- id_groupe: 47
+  id_evenement: 53
+- id_groupe: 48
+  id_evenement: 54
+- id_groupe: 49
+  id_evenement: 55
+- id_groupe: 50
+  id_evenement: 56
+- id_groupe: 51
+  id_evenement: 57
+- id_groupe: 52
+  id_evenement: 58
+- id_groupe: 53
+  id_evenement: 59
+- id_groupe: 54
+  id_evenement: 60
+- id_groupe: 55
+  id_evenement: 61
+- id_groupe: 56
+  id_evenement: 62
+- id_groupe: 57
+  id_evenement: 63
+- id_groupe: 58
+  id_evenement: 64
+- id_groupe: 59
+  id_evenement: 65
 loger:
 - id_groupe: 1
   id_hebergement: 1
@@ -4062,3 +4387,28 @@ loger:
   id_hebergement: 5
   date_nuit: *id006
   nb_places_necessaires: 2
+preferences:
+- id_spectateur: 1
+  id_style: 1
+  note: 5
+- id_spectateur: 1
+  id_style: 6
+  note: -3
+- id_spectateur: 1
+  id_style: 3
+  note: 2
+- id_spectateur: 2
+  id_style: 5
+  note: 4
+- id_spectateur: 2
+  id_style: 10
+  note: -4
+- id_spectateur: 3
+  id_style: 3
+  note: 5
+- id_spectateur: 3
+  id_style: 2
+  note: -2
+- id_spectateur: 4
+  id_style: 1
+  note: 5

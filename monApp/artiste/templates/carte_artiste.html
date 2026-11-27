@@ -1,0 +1,17 @@
+{# carte d'un groupe : utilisée dans la liste des artistes, les suggestions et les groupes similaires #}
+{% macro carte_artiste(unGroupe) %}
+<div class="carte-artiste position-relative">
+    {% if unGroupe.liens_photos %}
+    <img src="{{ unGroupe.liens_photos }}" alt="Photo de {{ unGroupe.nom_groupe }}">
+    {% else %}
+    <div class="carte-artiste-sans-photo"><i class="bi bi-person-fill"></i></div>
+    {% endif %}
+    <p class="carte-artiste-nom">
+        <a href="{{ url_for('artiste.getArtiste', id_groupe=unGroupe.id_groupe) }}"
+           class="stretched-link text-reset text-decoration-none">{{ unGroupe.nom_groupe }}</a>
+    </p>
+    <p class="carte-artiste-style">
+        {% for unLien in unGroupe.styles %}{{ unLien.style.libelle_style }}{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+</div>
+{% endmacro %}
