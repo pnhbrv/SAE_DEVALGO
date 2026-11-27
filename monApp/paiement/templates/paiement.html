@@ -21,7 +21,7 @@
                 {% endfor %}
             {% else %}
                 <p class="alert alert-light">
-                    Les passes sélectionnés apparaîtront ici lorsque Mon espace sera relié à cette page.
+                    Aucun billet sélectionné. <a href="{{ url_for('billeterie.billeterie') }}">Retour à la billetterie</a>
                 </p>
             {% endif %}
         </aside>
@@ -31,15 +31,15 @@
             <div class="paiement-champs">
                 <div class="paiement-champ">
                     <label for="prenom">Prénom</label>
-                    <input id="prenom" type="text" placeholder="Votre prénom" disabled>
+                    <input id="prenom" type="text" value="{{ current_user.prenom }}" disabled>
                 </div>
                 <div class="paiement-champ">
                     <label for="nom">Nom</label>
-                    <input id="nom" type="text" placeholder="Votre nom de famille" disabled>
+                    <input id="nom" type="text" value="{{ current_user.nom }}" disabled>
                 </div>
                 <div class="paiement-champ paiement-champ-large">
                     <label for="courriel">Adresse e-mail</label>
-                    <input id="courriel" type="email" placeholder="Votre adresse e-mail" disabled>
+                    <input id="courriel" type="email" value="{{ current_user.email }}" disabled>
                 </div>
                 <div class="paiement-champ paiement-champ-large">
                     <label for="adresse">Adresse</label>
@@ -80,9 +80,15 @@
             <p class="paiement-securite mt-3">
                 Démonstration uniquement : aucune donnée bancaire n’est saisie ou enregistrée.
             </p>
-            <button class="paiement-total" type="button" disabled>
-                Confirmer le paiement · {{ "%.2f"|format(total) }}€
-            </button>
+            <form role="form" method="POST" action="{{ url_for('paiement.insertAchat') }}">
+                {{ form.hidden_tag() }}
+                {% for billet in billets %}
+                <input type="hidden" name="id_type_billet" value="{{ billet.id_type_billet }}">
+                {% endfor %}
+                <button class="paiement-total" type="submit" {% if not billets %}disabled{% endif %}>
+                    Confirmer le paiement · {{ "%.2f"|format(total) }}€
+                </button>
+            </form>
         </section>
     </div>
 </section>

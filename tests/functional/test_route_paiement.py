@@ -59,13 +59,13 @@ def test_paiement_retrouve_la_selection_de_billetterie(client, testapp):
     assert "Pass sélectionné".encode() in response.data
 
 
-def test_paiement_sans_pass_affiche_message_de_liaison(client, testapp):
+def test_paiement_sans_pass_affiche_un_message(client, testapp):
     connecter_spectateur(client, testapp)
     response = client.get('/paiement/')
 
     assert response.status_code == 200
-    assert "Mon espace sera relié à cette page.".encode() in response.data
-    assert b'<button class="paiement-total" type="button" disabled>' in response.data
+    assert "Aucun billet sélectionné".encode() in response.data
+    assert b'<button class="paiement-total" type="submit" disabled>' in response.data
 
 
 def test_paiement_refuse_un_pass_indisponible(client, testapp):
