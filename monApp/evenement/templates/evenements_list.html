@@ -12,6 +12,36 @@
 </button>
 {% endmacro %}
 
+{% macro carte_evenement(item) %}
+{% set ev = item.evenement %}
+<article class="carte-evenement d-flex align-items-start gap-3">
+    {% if item.photo %}
+    <img src="{{ item.photo }}" alt="Photo de {{ ev.titre }}" class="carte-evenement-img">
+    {% else %}
+    <div class="carte-evenement-sans-photo"><i class="bi bi-music-note-beamed"></i></div>
+    {% endif %}
+
+    <div class="carte-evenement-infos">
+        <h2 class="carte-evenement-titre">
+            {% if item.participations %}
+                {% for uneParticipation in item.participations %}
+                <a href="{{ url_for('artiste.getArtiste', id_groupe=uneParticipation.groupe.id_groupe) }}"
+                   class="text-reset text-decoration-none">{{ uneParticipation.groupe.nom_groupe }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            {% else %}
+                {{ ev.titre }}
+            {% endif %}
+        </h2>
+        <p class="carte-evenement-detail">{{ ev.titre }}</p>
+        <p class="carte-evenement-detail">{{ item.date_label }} {{ item.heure_debut }} - {{ item.heure_fin }}</p>
+        <p class="carte-evenement-detail">
+            {% if ev.est_gratuit %}Inscription gratuite{% else %}Inscription payante{% endif %}
+        </p>
+        <p class="carte-evenement-detail">{{ ev.lieu.nom_lieu }}</p>
+    </div>
+</article>
+{% endmacro %}
+
 {% block main %}
 <div class="row mt-3">
     <div class="col-md-3">
@@ -88,6 +118,17 @@
             <input class="btn btn-festiuto ms-2" type="submit" value="Rechercher">
         </form>
 
+        {% if evenements_conseilles %}
+        <section class="mb-4">
+            <h2 class="h5 fw-bold mb-3">Concerts conseillés selon vos goûts</h2>
+            <div class="liste-evenements">
+                {% for item in evenements_conseilles %}
+                {{ carte_evenement(item) }}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
         {% if evenements|length == 0 %}
             <p>Aucun événement trouvé.</p>
         {% else %}
@@ -103,33 +144,7 @@
 
                 <div class="collapse show liste-evenements" id="jour-{{ bloc.date.isoformat() }}">
                     {% for item in bloc.evenements %}
-                    {% set ev = item.evenement %}
-                    <article class="carte-evenement d-flex align-items-start gap-3">
-                        {% if item.photo %}
-                        <img src="{{ item.photo }}" alt="Photo de {{ ev.titre }}" class="carte-evenement-img">
-                        {% else %}
-                        <div class="carte-evenement-sans-photo"><i class="bi bi-music-note-beamed"></i></div>
-                        {% endif %}
-
-                        <div class="carte-evenement-infos">
-                            <h2 class="carte-evenement-titre">
-                                {% if item.participations %}
-                                    {% for uneParticipation in item.participations %}
-                                    <a href="{{ url_for('artiste.getArtiste', id_groupe=uneParticipation.groupe.id_groupe) }}"
-                                       class="text-reset text-decoration-none">{{ uneParticipation.groupe.nom_groupe }}</a>{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    {{ ev.titre }}
-                                {% endif %}
-                            </h2>
-                            <p class="carte-evenement-detail">{{ ev.titre }}</p>
-                            <p class="carte-evenement-detail">{{ item.date_label }} {{ item.heure_debut }} - {{ item.heure_fin }}</p>
-                            <p class="carte-evenement-detail">
-                                {% if ev.est_gratuit %}Inscription gratuite{% else %}Inscription payante{% endif %}
-                            </p>
-                            <p class="carte-evenement-detail">{{ ev.lieu.nom_lieu }}</p>
-                        </div>
-                    </article>
+                    {{ carte_evenement(item) }}
                     {% endfor %}
                 </div>
             </section>

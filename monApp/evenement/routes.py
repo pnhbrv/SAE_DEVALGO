@@ -1,9 +1,11 @@
 from datetime import date, timedelta
 from flask import render_template, request
+from flask_login import current_user
 from sqlalchemy import or_
 from . import evenement_bp
 from monApp.artiste.routes import styles_avec_sous_genres
 from monApp.models import AvoirStyle, Evenement, Groupe, Journee, Lieu, Participer, StyleMusical
+from monApp.recommandation import concerts_conseilles
 
 JOURS_FR = ("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche")
 MOIS_FR = (
@@ -23,6 +25,19 @@ def photo_evenement(un_evenement):
         if une_participation.groupe and une_participation.groupe.liens_photos:
             return une_participation.groupe.liens_photos
     return None
+
+
+def preparer_evenement(un_evenement):
+    """Prépare les données d'affichage d'un événement pour le template."""
+    heure_fin = un_evenement.date_heure_debut + timedelta(minutes=un_evenement.duree or 0)
+    return {
+        "evenement": un_evenement,
+        "participations": un_evenement.participations.all(),
+        "photo": photo_evenement(un_evenement),
+        "heure_debut": un_evenement.date_heure_debut.strftime('%H:%M'),
+        "heure_fin": heure_fin.strftime('%H:%M'),
+        "date_label": formater_date_fr(un_evenement.date_jour),
+    }
 
 
 @evenement_bp.route('/evenements/')
@@ -85,21 +100,19 @@ def getEvenements():
             index_jours[date_j] = bloc
             groupes_par_jour.append(bloc)
 
-        heure_fin = un_evenement.date_heure_debut + timedelta(minutes=un_evenement.duree or 0)
-        participations = un_evenement.participations.all()
-        index_jours[date_j]["evenements"].append({
-            "evenement": un_evenement,
-            "participations": participations,
-            "photo": photo_evenement(un_evenement),
-            "heure_debut": un_evenement.date_heure_debut.strftime('%H:%M'),
-            "heure_fin": heure_fin.strftime('%H:%M'),
-            "date_label": formater_date_fr(date_j),
-        })
+        index_jours[date_j]["evenements"].append(preparer_evenement(un_evenement))
+
+    # recommandations de l'Algo : seulement sur la liste complète, pour un spectateur connecté
+    evenements_conseilles = []
+    if current_user.is_authenticated and not (recherche or style or prix or jour or lieu):
+        conseilles, _ = concerts_conseilles(current_user.id_spectateur)
+        evenements_conseilles = [preparer_evenement(e) for e in conseilles if e is not None]
 
     return render_template(
         'evenements_list.html',
         title="Événements",
         evenements=les_evenements,
+        evenements_conseilles=evenements_conseilles,
         groupes_par_jour=groupes_par_jour,
         styles=StyleMusical.query.order_by(StyleMusical.id_style).all(),
         journees=Journee.query.order_by(Journee.date_jour).all(),

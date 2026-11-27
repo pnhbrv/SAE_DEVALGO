@@ -117,3 +117,25 @@ def test_evenements_plusieurs_filtres_et_liens(client, testapp):
 
     response = client.get('/evenements/?style=2')
     assert b'href="/evenements/?style=2&amp;prix=gratuit"' in response.data
+
+
+def test_evenements_conseilles_spectateur_connecte(client, testapp):
+    from monApp.commands import hacher
+    from monApp.models import PreferenceStyle, Spectateur
+    from monApp.recommandation import cache
+
+    ajouter_donnees_evenements(testapp)
+    with testapp.app_context():
+        db.session.add(Spectateur("Dupont", "Jean", "jean@test.fr", hacher("secret")))
+        db.session.commit()
+        db.session.add(PreferenceStyle(id_spectateur=1, id_style=2, note=5))
+        db.session.commit()
+    cache.invalider()
+
+    client.post('/connexion/', data={'Login': 'jean@test.fr', 'Password': 'secret'})
+    response = client.get('/evenements/')
+    assert response.status_code == 200
+    assert "Concerts conseillés selon vos goûts".encode() in response.data
+
+    response_filtre = client.get('/evenements/?prix=gratuit')
+    assert "Concerts conseillés selon vos goûts".encode() not in response_filtre.data
