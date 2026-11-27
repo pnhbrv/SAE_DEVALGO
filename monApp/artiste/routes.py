@@ -3,7 +3,7 @@ from flask import render_template, request
 from flask_login import current_user
 from . import artiste_bp
 from monApp.models import AvoirStyle, Evenement, Groupe, Journee, Lieu, Participer, StyleMusical
-from monApp.recommandation import suggestions_groupes
+from monApp.recommandation import groupes_similaires, suggestions_groupes
 
 
 def styles_avec_sous_genres(id_style):
@@ -49,3 +49,30 @@ def getArtistes():
                         journees=Journee.query.order_by(Journee.date_jour).all(),
                         lieux=Lieu.query.order_by(Lieu.nom_lieu).all(),
                         recherche=recherche, style=style, prix=prix, jour=jour, lieu=lieu)
+
+
+def lien_video_integree(lien):
+    """Adresse à mettre dans une balise iframe pour une vidéo YouTube, ou None si le lien n'est pas une vidéo."""
+    if lien is None or "watch?v=" not in lien:
+        return None
+    id_video = lien.split("watch?v=")[1].split("&")[0]
+    return "https://www.youtube.com/embed/" + id_video
+
+
+@artiste_bp.route('/artistes/<int:id_groupe>/')
+def getArtiste(id_groupe):
+    unGroupe = Groupe.query.filter_by(id_groupe=id_groupe).first_or_404()
+
+    # chaque membre avec la liste de ses instruments
+    lesMembres = []
+    for uneComposition in unGroupe.compositions:
+        instruments = []
+        for unJouer in uneComposition.membre.jouers:
+            instruments.append(unJouer.instrument.libelle_instrument)
+        lesMembres.append((uneComposition.membre, instruments))
+
+    lesConcerts = Evenement.query.join(Participer, Participer.id_evenement == Evenement.id_evenement)                                  .filter(Participer.id_groupe == id_groupe)                                  .order_by(Evenement.date_heure_debut).all()
+
+    return render_template('artiste_fiche.html', title=unGroupe.nom_groupe, groupe=unGroupe, membres=lesMembres,
+                           concerts=lesConcerts, similaires=groupes_similaires(unGroupe),
+                           video=lien_video_integree(unGroupe.liens_videos))
