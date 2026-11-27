@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% macro lien_filtre(choix_style=style, choix_prix=prix, choix_jour=jour, choix_lieu=lieu) -%}
+    {{ url_for('evenement.getEvenements', recherche=recherche or None, style=choix_style, prix=choix_prix,
+               date=choix_jour.isoformat() if choix_jour else None, lieu=choix_lieu) }}
+{%- endmacro %}
+
+{% macro titre_filtre(nom, cible, ouvert) %}
+<button class="filtre-titre {% if not ouvert %}collapsed{% endif %}" type="button" data-bs-toggle="collapse"
+        data-bs-target="#{{ cible }}" aria-expanded="{{ 'true' if ouvert else 'false' }}" aria-controls="{{ cible }}">
+    {{ nom }} <i class="bi bi-caret-down-fill"></i>
+</button>
+{% endmacro %}
+
+{% block main %}
+<div class="row mt-3">
+    <div class="col-md-3">
+        <h1 class="titre-festiuto titre-artistes text-center">Evenements</h1>
+
+        <nav class="filtres" aria-label="Filtres">
+            <p class="filtres-entete">Filtres</p>
+
+            {{ titre_filtre("Style", "filtre-style", style) }}
+            <ul class="collapse {% if style %}show{% endif %} filtre-liste filtre-liste-longue" id="filtre-style">
+                {% for unStyle in styles %}
+                <li>
+                    <a href="{{ lien_filtre(choix_style=None if style == unStyle.id_style else unStyle.id_style) }}"
+                       {% if style == unStyle.id_style %}class="active" aria-current="true"{% endif %}>
+                        {{ unStyle.libelle_style }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {{ titre_filtre("Prix", "filtre-prix", prix) }}
+            <ul class="collapse {% if prix %}show{% endif %} filtre-liste" id="filtre-prix">
+                {% for valeur, texte in [('gratuit', 'Gratuit'), ('payant', 'Payant')] %}
+                <li>
+                    <a href="{{ lien_filtre(choix_prix=None if prix == valeur else valeur) }}"
+                       {% if prix == valeur %}class="active" aria-current="true"{% endif %}>{{ texte }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {{ titre_filtre("Date", "filtre-date", jour) }}
+            <ul class="collapse {% if jour %}show{% endif %} filtre-liste" id="filtre-date">
+                {% for uneJournee in journees %}
+                <li>
+                    <a href="{{ lien_filtre(choix_jour=None if jour == uneJournee.date_jour else uneJournee.date_jour) }}"
+                       {% if jour == uneJournee.date_jour %}class="active" aria-current="true"{% endif %}>
+                        {{ uneJournee.date_jour.strftime('%d/%m/%Y') }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {{ titre_filtre("Lieu", "filtre-lieu", true) }}
+            <ul class="collapse show filtre-liste filtre-liste-longue" id="filtre-lieu">
+                {% for unLieu in lieux %}
+                <li>
+                    <a href="{{ lien_filtre(choix_lieu=None if lieu == unLieu.id_lieu else unLieu.id_lieu) }}"
+                       {% if lieu == unLieu.id_lieu %}class="active" aria-current="true"{% endif %}>{{ unLieu.nom_lieu }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if style or prix or jour or lieu %}
+            <a href="{{ url_for('evenement.getEvenements', recherche=recherche or None) }}" class="filtres-effacer">Effacer les filtres</a>
+            {% endif %}
+        </nav>
+    </div>
+
+    <div class="col-md-9 evenements-contenu">
+        <form role="form" method="GET" action="{{ url_for('evenement.getEvenements') }}" class="d-flex mb-4">
+            {% if style %}<input type="hidden" name="style" value="{{ style }}">{% endif %}
+            {% if prix %}<input type="hidden" name="prix" value="{{ prix }}">{% endif %}
+            {% if jour %}<input type="hidden" name="date" value="{{ jour.isoformat() }}">{% endif %}
+            {% if lieu %}<input type="hidden" name="lieu" value="{{ lieu }}">{% endif %}
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" name="recherche" value="{{ recherche }}" class="form-control"
+                       placeholder="Rechercher un groupe, un artiste, un style..." aria-label="Rechercher un événement">
+                <a href="{{ url_for('evenement.getEvenements', style=style, prix=prix, date=jour.isoformat() if jour else None, lieu=lieu) }}"
+                   class="btn btn-outline-secondary" aria-label="Effacer la recherche">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+            <input class="btn btn-festiuto ms-2" type="submit" value="Rechercher">
+        </form>
+
+        {% if evenements|length == 0 %}
+            <p>Aucun événement trouvé.</p>
+        {% else %}
+            {% for bloc in groupes_par_jour %}
+            <section class="evenements-jour mb-4">
+                <div class="d-flex justify-content-end mb-2">
+                    <button class="evenements-jour-btn" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#jour-{{ bloc.date.isoformat() }}" aria-expanded="true"
+                            aria-controls="jour-{{ bloc.date.isoformat() }}">
+                        <i class="bi bi-caret-down-fill me-2"></i>{{ bloc.label }}
+                    </button>
+                </div>
+
+                <div class="collapse show liste-evenements" id="jour-{{ bloc.date.isoformat() }}">
+                    {% for item in bloc.evenements %}
+                    {% set ev = item.evenement %}
+                    <article class="carte-evenement d-flex align-items-start gap-3">
+                        {% if item.photo %}
+                        <img src="{{ item.photo }}" alt="Photo de {{ ev.titre }}" class="carte-evenement-img">
+                        {% else %}
+                        <div class="carte-evenement-sans-photo"><i class="bi bi-music-note-beamed"></i></div>
+                        {% endif %}
+
+                        <div class="carte-evenement-infos">
+                            <h2 class="carte-evenement-titre">
+                                {% if item.participations %}
+                                    {% for uneParticipation in item.participations %}
+                                    <a href="{{ url_for('artiste.getArtiste', id_groupe=uneParticipation.groupe.id_groupe) }}"
+                                       class="text-reset text-decoration-none">{{ uneParticipation.groupe.nom_groupe }}</a>{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {{ ev.titre }}
+                                {% endif %}
+                            </h2>
+                            <p class="carte-evenement-detail">{{ ev.titre }}</p>
+                            <p class="carte-evenement-detail">{{ item.date_label }} {{ item.heure_debut }} - {{ item.heure_fin }}</p>
+                            <p class="carte-evenement-detail">
+                                {% if ev.est_gratuit %}Inscription gratuite{% else %}Inscription payante{% endif %}
+                            </p>
+                            <p class="carte-evenement-detail">{{ ev.lieu.nom_lieu }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
