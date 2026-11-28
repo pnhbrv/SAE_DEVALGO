@@ -15,12 +15,14 @@ def create_app(config_class="config.ProductionConfig"):
     from monApp.menu import menu_bp
     from monApp.auth import auth_bp
     from monApp.artiste import artiste_bp
+    from monApp.evenement import evenement_bp
     from monApp.preference import preference_bp
     from monApp.billeterie import billeterie_bp
     from monApp.paiement import paiement_bp
     app.register_blueprint(menu_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(artiste_bp)
+    app.register_blueprint(evenement_bp)
     app.register_blueprint(preference_bp)
     app.register_blueprint(billeterie_bp)
     app.register_blueprint(paiement_bp)
