@@ -438,12 +438,15 @@ class Spectateur(db.Model, UserMixin):
     prenom = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(150), nullable=False, unique=True)
     mot_de_passe = db.Column(db.String(255), nullable=False)
+    # un organisateur du festival : il a accès à l'espace administrateur
+    est_admin = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, nom=None, prenom=None, email=None, mot_de_passe=None):
+    def __init__(self, nom=None, prenom=None, email=None, mot_de_passe=None, est_admin=False):
         self.nom = nom
         self.prenom = prenom
         self.email = email
         self.mot_de_passe = mot_de_passe
+        self.est_admin = est_admin
 
     def get_id_spectateur(self):
         return self.id_spectateur
@@ -474,6 +477,12 @@ class Spectateur(db.Model, UserMixin):
 
     def set_mot_de_passe(self, mot_de_passe):
         self.mot_de_passe = mot_de_passe
+
+    def get_est_admin(self):
+        return self.est_admin
+
+    def set_est_admin(self, est_admin):
+        self.est_admin = est_admin
 
     def get_id(self):
         return self.email

@@ -1,0 +1,26 @@
+{% extends "admin_base.html" %}
+{% block main %}
+<div class="carte-festiuto mt-3">
+    <h1 class="titre-festiuto">Tableau de bord</h1>
+    <p>Vue d'ensemble de l'organisation du festival.</p>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Groupes</th>
+                <th>Événements</th>
+                <th>Spectateurs inscrits</th>
+                <th>Billets vendus</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ nbGroupes }}</td>
+                <td>{{ nbEvenements }}</td>
+                <td>{{ nbSpectateurs }}</td>
+                <td>{{ nbBillets }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
