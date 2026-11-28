@@ -19,6 +19,7 @@ def create_app(config_class="config.ProductionConfig"):
     from monApp.preference import preference_bp
     from monApp.billeterie import billeterie_bp
     from monApp.paiement import paiement_bp
+    from monApp.admin import admin_bp
     app.register_blueprint(menu_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(artiste_bp)
@@ -26,6 +27,7 @@ def create_app(config_class="config.ProductionConfig"):
     app.register_blueprint(preference_bp)
     app.register_blueprint(billeterie_bp)
     app.register_blueprint(paiement_bp)
+    app.register_blueprint(admin_bp)
 
     from .commands import register_commands
     register_commands(app)

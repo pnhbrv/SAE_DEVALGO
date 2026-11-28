@@ -177,6 +177,9 @@ def test_spectateur():
         getattr(s, "set_" + a)("v")
         assert getattr(s, "get_" + a)() == "v"
     assert repr(s) == "<Spectateur (1) v v>"
+    assert s.get_est_admin() is False
+    s.set_est_admin(True)
+    assert s.get_est_admin() is True
 
 def test_jouer():
     obj = Jouer(id_membre=5, id_instrument=5)

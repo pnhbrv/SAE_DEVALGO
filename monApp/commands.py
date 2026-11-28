@@ -48,7 +48,7 @@ def loaddb(filename):
         db.session.add(unGroupe)
     for s in data["spectateurs"]:
         unSpectateur = Spectateur(nom=s["nom"], prenom=s["prenom"], email=s["email"],
-                                  mot_de_passe=hacher(s["mot_de_passe"]))
+                                  mot_de_passe=hacher(s["mot_de_passe"]), est_admin=s.get("est_admin", False))
         unSpectateur.set_id_spectateur(s["id_spectateur"])
         db.session.add(unSpectateur)
     for t in data["types_billet"]:

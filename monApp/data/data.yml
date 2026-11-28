@@ -1187,6 +1187,12 @@ spectateurs:
   prenom: Côme
   email: come.picard@mail.com
   mot_de_passe: pwd123
+- id_spectateur: 81
+  nom: Festiuto
+  prenom: Admin
+  email: admin@festiuto.fr
+  mot_de_passe: demo-admin
+  est_admin: true
 types_billet:
 - id_type_billet: 1
   libelle: Pass 1 jour

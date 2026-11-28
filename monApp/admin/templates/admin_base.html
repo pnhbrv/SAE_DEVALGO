@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{# barre verte de l'espace administrateur, comme sur les maquettes #}
+{% block navbar %}
+<nav class="navbar navbar-expand navbar-dark bg-success fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('admin.tableauDeBord') }}">Espace Administrateur</a>
+        <span class="navbar-text logo-festiuto mx-auto">Fest'IUT'O</span>
+        <ul class="navbar-nav align-items-center">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('menu.index') }}">Retour au site</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
